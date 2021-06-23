@@ -1,0 +1,22 @@
+header {
+    background-color: #caffc3;
+}
+
+#heade {
+    height: 120%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+header #heade #logoute {
+    background-color: aqua;
+}
+
+header #heade #gam {
+    background-color: aqua;
+}
+
+.dark-mode {
+    background-color: rgb(26, 26, 26);
+  }

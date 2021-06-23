@@ -1,0 +1,22 @@
+{
+  "name": "schulobjekt",
+  "version": "1.0.0",
+  "description": "Web",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jimp": "^0.16.1",
+    "jquery": "^3.6.0",
+    "mysql2": "^2.2.5",
+    "passport": "^0.4.1",
+    "png-js": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC"
+}

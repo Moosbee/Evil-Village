@@ -1,0 +1,14 @@
+{
+    "port":80,
+    "MySql":{
+        "state":true,
+        "host": "localhost",
+        "user": "server",
+        "password": "123456789",
+        "database": "schulprojekt"
+    },
+    "Game":{
+        "Map":1
+    },
+    "favicon":4
+}
