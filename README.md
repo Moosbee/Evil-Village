@@ -6,3 +6,5 @@ How to Start:
 - Run ```npm install```
 - import the schulprojekt.sql file into your database
 - Run ```npm start```
+
+Needs 2 or more Players to be good
