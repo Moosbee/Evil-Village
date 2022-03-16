@@ -16,19 +16,19 @@ module.exports = class stadt {
         if(search!=-1){
             this.search=search;
         }
+        let min = 1;
+        let max = 25000;
+        if (id == -1) {
+            this.id = Math.floor(Math.random() * (max - min)) + min;
+        }
         if (strength == -1) {
             this.strength = 1;
             let min = 1;
             let max = 6;
             this.speed = Math.floor(Math.random() * (max - min)) + min;
-            min = 1;
+            //min = 1;
             max = 101;
             this.population = Math.floor(Math.random() * (max - min)) + min;
-            min = 1;
-            max = 25000;
-            if (id == -1) {
-                this.id = Math.floor(Math.random() * (max - min)) + min;
-            }
             if (capital) {
                 this.capital = capital;
                 this.size = 60;

@@ -3,11 +3,12 @@
     "MySql":{
         "state":true,
         "host": "localhost",
-        "user": "server",
-        "password": "123456789",
+        "user": "root",
+        "password": "",
         "database": "schulprojekt"
     },
     "Game":{
+        "ResetOnStart":true,
         "Map":1
     },
     "favicon":4

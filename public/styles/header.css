@@ -11,6 +11,11 @@ header {
 
 header #heade #logoute {
     background-color: aqua;
+    visibility: hidden;
+}
+
+header #heade #darkm{
+    background-color: aqua;
 }
 
 header #heade #gam {
@@ -20,3 +25,4 @@ header #heade #gam {
 .dark-mode {
     background-color: rgb(26, 26, 26);
   }
+

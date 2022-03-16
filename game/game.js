@@ -1,11 +1,24 @@
+"use strict";
 const fs = require("fs");
+
+
 const armee = require("./serveronly/serverarmee");
 const stadt = require("./serveronly/serverstadt");
 const utileties = require("./serveronly/serverutilities");
 
 exports.httplistener = function (browser) {
+
     browser.get('/game/main', (req, res) => {
         fs.readFile("./game/html/maingameframe.html", "utf-8", (err, data) => {
+            if (err) {
+                res.status(500).send('<h1>Error</h1>');
+            }
+            res.send(data);
+        });
+    });
+
+    browser.get('/game/config', (req, res) => {
+        fs.readFile("./game/html/config.html", "utf-8", (err, data) => {
             if (err) {
                 res.status(500).send('<h1>Error</h1>');
             }
@@ -35,7 +48,7 @@ exports.httplistener = function (browser) {
             return;
         } else {
             let idd = resiveddata["id"];
-            let selectobject = object.filter(arm => (arm.owner == idd&&arm.capital==true));
+            let selectobject = object.filter(arm => (arm.owner == idd && arm.capital == true));
             if (selectobject.length == 0) {
                 let min = 75;
                 let max = 930;
@@ -57,15 +70,15 @@ exports.httplistener = function (browser) {
         let resiveddata = req.body;
         let selectobject = object.filter(arm => ((arm.owner == resiveddata["id"]) && (arm.capital == true)));
 
-        if(selectobject.length > 0){
+        if (selectobject.length > 0) {
 
-            selectobject[0].search=selectobject[0].search-50;
+            selectobject[0].search = selectobject[0].search - 50;
             if (selectobject[0].search < 0) {
                 res.send("END");
-                selectobject[0].strength=-1;
+                selectobject[0].strength = -1;
                 return;
             }
-        }else{
+        } else {
             res.send("END");
             return;
         }
@@ -88,10 +101,9 @@ exports.httplistener = function (browser) {
 
             }
         }
-        setTimeout(function(){ res.send(JSON.stringify(object)); }, 101);
-        
-    });
+        setTimeout(function () { res.send(JSON.stringify(object)); }, 101);
 
+    });
 
 }
 
@@ -102,53 +114,57 @@ exports.start = function () {
 
     utileties.setmap();
 
-    fs.readFile('./save.json', (err, data) => {
-        if (err) throw err;
-
-        if(data==""){
-            data="[]";
-        }
-        let res=JSON.parse(data);
-        for (let index = 0; index < res.length; index++) {
-            const element = res[index];
-            if (element.type == "stadt") {
-                if(element.search){
-                    object.push(new stadt(element.x, element.y, element.owner, element.capital, element.strength, element.id, element.size, element.makingofarmy, element.speed, element.population, element.search));
-
-                }else{
-               object.push(new stadt(element.x, element.y, element.owner, element.capital, element.strength, element.id, element.size, element.makingofarmy, element.speed, element.population));
-
-                }
-                object[object.length - 1].arraypos = object.length - 1;
-            } else {
-                object.push(new armee(element.x, element.y, element.owner, element.strength, element.id, element.size, element.gotox, element.gotoy, element.move, element.a, element.b));
-                object[object.length - 1].arraypos = object.length - 1;
-            }
-        }
-        console.log(object);
-        setInterval(gameloop, 100);
-        setInterval(save,5000);
-        console.log("Game Startet");
-    });
     
+
+        fs.readFile('./save.json', (err, data) => {
+            if (err) throw err;
+
+            if (data == "" || global.configur.Game.ResetOnStart) {
+                data = "[]";
+            }
+            let res = JSON.parse(data);
+            for (let index = 0; index < res.length; index++) {
+                const element = res[index];
+                if (element.type == "stadt") {
+                    if (element.search) {
+                        object.push(new stadt(element.x, element.y, element.owner, element.capital, element.strength, element.id, element.size, element.makingofarmy, element.speed, element.population, element.search));
+
+                    } else {
+                        object.push(new stadt(element.x, element.y, element.owner, element.capital, element.strength, element.id, element.size, element.makingofarmy, element.speed, element.population));
+
+                    }
+                    object[object.length - 1].arraypos = object.length - 1;
+                } else {
+                    object.push(new armee(element.x, element.y, element.owner, element.strength, element.id, element.size, element.gotox, element.gotoy, element.move, element.a, element.b));
+                    object[object.length - 1].arraypos = object.length - 1;
+                }
+            }
+
+            console.log(object);
+            setInterval(gameloop, 100);
+            setInterval(save, 5000);
+            console.log("Game Startet");
+        });
+    
+
 }
 
 exports.end = function (a) {
-    let data=JSON.stringify(global.object);
+    let data = JSON.stringify(global.object);
     console.log(data);
     fs.writeFile('./save.json', data, function (err) {
         if (err) throw err;
         console.log('Saved!');
         process.exit(a);
-      }); 
+    });
 }
 
-function save(){
-    let data=JSON.stringify(global.object);
+function save() {
+    let data = JSON.stringify(global.object);
     fs.writeFile('./save.json', data, function (err) {
         if (err) throw err;
         console.log('Saved!');
-      }); 
+    });
 }
 
 
