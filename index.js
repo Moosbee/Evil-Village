@@ -6,9 +6,6 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 80;
 
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-
 //Mysql
 const mysql = require('mysql2');
 // create the connection to database
@@ -79,7 +76,7 @@ app.post('/login', (req, res) => {
   let resiveddata = req.body;
   resiveddata["passwordfld"] = hasha.hash(resiveddata["passwordfld"], resiveddata["usernamefld"]);
 
-  var anfrag = "SELECT id, vorname, nachname, benutzername, passwort FROM `users` WHERE benutzername='" + resiveddata["usernamefld"] + "' AND passwort='" + resiveddata["passwordfld"] + "'";
+  anfrag = "SELECT id, vorname, nachname, benutzername, passwort FROM `users` WHERE benutzername='" + resiveddata["usernamefld"] + "' AND passwort='" + resiveddata["passwordfld"] + "'";
   connection.query(anfrag, (err, results) => {
     if (err) {
       console.log(err);
@@ -167,8 +164,8 @@ app.get('/shutdown', (req, res) => {
 
 app.get('/favicon.ico', (req, res) => {
   console.log("favicon");
-  let faf = configur.favicon;
-  let dir = "./unpublic/farvi/" + faf + ".ico";
+  let faf =configur.favicon;
+  let dir ="./unpublic/farvi/"+faf+".ico";
   fs.readFile(dir, (err, data) => {
     if (err) {
       res.status(500).send('<h1>Error</h1>');
@@ -178,42 +175,6 @@ app.get('/favicon.ico', (req, res) => {
     res.send(data);
   });
 });
-
-//Socket.io ----------------------------------------------------
-
-//Whenever someone connects this gets executed
-io.on('connection', function (socket) {
-  console.log('A user connected');
-
-
-  socket.on('test', function () {
-    console.log('A user tested');
-  });
-
-  socket.on('putupdate', function (data) {
-    console.log(data);
-          let selectobject = object.filter(arm => (arm.id == data.id));
-
-          if (!((data.x == -1) && (data.y == -1))) {
-              selectobject[0].goto(data.x, data.y);
-          }
-
-          if (data.settele) {
-              selectobject[0].settle();
-          }
-  });
-
-  //Whenever someone disconnects this piece of code executed
-  socket.on('disconnect', function () {
-    console.log('A user disconnected');
-  });
-});
-
-setInterval(() => {
-  let info=JSON.stringify(object);
-  io.emit('update', info);
-  //console.log("tetetw");
-}, 100);
 
 
 
@@ -234,8 +195,6 @@ app.all('*', function (req, res, next) {
 
 
 
-http.listen(port, () => {
+app.listen(port, () => {
   console.log(`Schulprojekt listening on port ${port}!`);
   game.start();
-
-});
