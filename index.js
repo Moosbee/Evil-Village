@@ -32,6 +32,8 @@ const hasha = require("./onlyserver/hashing");
 const game = require("./game/game");
 
 
+app.use('/media', express.static('public'));
+
 //Server aktivieren-----------------------------------------------
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -46,29 +48,11 @@ app.all('*', function (req, res, next) {
 game.httplistener(app);
 
 app.get('/', (req, res) => {
-
-  // console.log("Request");
-  // console.log(req);
-  // console.log("Responce");
-  // console.log(res);
-  // console.log("Ende");
-
-  fs.readFile("./unpublic/home.html", "utf-8", (err, data) => {
-    if (err) {
-      res.status(500).send('<h1>Error</h1>');
-    }
-    res.send(data);
-  });
+    res.sendFile("./unpublic/home.html");
 });
 
 app.get('/login', (req, res) => {
-
-  fs.readFile("./unpublic/login.html", "utf-8", (err, data) => {
-    if (err) {
-      res.status(500).send('<h1>Error</h1>');
-    }
-    res.send(data);
-  });
+  res.sendFile("./unpublic/login.html");
 });
 
 //fuer einloggen benutze Node.js Passport
@@ -169,14 +153,7 @@ app.get('/favicon.ico', (req, res) => {
   console.log("favicon");
   let faf = configur.favicon;
   let dir = "./unpublic/farvi/" + faf + ".ico";
-  fs.readFile(dir, (err, data) => {
-    if (err) {
-      res.status(500).send('<h1>Error</h1>');
-      console.log(err);
-      return;
-    }
-    res.send(data);
-  });
+  res.sendFile(dir);
 });
 
 //Socket.io ----------------------------------------------------
@@ -218,8 +195,6 @@ setInterval(() => {
 
 
 //Server chatch -------------------------------------------------
-
-app.use('/media', express.static('public'));
 
 app.all('*', function (req, res, next) {
   try {
