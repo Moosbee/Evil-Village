@@ -1,8 +1,0 @@
-{
-    "MaxPlayers":1000,
-    "Game":{
-        "ResetOnStart":true,
-        "Map":1
-    },
-    "favicon":4
-}
