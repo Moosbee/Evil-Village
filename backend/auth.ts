@@ -16,8 +16,6 @@ async function verify(
   let passwordHash = hash(password, user);
   let file = '[]';
 
-  let pix=await getMapPixel(101,101);
-
   try {
     file = await readFile(config.rootPath + config.PlayerFile, {
       encoding: 'utf8',
@@ -35,7 +33,6 @@ async function verify(
 async function createUser(
   user: string,
   password: string,
-  maxPlayer: number
 ): Promise<number | 'failed' | 'taken'> {
   let passwordHash = hash(password, user);
   let file = '[]';
@@ -50,9 +47,9 @@ async function createUser(
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer != undefined) return 'taken';
   let minPlayer = 1;
-  let newid = Math.floor(Math.random() * (maxPlayer - 1 + 1)) + 1;
+  let newid = Math.floor(Math.random() * (config.MaxPlayers - 1 + 1)) + 1;
   while (jsonPlayers.find((e) => e.id === newid) != undefined) {
-    newid = Math.floor(Math.random() * (maxPlayer - minPlayer + 1)) + minPlayer;
+    newid = Math.floor(Math.random() * (config.MaxPlayers - minPlayer + 1)) + minPlayer;
   }
 
   let newPlayer: player = {

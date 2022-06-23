@@ -1,101 +1,99 @@
-module.exports = class stadt {
-    constructor(x, y, owner, capital = false, strength = -1, id = -1, size = 40, makingofarmy = 500, speed = -1, population = -1,search=-1) {
-        this.type = "stadt";
-        this.id = id;
-        this.arraypos = 0;
-        this.owner = owner;
-        this.selected = false;
-        this.strength = strength;
-        this.size = size;
-        this.capital = capital;
-        this.x = x;
-        this.y = y;
-        this.makingofarmy = makingofarmy;
-        this.speed = speed;
-        this.population = population;
-        if(search!=-1){
-            this.search=search;
-        }
-        let min = 1;
-        let max = 25000;
-        if (id == -1) {
-            this.id = Math.floor(Math.random() * (max - min)) + min;
-        }
-        if (strength == -1) {
-            this.strength = 1;
-            let min = 1;
-            let max = 6;
-            this.speed = Math.floor(Math.random() * (max - min)) + min;
-            //min = 1;
-            max = 101;
-            this.population = Math.floor(Math.random() * (max - min)) + min;
-            if (capital) {
-                this.capital = capital;
-                this.size = 60;
-                min = 40;
-                max = 50;
-                this.strength = Math.floor(Math.random() * (max - min)) + min;
-                min = 750;
-                max = 1000;
-                this.population = Math.floor(Math.random() * (max - min)) + min;
-                this.search=500;
-            }
-        }
-    }
+import { gameobject } from './gameobject';
+import { armee } from './serverarmee';
+import { schiff } from './serverschiff';
 
-    setarraypos(a) {
-        this.arraypos = a;
-    }
-    remove() {
-        if (this.strength <= 0 || this.x <= 0 || this.y <= 0 || this.x >= 1000 || this.y >= 1000) {
-            object.splice(this.arraypos, 1);
-        }
-    }
-    settle() {
-
-    }
-
-    tick() {
-        let armee = require("./serverarmee");
-        this.makingofarmy = this.makingofarmy - 1;
-        if (this.makingofarmy < 0) {
-            this.makingofarmy = (Math.floor(Math.random() * (1000 - 100)) + 100)+this.strength/2;
-            if(this.capital){
-                this.makingofarmy = (Math.floor(Math.random() * (1000 - 100)) + 100)+this.strength/2;
-            }
-            let max = 150;
-            let min = -150;
-            let x = Math.floor(Math.random() * (max - min)) + min;
-            let y = Math.floor(Math.random() * (max - min)) + min;
-            object.push(new armee(this.x, this.y, this.owner));
-            object[object.length - 1].arraypos = object.length - 1;
-            object[object.length - 1].gotox = this.x + x;
-            object[object.length - 1].gotoy = this.y + y;
-            min = this.strength- this.strength/25;
-            max = this.strength+this.strength/20;
-            object[object.length - 1].strength = Math.floor(Math.random() * (max - min)) + min;
-            if((this.strength/2)>this.population){
-                object[object.length - 1].strength=object[object.length - 1].strength;
-                let max = 150;
-                let min = -150;
-                let x = Math.floor(Math.random() * (max - min)) + min;
-                let y = Math.floor(Math.random() * (max - min)) + min;
-                object.push(new armee(this.x+100, this.y+100, this.owner));
-                object[object.length - 1].arraypos = object.length - 1;
-                object[object.length - 1].gotox = this.x + x;
-                object[object.length - 1].gotoy = this.y + y;
-                min = this.strength- this.strength/25;
-                max = this.strength+this.strength/20;
-                object[object.length - 1].strength = (Math.floor(Math.random() * (max - min)) + min)/2;
-            }
-            
-        }
-        if(this.capital){
-            if(this.search<500){
-            this.search=this.search+2;
-            }
-        }
-    }
-
+declare global {
+  // var gameObjects: armee[];
+  var gameObjects: (armee | stadt | schiff)[];
 }
+export class stadt extends gameobject {
+  capital: boolean;
+  speed: number;
+  population: number;
+  makingofarmy: number;
 
+  constructor(
+    x: number,
+    y: number,
+    owner: number,
+    strength?: number,
+    id: number = -1,
+    population: number = -1,
+    size: number = 40,
+    capital: boolean = false,
+    speed?: number,
+    makingofarmy?: number
+  ) {
+    if (strength == undefined) strength = 1;
+    super(x, y, owner, id, strength, size);
+
+    let min = 1;
+    let max = 1;
+
+    this.capital = capital;
+    this.makingofarmy = makingofarmy == undefined ? 500 : makingofarmy;
+    max = 6;
+    this.speed =
+      speed == undefined
+        ? Math.floor(Math.random() * (max - min)) + min
+        : speed;
+
+    if (capital) {
+      this.capital = true;
+      this.size = 60;
+      min = 40;
+      max = 50;
+      this.strength = Math.floor(Math.random() * (max - min)) + min;
+      min = 750;
+      max = 1000;
+      this.population = Math.floor(Math.random() * (max - min)) + min;
+    } else {
+      max = 101;
+      this.population =
+        population == undefined
+          ? Math.floor(Math.random() * (max - min)) + min
+          : population;
+    }
+  }
+  settle() {}
+
+  tick() {
+    let armee = require('./serverarmee');
+    this.makingofarmy = this.makingofarmy - 1;
+    if (this.makingofarmy < 0) {
+      this.makingofarmy =
+        Math.floor(Math.random() * (1000 - 100)) + 100 + this.strength / 2;
+      if (this.capital) {
+        this.makingofarmy =
+          Math.floor(Math.random() * (1000 - 100)) + 100 + this.strength / 2;
+      }
+      let max = 150;
+      let min = -150;
+      let x = Math.floor(Math.random() * (max - min)) + min;
+      let y = Math.floor(Math.random() * (max - min)) + min;
+      globalThis.gameObjects.push(new armee(this.x, this.y, this.owner));
+      globalThis.gameObjects[globalThis.gameObjects.length - 1].arraypos = globalThis.gameObjects.length - 1;
+      globalThis.gameObjects[globalThis.gameObjects.length - 1].gotox = this.x + x;
+      globalThis.gameObjects[globalThis.gameObjects.length - 1].gotoy = this.y + y;
+      min = this.strength - this.strength / 25;
+      max = this.strength + this.strength / 20;
+      globalThis.gameObjects[globalThis.gameObjects.length - 1].strength =
+        Math.floor(Math.random() * (max - min)) + min;
+      if (this.strength / 2 > this.population) {
+        globalThis.gameObjects[globalThis.gameObjects.length - 1].strength = globalThis.gameObjects[globalThis.gameObjects.length - 1].strength;
+        let max = 150;
+        let min = -150;
+        let x = Math.floor(Math.random() * (max - min)) + min;
+        let y = Math.floor(Math.random() * (max - min)) + min;
+        globalThis.gameObjects.push(new armee(this.x + 100, this.y + 100, this.owner));
+        globalThis.gameObjects[globalThis.gameObjects.length - 1].arraypos = globalThis.gameObjects.length - 1;
+        globalThis.gameObjects[globalThis.gameObjects.length - 1].gotox = this.x + x;
+        globalThis.gameObjects[globalThis.gameObjects.length - 1].gotoy = this.y + y;
+        min = this.strength - this.strength / 25;
+        max = this.strength + this.strength / 20;
+        globalThis.gameObjects[globalThis.gameObjects.length - 1].strength =
+          (Math.floor(Math.random() * (max - min)) + min) / 2;
+      }
+    }
+  }
+}

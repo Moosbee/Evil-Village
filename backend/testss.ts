@@ -1,17 +1,15 @@
-import { verify } from "./auth";
-import { getMapPixel } from "./serverutilities";
+import { verify } from './auth';
+import { getMapPixel, mapMini, setmap } from './serverutilities';
 
 // const verify = require('./auth');
 
+declare global {
+  var map: mapMini;
+}
 
-getMapPixel(100,100).then((pixel)=>{
-    console.log(pixel);
-    verify("west","mm").then((erg)=>{
-        console.log(erg)
-    })
+let pixel = getMapPixel(200, 200);
+console.log(pixel);
+verify('west', 'mm').then((erg) => {
+  console.log(erg);
 });
-getMapPixel(200,200).then((pixel)=>{
-    console.log(pixel);
-});
-
-
+console.log(getMapPixel(200, 200));

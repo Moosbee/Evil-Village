@@ -8,6 +8,8 @@ let config = {
     ResetOnStart: true,
     Map: 1,
     saveFile: './save.json',
+    runspeed:2,
+    maxGameObjects:25000
   },
   favicon: 4,
   port:80

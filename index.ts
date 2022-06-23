@@ -1,34 +1,15 @@
-import { readFileSync } from 'fs';
-
 import express from 'express';
-// const express = require('express');
 import { urlencoded } from 'body-parser';
-// const bodyParser = require('body-parser');
 import cookieParser from 'cookie-parser';
-// const cookieParser = require('cookie-parser');
-const app = express();
-
-const http = require('http').Server(app);
-// const io = require('socket.io')(http);
-
 import { Server } from 'socket.io';
-
 import { config } from './config';
-
-const io = new Server();
-
-interface configInterface {
-  MaxPlayers: number;
-  PlayerFile: string;
-  Game: {
-    ResetOnStart: boolean;
-    Map: number;
-    saveFile: string;
-  };
-  favicon: number;
-}
-
 import { createUser, verify } from './backend/auth';
+import { game } from './backend/gamelogic';
+
+const app = express();
+const io = new Server();
+const http = require('http').Server(app);
+var localGame = new game();
 
 //Server aktivieren-----------------------------------------------
 
@@ -49,7 +30,7 @@ app.use(cookieParser());
 
 //Handeling anfragen-----------------------------------------------
 
-app.use('/game',require("./backend/game"))
+app.use('/game', require('./backend/gamerouter'));
 
 app.get('/', async (req, res) => {
   res.sendFile(config.rootPath + './frontend/unpublic/home.html');
@@ -98,8 +79,7 @@ app.post('/makeuser', async (req, res) => {
 
   let erg = await createUser(
     resiveddata['usernamefld'],
-    resiveddata['passwordfld'],
-    1000
+    resiveddata['passwordfld']
   );
   if (typeof erg == 'number') {
     let sent: number = erg;

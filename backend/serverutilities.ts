@@ -14,10 +14,10 @@ interface mapMini {
   set?: boolean;
 }
 
-var map: mapMini;
+// declare var map: mapMini;
 
 async function setmap(): Promise<mapMini> {
-  console.log("Setting Map")
+  console.log('Setting Map');
   let mapDir = config.rootPath + './both/maps/map_';
   let mapNumber: number = config.Game.Map;
   mapDir = mapDir + mapNumber + '.png';
@@ -32,30 +32,43 @@ async function setmap(): Promise<mapMini> {
     pixels: image.bitmap.data,
     height: image.getHeight(),
     width: image.getHeight(),
-    set:true
+    set: true,
   };
 }
 
 //image.getPixelColor(x, y); // returns the colour of that pixel e.g. 0xFFFFFFFF
-async function getMapPixel(x: number, y: number): Promise<RGBColor> {
-  if (map==undefined || map.set == undefined || map.set == false) {
-    map = await setmap();
+function getMapPixel(x: number, y: number): RGBColor {
+  if (
+    globalThis.map == undefined ||
+    globalThis.map.set == undefined ||
+    globalThis.map.set == false ||
+    !globalThis.map
+  ) {
+    setmap().then((map) => {
+      globalThis.map = map;
+    });
+    return {
+      red: 0,
+      green: 0,
+      blue: 0,
+      alpha: 0,
+    };
   }
 
   x = Math.round(x);
   y = Math.round(y);
-  let indexred = y * (map.width * 4) + x * 4;
+  let indexred = y * (globalThis.map.width * 4) + x * 4;
   let indexgreen = indexred + 1;
   let indexblue = indexred + 2;
   let indexalpha = indexred + 3;
 
   let pixel: RGBColor = {
-    red: map.pixels[indexred],
-    green: map.pixels[indexgreen],
-    blue: map.pixels[indexblue],
-    alpha: map.pixels[indexalpha],
+    red: globalThis.map.pixels[indexred],
+    green: globalThis.map.pixels[indexgreen],
+    blue: globalThis.map.pixels[indexblue],
+    alpha: globalThis.map.pixels[indexalpha],
   };
   return pixel;
 }
 
-export { getMapPixel };
+export { setmap, getMapPixel, mapMini };
