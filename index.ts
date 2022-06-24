@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 import { config } from './config';
 import { createUser, verify } from './backend/auth';
 import { game } from './backend/gamelogic';
+import { changes, makeRamdomInt } from './backend/serverutilities';
 
 const app = express();
 const io = new Server();
@@ -19,7 +20,8 @@ app.all('*', function (req, res, next) {
 });
 
 app.use('/media', express.static(config.rootPath + './frontend/public'));
-app.use(urlencoded({ extended: true }));
+// app.use(urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieParser());
 
 // parses request cookies, populating
@@ -29,8 +31,6 @@ app.use(cookieParser());
 //app.use(cookieParser('my secret here'));
 
 //Handeling anfragen-----------------------------------------------
-
-app.use('/game', require('./backend/gamerouter'));
 
 app.get('/', async (req, res) => {
   res.sendFile(config.rootPath + './frontend/unpublic/home.html');
@@ -104,6 +104,60 @@ app.get('/logedin', async (req, res) => {
   res.sendFile(config.rootPath + './frontend/unpublic/logedin.html');
 });
 
+app.get('/game/main', (req, res) => {
+  res.sendFile(config.rootPath + './frontend/unpublic/maingameframe.html');
+});
+
+app.get('/game/config', (req, res) => {
+  res.sendFile(config.rootPath + './frontend/unpublic/maingameframe.html');
+});
+
+app.get('/game/map', (req, res) => {
+  let mapDir = config.rootPath + './both/maps/map_';
+  let mapNumber: number = config.Game.Map;
+  mapDir = mapDir + mapNumber + '.png';
+  res.sendFile(mapDir);
+});
+
+app.post('/game/main', (req, res) => {
+  // let resiveddata = req.body;
+  // console.log(resiveddata);
+  // if (resiveddata['id'] == undefined) {
+  //   res.send('<h1>Error</h1>');
+  //   return;
+  // } else {
+  //   let idd = resiveddata['id'];
+  //   let selectobject = globalThis.gameObjects.filter(
+  //     (arm) => arm.owner == idd && arm.capital == true
+  //   );
+  //   if (selectobject.length == 0) {
+  //     let min = 75;
+  //     let max = 930;
+  //     let x = makeRamdomInt(min,max);
+  //     let y = makeRamdomInt(min,max);
+  //     globalThis.gameObjects.push(new stadt(x, y, resiveddata['id'], true));
+  //     globalThis.gameObjects[globalThis.gameObjects.length - 1].arraypos = globalThis.gameObjects.length - 1;
+  //   }
+  // }
+  // res.send(JSON.stringify(globalThis.gameObjects));
+});
+
+app.get('/game/update', (req, res) => {
+  setTimeout(function () {
+    res.send(localGame.getUpdateEasy());
+  }, 101);
+});
+
+app.post('/game/update', (req, res) => {
+  let resiveddata: changes[] = req.body;
+  console.log(resiveddata);
+
+  localGame.update(resiveddata);
+
+  setTimeout(function () {
+    res.send(localGame.getUpdateEasy());
+  }, 101);
+});
 app.get('/shutdown', async (req, res) => {
   res.send('<h1 color="red">Shutdown</h1>');
   //game.end(0);
@@ -126,15 +180,11 @@ io.on('connection', function (socket) {
     console.log('A user tested');
   });
 
-  socket.on('putupdate', function (data) {
-    // console.log(data);
-    // let selectobject = object.filter((arm) => arm.id == data.id);
-    // if (!(data.x == -1 && data.y == -1)) {
-    //   selectobject[0].goto(data.x, data.y);
-    // }
-    // if (data.settele) {
-    //   selectobject[0].settle();
-    // }
+  socket.on('update', function (data) {
+    let resiveddata: changes[] = data;
+    console.log(resiveddata);
+
+    localGame.update(resiveddata);
   });
 
   //Whenever someone disconnects this piece of code executed
@@ -143,11 +193,9 @@ io.on('connection', function (socket) {
   });
 });
 
-// setInterval(() => {
-//   let info = JSON.stringify(object);
-//   io.emit('update', info);
-//   //console.log("tetetw");
-// }, 100);
+setInterval(() => {
+  io.emit('update', localGame.getUpdateEasy());
+}, 100);
 
 //Server chatch -------------------------------------------------
 

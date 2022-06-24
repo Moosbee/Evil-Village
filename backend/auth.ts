@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
 import { createHmac } from 'crypto';
-import { getMapPixel } from './serverutilities';
+import { getMapPixel, makeRamdomInt } from './serverutilities';
 interface player {
   id: number;
   username: string;
@@ -47,9 +47,9 @@ async function createUser(
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer != undefined) return 'taken';
   let minPlayer = 1;
-  let newid = Math.floor(Math.random() * (config.MaxPlayers - 1 + 1)) + 1;
+  let newid =makeRamdomInt(minPlayer,config.MaxPlayers);
   while (jsonPlayers.find((e) => e.id === newid) != undefined) {
-    newid = Math.floor(Math.random() * (config.MaxPlayers - minPlayer + 1)) + minPlayer;
+    newid =makeRamdomInt(minPlayer,config.MaxPlayers);
   }
 
   let newPlayer: player = {

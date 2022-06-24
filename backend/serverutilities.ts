@@ -14,6 +14,41 @@ interface mapMini {
   set?: boolean;
 }
 
+interface changes {
+  id: number;
+  gotox?: number;
+  gotoy?: number;
+  settle?: boolean;
+}
+
+interface saveFile {
+  id: number;
+  x: number;
+  y: number;
+  owner: number;
+  strength: number;
+  size: number;
+  typeof: saveArmy | saveSchiff | saveStadt;
+}
+
+interface saveArmy {
+  type:"saveArmy"
+  gotox: number;
+  gotoy: number;
+}
+interface saveSchiff {
+  type:"saveSchiff"
+  gotox: number;
+  gotoy: number;
+}
+interface saveStadt {
+  type:"saveStadt"
+  capital: boolean;
+  speed: number;
+  population: number;
+  makingofarmy: number;
+}
+
 // declare var map: mapMini;
 
 async function setmap(): Promise<mapMini> {
@@ -71,4 +106,8 @@ function getMapPixel(x: number, y: number): RGBColor {
   return pixel;
 }
 
-export { setmap, getMapPixel, mapMini };
+function makeRamdomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+export { setmap, getMapPixel, makeRamdomInt, saveFile, changes, mapMini };

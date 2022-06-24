@@ -2,7 +2,7 @@ import { config } from '../config';
 import { gameobject } from './gameobject';
 import { armee } from './serverarmee';
 import { stadt } from './serverstadt';
-import { getMapPixel } from './serverutilities';
+import { getMapPixel, makeRamdomInt } from './serverutilities';
 
 declare global {
   // var gameObjects: armee[];
@@ -56,7 +56,7 @@ export class schiff extends gameobject {
   settle() {
     let min = this.strength - 100;
     let max = this.strength + 100;
-    let population = Math.floor(Math.random() * (max - min)) + min;
+    let population = makeRamdomInt(min,max);
     globalThis.gameObjects.push(
       new stadt(
         this.x,

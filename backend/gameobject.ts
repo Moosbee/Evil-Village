@@ -1,4 +1,5 @@
 import { config } from "../config";
+import { makeRamdomInt } from "./serverutilities";
 
 export class gameobject {
   public id: number;
@@ -10,7 +11,7 @@ export class gameobject {
   public selected: boolean;
   public size: number = 50;
   constructor(
-    x: number,
+    x: number, 
     y: number,
     owner: number,
     id: number,
@@ -24,14 +25,14 @@ export class gameobject {
 
     let min = 1;
     if (id == -1) {
-      this.id = Math.floor(Math.random() * (config.Game.maxGameObjects - min)) + min;
+      this.id = makeRamdomInt(min,config.Game.maxGameObjects);
     } else {
       this.id = id;
     }
     min = 10;
     let max = 35;
     if (strength == undefined || strength == -1) {
-      this.strength = Math.floor(Math.random() * (max - min)) + min;
+      this.strength = makeRamdomInt(min,max);
     } else {
       this.strength = strength;
     }
