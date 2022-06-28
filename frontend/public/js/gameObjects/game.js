@@ -1,280 +1,299 @@
-
 var object = [];
 var changes = [];
 
 $(document).ready(function () {
-    $(".invis").hide();
-    $("#info").hide();
-    $("#Armee").hide();
-    $("#Stadt").hide();
-    $("#loose").hide();
-    $("#send").hide();
+  $(".invis").hide();
+  $("#info").hide();
+  $("#Armee").hide();
+  $("#Stadt").hide();
+  $("#loose").hide();
+  $("#send").hide();
 
-
-    onloaded();
+  onloaded(makeitready);
 });
-function makeitready() {
-    console.log(document.vorname);
-    console.log(document.nachname);
-    console.log(document.benutzername);
-    console.log(document.tokenid);
+async function makeitready() {
+  console.log(document.benutzername);
+  console.log(document.tokenid);
 
-    setTimeout(function () { sockets(); }, 201);
+  $(".invis").show();
 
+  var can = document.getElementById("game");
+  var disp = can.getContext("2d");
+  document.getElementById("audiofile").play();
 
-    $(".invis").show();
+  //can.addEventListener("click", handleClick, false);
+  document.addEventListener("keydown", handlePress, false);
+  document.addEventListener("click", handleClick, false);
 
-    var can = document.getElementById("game");
-    var disp = can.getContext('2d');
-    document.getElementById('audiofile').play();
+  window.can = can;
+  window.disp = disp;
+  window.keyframe = 0;
+  window.speed = 2;
 
-    setInterval(gameloop, 100);
-    setInterval(keyframed, 150);
+  let dater = {
+    id: document.tokenid,
+  };
 
-    //can.addEventListener("click", handleClick, false);
-    document.addEventListener("keydown", handlePress, false);
-    document.addEventListener("click", handleClick, false);
+  setInterval(gameloop, 100);
+  setInterval(keyframed, 150);
+  setTimeout(function () {
+    sockets();
+  }, 201);
 
-    window.can = can;
-    window.disp = disp;
-    window.keyframe = 0;
-    window.speed = 2;
-
-    let dater = {
-        id: document.tokenid
-    }
-    $.ajax({
-        url: "/game/main", type: 'POST',
-        data: dater,
-        success: function (result, status) {
-            console.log(result);
-            let res = JSON.parse(result);
-            console.log(res);
-            object = [];
-            for (let index = 0; index < res.length; index++) {
-                const element = res[index];
-                if (element.type == "stadt") {
-                    object.push(new stadt(element.x, element.y, element.owner, element.strength, element.id, element.capital, element.size, element.makingofarmy, element.speed, element.population));
-                    object[object.length - 1].arraypos = object.length - 1;
-                } else {
-                    object.push(new armee(element.x, element.y, element.owner, element.size, element.id, element.gotox, element.gotoy, element.move, element.a, element.b, element.strength));
-                    object[object.length - 1].arraypos = object.length - 1;
-                }
-            }
-        }
-    });
+  const result = await fetch("/game/main", {
+    method: "POST",
+    body: JSON.stringify(dater),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const resultText = await result.text();
+  updateObject(resultText);
 }
-
 
 function sockets() {
+  window.socket = io();
 
-    window.socket = io();
-
-    socket.on('update', function (data) {
-        console.log(data);
-        if (data == "END") {
-            $("#loose").show();
-        } else {
-            let res = JSON.parse(data);
-            console.log(res);
-            let obtemp = object;
-            object = [];
-            for (let index = 0; index < res.length; index++) {
-                const element = res[index];
-                let selectobject = obtemp.filter(arm => ((arm.id == element.id) && (arm.selected)));
-                if (element.type == "stadt") {
-                    object.push(new stadt(element.x, element.y, element.owner, element.strength, element.id, element.capital, element.size, element.makingofarmy, element.speed, element.population));
-                    object[object.length - 1].arraypos = object.length - 1;
-                } else {
-                    object.push(new armee(element.x, element.y, element.owner, element.size, element.id, element.gotox, element.gotoy, element.move, element.a, element.b, element.strength));
-                    object[object.length - 1].arraypos = object.length - 1;
-                }
-
-                if (selectobject.length != 0) {
-                    object[object.length - 1].selected = true;
-                }
-            }
-            let selectobject = obtemp.filter(arm => ((arm.owner == document.tokenid) && (arm.capital)));
-            if (selectobject.length == 0) {
-                if ($("#loose").is(":hidden")) {
-
-                    senden();
-                }
-            }
-        }
-
-    });
+  socket.on("update", function (data) {
+    console.log(data);
+    if (data == "END") {
+      $("#loose").show();
+    } else {
+      updateObject(data);
+    }
+  });
 }
 
-function senden() {
-    console.log("sent");
+async function senden() {
+  console.log("sent");
 
-    let stringchanges = JSON.stringify(changes);
-    let dater = {
-        id: document.tokenid,
-        info: stringchanges
+  let stringchanges = JSON.stringify(changes);
+  let dater = {
+    id: document.tokenid,
+    info: stringchanges,
+  };
+  console.log(dater);
+  changes = [];
+
+  const result = await fetch("/game/update", {
+    method: "GET",
+    body: JSON.stringify(dater),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  console.log(result);
+  if (result == "END") {
+    $("#loose").show();
+  } else {
+    updateObject(result);
+  }
+
+  $("#Layer_1").css("transform", "translateX(0%)");
+  let brief = document.getElementsByClassName("lay1");
+  for (let i = 0; i < brief.length; i++) {
+    brief[i].style.transform = "translateX(100%)";
+  }
+  setTimeout(function () {
+    $("#Layer_1").css("transform", "translateX(-200%)");
+    $(".lay1").css("transform", "translateX(0%)");
+  }, 1000);
+}
+
+function updateObject(newObject) {
+  console.log(newObject);
+  let newObjectJSON = JSON.parse(newObject);
+  console.log(newObjectJSON);
+  let oldobject = Object.assign([], object);
+  console.log(oldobject);
+  object = [];
+  for (let i = 0; i < newObjectJSON.length; i++) {
+    const element = newObjectJSON[i];
+    let savedObject;
+    switch (element.typeof.type) {
+      case "saveArmy":
+        savedObject = new armee(
+          element.x,
+          element.y,
+          element.owner,
+          element.strength,
+          element.id,
+          element.size,
+          element.typeof.gotox,
+          element.typeof.gotoy
+        );
+        break;
+      case "saveSchiff":
+        savedObject = new schiff(
+          element.x,
+          element.y,
+          element.owner,
+          element.size,
+          element.id,
+          element.typeof.gotox,
+          element.typeof.gotoy,
+          element.strength,
+        );
+        break;
+      case "saveStadt":
+        savedObject = new stadt(
+          element.x,
+          element.y,
+          element.owner,
+          element.strength,
+          element.id,
+          element.typeof.capital,
+          element.size,
+          element.typeof.makingofarmy,
+          element.typeof.speed,
+          element.typeof.population,
+        );
+        break;
+      default:
+        continue;
+        break;
     }
-    console.log(dater);
-    changes = [];
 
-    $.ajax({
-        url: "/game/getupdate", type: 'POST',
-        data: dater,
-        success: function (result, status) {
-            console.log(result);
-            if (result == "END") {
-                $("#loose").show();
-            } else {
-                let res = JSON.parse(result);
-                console.log(res);
-                object = [];
-                for (let index = 0; index < res.length; index++) {
-                    const element = res[index];
-                    if (element.type == "stadt") {
-                        object.push(new stadt(element.x, element.y, element.owner, element.strength, element.id, element.capital, element.size, element.makingofarmy, element.speed, element.population));
-                        object[object.length - 1].arraypos = object.length - 1;
-                    } else {
-                        object.push(new armee(element.x, element.y, element.owner, element.size, element.id, element.gotox, element.gotoy, element.move, element.a, element.b, element.strength));
-                        object[object.length - 1].arraypos = object.length - 1;
-                    }
-                }
-            }
-        }
+    let selectobject = oldobject.filter((e) => {
+      return e.selected && e.id == element.id;
     });
-
-    $("#Layer_1").css("transform", "translateX(0%)");
-    let brief = document.getElementsByClassName("lay1");
-    for (let i = 0; i < brief.length; i++) {
-        brief[i].style.transform = "translateX(100%)";
+    if (selectobject.length >= 1) {
+      savedObject.selected = true;
     }
-    setTimeout(function () {
-        $("#Layer_1").css("transform", "translateX(-200%)");
-        $(".lay1").css("transform", "translateX(0%)");
-    }, 1000);
 
+    object.push(savedObject);
+  }
 }
 
 function gameloop() {
-    draw();
+  draw();
 }
+
 function keyframed() {
-    let key = window.keyframe;
-    key = key + 1;
-    if (key > 11) {
-        key = 0;
-    }
-    window.keyframe = key;
+  let key = window.keyframe;
+  key = key + 1;
+  if (key > 11) {
+    key = 0;
+  }
+  window.keyframe = key;
 }
 function draw() {
-    clear();
+  clear();
 
-    let img = document.createElement("img");
-    img.src = "/game/map";
-    window.disp.drawImage(img, 0, 0, 1000, 1000);
+  let img = document.createElement("img");
+  img.src = "/game/map";
+  window.disp.drawImage(img, 0, 0, 1000, 1000);
 
-    for (let sein = 0; sein < object.length; sein++) {
-        let stadt = object[sein];
+  for (let sein = 0; sein < object.length; sein++) {
+    let stadt = object[sein];
 
-        //stadt.setarraypos(sein);
-        //stadt.tick();
-        stadt.drew();
-        //stadt.remove();
+    //stadt.setarraypos(sein);
+    //stadt.tick();
+    stadt.drew();
+    //stadt.remove();
+  }
 
-    }
-
-    let selectobject = object.filter(arm => (arm.selected));
-    if (selectobject.length == 0) {
-        $("#info").hide();
-    }
-    for (let ist = 0; ist < selectobject.length; ist++) {
-        let selected = selectobject[ist];
-        selected.infodraw();
-
-    }
-
+  let selectobject = object.filter((arm) => arm.selected);
+  if (selectobject.length == 0) {
+    $("#info").hide();
+  }
+  for (let ist = 0; ist < selectobject.length; ist++) {
+    let selected = selectobject[ist];
+    selected.infodraw();
+  }
 }
 
-
 function clear() {
-    window.disp.clearRect(0, 0, can.width, can.height);
+  window.disp.clearRect(0, 0, can.width, can.height);
 }
 
 function handlePress(e) {
-    //Esc handler
-    if (e.which === 27) {
-        console.log("test");
-        let selectobject = object.filter(arm => (arm.selected));
-        for (let ist = 0; ist < selectobject.length; ist++) {
-            let selected = selectobject[ist];
-            selected.selected = false;
-
-        }
-    } else if (e.which === 13) {// Enter handler
-        console.log("test");
-        senden();
+  //Esc handler
+  if (e.which === 27) {
+    console.log("test");
+    let selectobject = object.filter((arm) => arm.selected);
+    for (let ist = 0; ist < selectobject.length; ist++) {
+      let selected = selectobject[ist];
+      selected.selected = false;
     }
+  } else if (e.which === 13) {
+    // Enter handler
+    console.log("test");
+    senden();
+  }
 }
 function handlebodyClick(e) {
-    console.log("tetetrs,ulfdit");
+  console.log("tetetrs,ulfdit");
 }
 function handleClick(e) {
+  console.log(e.target);
 
-    console.log(e.target);
+  if (e.target.id == "game") {
+    var rect = window.can.getBoundingClientRect();
+    var mausx = ((e.clientX - rect.x) / window.can.offsetWidth) * 1000;
+    var mausy = ((e.clientY - rect.y) / window.can.offsetHeight) * 1000;
 
-    if (e.target.id == "game") {
+    // console.log(mausx);
+    // console.log(mausy);
+    // console.log(can.width);
+    // console.log(can.height);
+    // let rgb = getmappixel(mausx, mausy);
+    // console.log(rgb);
 
-        var rect = window.can.getBoundingClientRect();
-        var mausx = (e.clientX - rect.x) / window.can.offsetWidth * 1000;
-        var mausy = (e.clientY - rect.y) / window.can.offsetHeight * 1000;
+    for (let ist = 0; ist < object.length; ist++) {
+      let arm = object[ist];
 
-        // console.log(mausx);
-        // console.log(mausy);
-        // console.log(can.width);
-        // console.log(can.height);
-        // let rgb = getmappixel(mausx, mausy);
-        // console.log(rgb);
-
-        for (let ist = 0; ist < object.length; ist++) {
-            let arm = object[ist];
-
-            if (((arm.x > (mausx - (arm.size / 2))) && (arm.x < (mausx + (arm.size / 2)))) && ((arm.y > (mausy - (arm.size / 2))) && (arm.y < (mausy + (arm.size / 2))))) {
-                arm.selected = true;
-            } else {
-                if (arm.selected) {
-
-                    if (arm.type == "armee" && arm.owner == document.tokenid) {
-                        //changes.push(new change(arm.id, mausx, mausy, arm.settele = false));
-                        socket.emit("putupdate", { id: arm.id, x: mausx, y: mausy, settele: false });
-                        // arm.gotox = mausx;
-                        // arm.gotoy = mausy;
-                        // arm.a = 0;
-                        // arm.b = 0;
-                    }
-                }
-                arm.selected = false;
-            }
+      if (
+        arm.x > mausx - arm.size / 2 &&
+        arm.x < mausx + arm.size / 2 &&
+        arm.y > mausy - arm.size / 2 &&
+        arm.y < mausy + arm.size / 2
+      ) {
+        arm.selected = true;
+      } else {
+        if (arm.selected) {
+          if (arm.type == "armee" && arm.owner == document.tokenid) {
+            //changes.push(new change(arm.id, mausx, mausy, arm.settele = false));
+            socket.emit("putupdate", {
+              id: arm.id,
+              x: mausx,
+              y: mausy,
+              settele: false,
+            });
+            // arm.gotox = mausx;
+            // arm.gotoy = mausy;
+            // arm.a = 0;
+            // arm.b = 0;
+          }
         }
+        arm.selected = false;
+      }
     }
-    else {
-        let selectobject = object.filter(arm => (arm.selected));
-        for (let ist = 0; ist < selectobject.length; ist++) {
-            let selected = selectobject[ist];
-            selected.selected = false;
-
-        }
+  } else {
+    let selectobject = object.filter((arm) => arm.selected);
+    for (let ist = 0; ist < selectobject.length; ist++) {
+      let selected = selectobject[ist];
+      selected.selected = false;
     }
+  }
 }
 
 function settle() {
-    console.log("settle");
-    let selectobject = object.filter(arm => (arm.selected));
-    if (selectobject.length == 0) {
-        return;
+  console.log("settle");
+  let selectobject = object.filter((arm) => arm.selected);
+  if (selectobject.length == 0) {
+    return;
+  }
+  for (let ist = 0; ist < selectobject.length; ist++) {
+    if (selectobject[ist].type == "armee") {
+      //changes.push(new change(selectobject[ist].id, -1, -1, selectobject[ist].settele = true));
+      socket.emit("putupdate", {
+        id: selectobject[ist].id,
+        x: -1,
+        y: -1,
+        settele: true,
+      });
     }
-    for (let ist = 0; ist < selectobject.length; ist++) {
-        if (selectobject[ist].type == "armee") {
-            //changes.push(new change(selectobject[ist].id, -1, -1, selectobject[ist].settele = true));
-            socket.emit("putupdate", { id: selectobject[ist].id, x: -1, y: -1, settele: true });
-        }
-    }
+  }
 }

@@ -1,4 +1,5 @@
 import { config } from "../config";
+import { gamelogic } from "./gamelogic";
 import { makeRamdomInt } from "./serverutilities";
 
 export class gameobject {
@@ -40,7 +41,7 @@ export class gameobject {
       this.size = size;
     }
   }
-  tick() {}
+  tick(game:gamelogic) {}
   setarraypos(a: number) {
     this.arraypos = a;
   }

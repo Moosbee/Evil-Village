@@ -1,16 +1,15 @@
 import express from 'express';
-import { urlencoded } from 'body-parser';
-import cookieParser from 'cookie-parser';
-import { Server } from 'socket.io';
+// import { urlencoded } from 'body-parser';
+// import cookieParser from 'cookie-parser';
 import { config } from './config';
 import { createUser, verify } from './backend/auth';
-import { game } from './backend/gamelogic';
-import { changes, makeRamdomInt } from './backend/serverutilities';
+import { gamelogic } from './backend/gamelogic';
+import { changes } from './backend/serverutilities';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
-const io = new Server();
-const http = require('http').Server(app);
-var localGame = new game();
+var localGame = new gamelogic();
 
 //Server aktivieren-----------------------------------------------
 
@@ -22,7 +21,7 @@ app.all('*', function (req, res, next) {
 app.use('/media', express.static(config.rootPath + './frontend/public'));
 // app.use(urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 
 // parses request cookies, populating
 // req.cookies and req.signedCookies
@@ -42,29 +41,36 @@ app.get('/login', async (req, res) => {
 
 //fuer einloggen benutze Node.js Passport
 app.post('/login', async (req, res) => {
-  //console.log(req.body);
+  // console.log(req.body);
   let resiveddata = req.body;
 
-  let erg = await verify(
-    resiveddata['usernamefld'],
-    resiveddata['passwordfld']
-  );
+  if (
+    typeof resiveddata['username'] != 'string' ||
+    typeof resiveddata['password'] != 'string'
+  ) {
+    res.json({ state: 'failed' });
+    return;
+  }
+  let username: string = resiveddata['username'];
+  let password: string = resiveddata['password'];
 
-  if (typeof erg == 'number') {
-    let sent: number = erg;
-    res.send(
-      JSON.stringify({
-        state: 'success',
-        id: sent,
-      })
-    );
+  let erg = await verify(username, password);
+
+  if (erg != 'wrong' && erg != 'failed') {
+    res.json({
+      state: 'success',
+      id: erg.id,
+      username: erg.username,
+      pass: erg.pass,
+    });
   } else if (erg == 'wrong') {
-    res.send('{"state":"wrong"}');
+    res.json({ state: 'wrong' });
+    return;
   } else if (erg == 'failed') {
-    res.send('{"state":"failed"}');
+    res.json({ state: 'failed' });
     return;
   } else {
-    res.send('{"state":"failed"}');
+    res.json({ state: 'failed' });
     return;
   }
 });
@@ -75,27 +81,35 @@ app.get('/makeuser', async (req, res) => {
 
 app.post('/makeuser', async (req, res) => {
   // console.log(req.body);
-  let resiveddata = req.body;
 
-  let erg = await createUser(
-    resiveddata['usernamefld'],
-    resiveddata['passwordfld']
-  );
-  if (typeof erg == 'number') {
-    let sent: number = erg;
-    res.send(
-      JSON.stringify({
-        state: 'success',
-        id: sent,
-      })
-    );
+  // res.json({ state: 'failed' });
+
+  let resiveddata = req.body;
+  if (
+    typeof resiveddata['username'] != 'string' ||
+    typeof resiveddata['password'] != 'string'
+  ) {
+    res.json({ state: 'failed' });
+    return;
+  }
+  let username: string = resiveddata['username'];
+  let password: string = resiveddata['password'];
+
+  let erg = await createUser(username, password);
+  if (erg != 'taken' && erg != 'failed') {
+    res.json({
+      state: 'success',
+      id: erg.id,
+      username: erg.username,
+      pass: erg.pass,
+    });
   } else if (erg == 'taken') {
-    res.send('{"state":"taken"}');
+    res.json({ state: 'taken' });
   } else if (erg == 'failed') {
-    res.send('{"state":"failed"}');
+    res.json({ state: 'failed' });
     return;
   } else {
-    res.send('{"state":"failed"}');
+    res.json({ state: 'failed' });
     return;
   }
 });
@@ -109,7 +123,7 @@ app.get('/game/main', (req, res) => {
 });
 
 app.get('/game/config', (req, res) => {
-  res.sendFile(config.rootPath + './frontend/unpublic/maingameframe.html');
+  res.sendFile(config.rootPath + './frontend/unpublic/config.html');
 });
 
 app.get('/game/map', (req, res) => {
@@ -120,32 +134,14 @@ app.get('/game/map', (req, res) => {
 });
 
 app.post('/game/main', (req, res) => {
-  // let resiveddata = req.body;
-  // console.log(resiveddata);
-  // if (resiveddata['id'] == undefined) {
-  //   res.send('<h1>Error</h1>');
-  //   return;
-  // } else {
-  //   let idd = resiveddata['id'];
-  //   let selectobject = globalThis.gameObjects.filter(
-  //     (arm) => arm.owner == idd && arm.capital == true
-  //   );
-  //   if (selectobject.length == 0) {
-  //     let min = 75;
-  //     let max = 930;
-  //     let x = makeRamdomInt(min,max);
-  //     let y = makeRamdomInt(min,max);
-  //     globalThis.gameObjects.push(new stadt(x, y, resiveddata['id'], true));
-  //     globalThis.gameObjects[globalThis.gameObjects.length - 1].arraypos = globalThis.gameObjects.length - 1;
-  //   }
-  // }
-  // res.send(JSON.stringify(globalThis.gameObjects));
+  let id: string | number | null | undefined = req.body.id;
+  if (typeof id == 'number' && !localGame.doesCapitolExist(id)) {
+    localGame.addCapitol(id);
+  }
+  res.send(localGame.getUpdate());
 });
-
 app.get('/game/update', (req, res) => {
-  setTimeout(function () {
-    res.send(localGame.getUpdateEasy());
-  }, 101);
+  res.send(localGame.getUpdate());
 });
 
 app.post('/game/update', (req, res) => {
@@ -154,13 +150,12 @@ app.post('/game/update', (req, res) => {
 
   localGame.update(resiveddata);
 
-  setTimeout(function () {
-    res.send(localGame.getUpdateEasy());
-  }, 101);
+  res.send(localGame.getUpdate());
 });
+
 app.get('/shutdown', async (req, res) => {
   res.send('<h1 color="red">Shutdown</h1>');
-  //game.end(0);
+  localGame.end(0);
 });
 
 app.get('/favicon.ico', async (req, res) => {
@@ -170,10 +165,25 @@ app.get('/favicon.ico', async (req, res) => {
   res.sendFile(dir);
 });
 
+app.all('*', function (req, res, next) {
+  try {
+    //console.log(req);
+    res.status(400).send('<h1>Error</h1>');
+    console.log('An Idiot has a typo!');
+    console.log(req.method + ' Anfrage ' + req.url);
+  } catch (error) {
+    console.log(error);
+  }
+  next(); // pass control to the next handler
+});
+
 //Socket.io ----------------------------------------------------
 
+const httpServer = createServer(app);
+const socketServer = new Server(httpServer);
+
 //Whenever someone connects this gets executed
-io.on('connection', function (socket) {
+socketServer.on('connection', function (socket) {
   console.log('A user connected');
 
   socket.on('test', function () {
@@ -194,23 +204,13 @@ io.on('connection', function (socket) {
 });
 
 setInterval(() => {
-  io.emit('update', localGame.getUpdateEasy());
+  socketServer.emit('update', localGame.getUpdate());
 }, 100);
 
-//Server chatch -------------------------------------------------
+// server.listen(app.get('port'), function(){
+//   console.log('Express server listening on port ' + app.get('port'));
+// });
 
-app.all('*', function (req, res, next) {
-  try {
-    //console.log(req);
-    res.status(400).send('<h1>Error</h1>');
-    console.log('An Idiot has a typo!');
-  } catch (error) {
-    console.log(error);
-  }
-  next(); // pass control to the next handler
-});
-
-http.listen(config.port, () => {
-  console.log(`Schulprojekt listening on port ${config.port}!`);
-  //game.start();
+httpServer.listen(config.expressPort, () => {
+  console.log(`Schulprojekt listening on port ${config.expressPort}!`);
 });

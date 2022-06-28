@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
 import { createHmac } from 'crypto';
-import { getMapPixel, makeRamdomInt } from './serverutilities';
+import { makeRamdomInt } from './serverutilities';
 interface player {
   id: number;
   username: string;
@@ -12,9 +12,10 @@ interface player {
 async function verify(
   user: string,
   password: string
-): Promise<number | 'failed' | 'wrong'> {
+): Promise<player | 'failed' | 'wrong'> {
   let passwordHash = hash(password, user);
   let file = '[]';
+  console.log(config.rootPath + config.PlayerFile);
 
   try {
     file = await readFile(config.rootPath + config.PlayerFile, {
@@ -27,15 +28,21 @@ async function verify(
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer == undefined) return 'failed';
   if (jsonPlayer.pass != passwordHash) return 'wrong';
-  return jsonPlayer?.id;
+  jsonPlayer.pass = password;
+  return jsonPlayer;
 }
 
 async function createUser(
   user: string,
-  password: string,
-): Promise<number | 'failed' | 'taken'> {
-  let passwordHash = hash(password, user);
+  password: string
+): Promise<player | 'failed' | 'taken'> {
+
+
   let file = '[]';
+  let passwordHash = hash(password, user);
+
+
+
   try {
     file = readFileSync(config.rootPath + config.PlayerFile, {
       encoding: 'utf8',
@@ -47,9 +54,9 @@ async function createUser(
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer != undefined) return 'taken';
   let minPlayer = 1;
-  let newid =makeRamdomInt(minPlayer,config.MaxPlayers);
+  let newid = makeRamdomInt(minPlayer, config.MaxPlayers);
   while (jsonPlayers.find((e) => e.id === newid) != undefined) {
-    newid =makeRamdomInt(minPlayer,config.MaxPlayers);
+    newid = makeRamdomInt(minPlayer, config.MaxPlayers);
   }
 
   let newPlayer: player = {
@@ -59,19 +66,24 @@ async function createUser(
   };
   jsonPlayers.push(newPlayer);
   try {
-    writeFileSync('../players.json', JSON.stringify(jsonPlayers));
+    console.log(jsonPlayers);
+    writeFileSync(
+      config.rootPath + config.PlayerFile,
+      JSON.stringify(jsonPlayers)
+    );
   } catch (e) {
     return 'failed';
   }
-  return newPlayer.id;
+  newPlayer.pass = password;
+  return newPlayer;
 }
 
 function hash(text: string, salt: string): string {
   // string to be hashed
-  let str = text;
+  let str:string = text;
 
   // secret or salt to be hashed with
-  let secret = salt;
+  let secret:string = salt;
 
   // create a sha-256 hasher
   let sha256Hasher = createHmac('sha256', secret);

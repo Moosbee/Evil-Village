@@ -1,11 +1,17 @@
 import { readFile, writeFile } from 'fs/promises';
 import { config } from '../config';
-import { changes, mapMini, saveFile, setmap } from './serverutilities';
+import {
+  changes,
+  mapMini,
+  saveFile,
+  setmap,
+  makeRamdomInt,
+} from './serverutilities';
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
 
-export class game {
+export class gamelogic {
   gameObjects: (armee | stadt | schiff)[];
   map?: mapMini;
 
@@ -14,10 +20,11 @@ export class game {
 
     this.importGameObjects().then(() => {
       setmap().then((mapi) => {
-        map = mapi;
+        this.map = mapi;
         console.log(this.gameObjects);
-        setInterval(this.gameloop, 100);
-        setInterval(this.save, 5000);
+        setInterval(this.gameloop, 100, this);
+        setInterval(this.save, 5000, this);
+        // setTimeout(this.gameloop, 1000,this);
         console.log('Game Startet');
       });
     });
@@ -87,23 +94,61 @@ export class game {
           continue;
           break;
       }
-      gameObjects.push(savedObject);
+      this.gameObjects.push(savedObject);
     }
   }
 
-  doesCapitolExist(owner: number) {}
+  doesCapitolExist(owner: number) {
+    let filterd = this.gameObjects.filter((e): boolean => {
+      return e instanceof stadt && e.owner == owner && e.capital;
+    });
+    if (filterd.length == 1) {
+      return true;
+    } else if (filterd.length > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  addCapitol(owner: number) {}
+  doesExistAtAll(owner: number) {
+    let filterd = this.gameObjects.filter((e): boolean => {
+      return e.owner == owner;
+    });
+    if (filterd.length == 1) {
+      return true;
+    } else if (filterd.length > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  addStadt(){}
-  addArmy(){}
-  addSchiff(){}
+  addCapitol(owner: number) {
+    if (this.map == undefined) return;
+    let capital = new stadt(
+      makeRamdomInt(50, this.map.width),
+      makeRamdomInt(50, this.map.height),
+      owner,
+      undefined,
+      -1,
+      -1,
+      undefined,
+      true
+    );
+    capital.arraypos = this.gameObjects.length;
+    this.gameObjects.push(capital);
+  }
+
+  addStadt() {}
+  addArmy() {}
+  addSchiff() {}
 
   getUpdate(): string {
     let savedObjects: saveFile[] = [];
 
-    for (let i = 0; i < gameObjects.length; i++) {
-      const element = gameObjects[i];
+    for (let i = 0; i < this.gameObjects.length; i++) {
+      const element = this.gameObjects[i];
       let savedObject: saveFile;
       if (element instanceof armee) {
         savedObject = {
@@ -182,25 +227,26 @@ export class game {
   }
 
   async end(a: number) {
-    await this.save();
+    await this.save(this);
     process.exit(a);
   }
 
-  async save() {
-    let data = this.getUpdate();;
+  async save(game: gamelogic) {
+    let data = game.getUpdate();
     await writeFile('./save.json', data);
-    console.log('Saved!');
+    // console.log('Autosave!');
   }
 
-  gameloop() {
-    //console.log("Looped");
+  async gameloop(game: gamelogic) {
+    // console.log("Looped");
 
-    for (let i = 0; i < this.gameObjects.length; i++) {
-      let stadt = this.gameObjects[i];
+    // console.log(game);
 
-      stadt.setarraypos(i);
-      stadt.tick();
-      //stadt.drew();
+    for (let i = 0; i < game.gameObjects.length; i++) {
+      let Object = game.gameObjects[i];
+      Object.setarraypos(i);
+      Object.tick(game);
+      //Object.drew();
     }
   }
 }

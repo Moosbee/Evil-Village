@@ -3,16 +3,17 @@ import path from 'path';
 let config = {
   rootPath: path.normalize(__dirname + '/'),
   MaxPlayers: 1000,
-  PlayerFile: './players.json',
+  PlayerFile: path.normalize('./players.json'),
   Game: {
     ResetOnStart: true,
     Map: 1,
-    saveFile: './save.json',
+    saveFile: path.normalize('./save.json'),
     runspeed:2,
     maxGameObjects:25000
   },
   favicon: 4,
-  port:80
+  expressPort:80,
+  socketPort:3000
 };
 
 export { config };

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/media/styles/maingameframe.css">
-    <link rel="stylesheet" href="/media/styles/header.css">
-    <script src="/socket.io/socket.io.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/media/styles/maingameframe.css" />
+    <link rel="stylesheet" href="/media/styles/header.css" />
+    <!-- Dependencies -->
+    <script src="/media/js/socket.io.js"></script>
     <script src="/media/js/jquery-3.6.0.min.js"></script>
     <script src="/media/js/js.cookie.js"></script>
+    <!-- Self-Scripts -->
     <script src="/media/js/coocie.js"></script>
     <script src="/media/js/utilities.js"></script>
     <script src="/media/js/gameObjects/change.js"></script>
@@ -18,99 +19,200 @@
     <script src="/media/js/gameObjects/schiff.js"></script>
     <script src="/media/js/gameObjects/game.js"></script>
     <title>Evil village</title>
-    <script src="https://kit.fontawesome.com/18e03e461d.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/18e03e461d.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <header>
-        <div id="heade">
-            <div id="gam">Evil village</div>
-            <button id="darkm" onclick="dark()">Change Modes
-                <audio id="audiofile" loop="true">
-                    <source src="/media/music1.mp3" />
-                </audio>
-            </button>
-            <button id="logoute" onclick="logof()" style="visibility: visible;">LOGOUT</button>
-        </div>
+      <div id="heade">
+        <div id="gam">Evil village</div>
+        <button id="darkm" onclick="dark()">
+          Change Modes
+          <audio id="audiofile" loop="true">
+            <source src="/media/music1.mp3" />
+          </audio>
+        </button>
+        <button id="logoute" onclick="logof()" style="visibility: visible">
+          LOGOUT
+        </button>
+      </div>
     </header>
     <div id="cent">
-        <div class="gamebox">
-            <div class="gamecntent">
-                <canvas id="game" width="1000" height="1000">
-                    <p>Unsupportet Browser</p>
-                </canvas>
-                <div id="send" onclick="senden()">
-                    <style>
-                        #sed {
-                            position: absolute;
-                            height: 100%;
-                            width: 100%;
-                        }
+      <div class="gamebox">
+        <div class="gamecntent">
+          <canvas id="game" width="1000" height="1000">
+            <p>Unsupportet Browser</p>
+          </canvas>
+          <div id="send" onclick="senden()">
+            <style>
+              #sed {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+              }
 
-                        .lay1 {
-                            transition: all 0.5s ease;
-                        }
+              .lay1 {
+                transition: all 0.5s ease;
+              }
 
-                        #Layer_1 {
-                            stroke: crimson;
-                        }
+              #Layer_1 {
+                stroke: crimson;
+              }
 
-                        #Layer_2 {
-                            stroke: black;
-                        }
-                    </style>
-                    <svg id="sed" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
-                        <g id="Layer_1">
-                            <title>Layer 1</title>
-                            <rect class="lay1" stroke-width="2" id="svg_1" height="55.0" width="75.0" y="2.5" x="2.6"
-                                fill="none" />
-                            <line class="lay1" id="svg_2" y2="35.0" x2="40.0" y1="2.5" x1="2.5" stroke-width="2"
-                                fill="none" />
-                            <line class="lay1" id="svg_3" y2="2.5" x2="77.5" y1="35.0" x1="40.0" stroke-width="2"
-                                fill="none" />
-                            <line class="lay1" id="svg_4" y2="57.5" x2="77.5" y1="30.0" x1="46.0" stroke-width="2"
-                                fill="none" />
-                            <line class="lay1" id="svg_5" y2="30.0" x2="34.0" y1="57.5" x1="2.5" stroke-width="2"
-                                fill="none" />
-                        </g>
-                        <g id="Layer_2">
-                            <title>Layer 2</title>
-                            <rect stroke-width="2" id="svg_6" height="55.0" width="75.0" y="2.5" x="2.6" fill="none" />
-                            <line id="svg_7" y2="35.0" x2="40.0" y1="2.5" x1="2.5" stroke-width="2" fill="none" />
-                            <line id="svg_8" y2="2.5" x2="77.5" y1="35.0" x1="40.0" stroke-width="2" fill="none" />
-                            <line id="svg_9" y2="57.5" x2="77.5" y1="30.0" x1="46.0" stroke-width="2" fill="none" />
-                            <line id="svg_10" y2="30.0" x2="34.0" y1="57.5" x1="2.5" stroke-width="2" fill="none" />
-                        </g>
-                    </svg>
-                </div>
-                <div id="info" onclick="settle()">
-                    <div id="Armee">
-                        Info:<img class="image" src="/media/images/armee.png" alt="armee"><br>
-                        Stärke:<label class="strength">500</label><br>
-                        <!-- Geschwindichkeit:<label class="speed">500</label><br> -->
-                        Besitzer:<label class="owner">Nicht du</label><br>
-                        Position:<br>x: <label class="x">436</label><br>y: <label class="y">146</label><br>
-                        Zielposition:<br>x:<label class="gotox">983</label><br>y: <label class="gotoy">248</label>
-                    </div>
-                    <div id="Stadt">
-                        Info:<img class="image" src="/media/images/stadt.png" alt="Stadt"><br>
-                        Stärke:<label class="strength">1000</label><br>
-                        Besitzer:<label class="owner">Nicht du</label><br>
-                        Position:<br>x: <label class="x">500</label><br>y: <label class="y">500</label><br>
-                        Geschwindichkeit:<label class="speed">0</label><br>
-                        Population:<label class="population">101</label><br>
-                        Ausbildungsstatus:<label class="makingofarmy">999</label><br>
-                    </div>
-                </div>
-                <div id="loose">
-                    <div id="loosetag">
-                        <h1>Verloren</h1>
-                        <p>Deine Hauptstadt wurde Vernichtet</p>
-                        <img id="death" src="/media/images/death.png" alt="Tod">
-                    </div>
-                </div>
+              #Layer_2 {
+                stroke: black;
+              }
+            </style>
+            <svg
+              id="sed"
+              viewBox="0 0 80 60"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="Layer_1">
+                <title>Layer 1</title>
+                <rect
+                  class="lay1"
+                  stroke-width="2"
+                  id="svg_1"
+                  height="55.0"
+                  width="75.0"
+                  y="2.5"
+                  x="2.6"
+                  fill="none"
+                />
+                <line
+                  class="lay1"
+                  id="svg_2"
+                  y2="35.0"
+                  x2="40.0"
+                  y1="2.5"
+                  x1="2.5"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  class="lay1"
+                  id="svg_3"
+                  y2="2.5"
+                  x2="77.5"
+                  y1="35.0"
+                  x1="40.0"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  class="lay1"
+                  id="svg_4"
+                  y2="57.5"
+                  x2="77.5"
+                  y1="30.0"
+                  x1="46.0"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  class="lay1"
+                  id="svg_5"
+                  y2="30.0"
+                  x2="34.0"
+                  y1="57.5"
+                  x1="2.5"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </g>
+              <g id="Layer_2">
+                <title>Layer 2</title>
+                <rect
+                  stroke-width="2"
+                  id="svg_6"
+                  height="55.0"
+                  width="75.0"
+                  y="2.5"
+                  x="2.6"
+                  fill="none"
+                />
+                <line
+                  id="svg_7"
+                  y2="35.0"
+                  x2="40.0"
+                  y1="2.5"
+                  x1="2.5"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  id="svg_8"
+                  y2="2.5"
+                  x2="77.5"
+                  y1="35.0"
+                  x1="40.0"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  id="svg_9"
+                  y2="57.5"
+                  x2="77.5"
+                  y1="30.0"
+                  x1="46.0"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <line
+                  id="svg_10"
+                  y2="30.0"
+                  x2="34.0"
+                  y1="57.5"
+                  x1="2.5"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </g>
+            </svg>
+          </div>
+          <div id="info" onclick="settle()">
+            <div id="Armee">
+              Info:<img
+                class="image"
+                src="/media/images/armee.png"
+                alt="armee"
+              /><br />
+              Stärke:<label class="strength">500</label><br />
+              <!-- Geschwindichkeit:<label class="speed">500</label><br> -->
+              Besitzer:<label class="owner">Nicht du</label><br />
+              Position:<br />x: <label class="x">436</label><br />y:
+              <label class="y">146</label><br />
+              Zielposition:<br />x:<label class="gotox">983</label><br />y:
+              <label class="gotoy">248</label>
             </div>
+            <div id="Stadt">
+              Info:<img
+                class="image"
+                src="/media/images/stadt.png"
+                alt="Stadt"
+              /><br />
+              Stärke:<label class="strength">1000</label><br />
+              Besitzer:<label class="owner">Nicht du</label><br />
+              Position:<br />x: <label class="x">500</label><br />y:
+              <label class="y">500</label><br />
+              Geschwindichkeit:<label class="speed">0</label><br />
+              Population:<label class="population">101</label><br />
+              Ausbildungsstatus:<label class="makingofarmy">999</label><br />
+            </div>
+          </div>
+          <div id="loose">
+            <div id="loosetag">
+              <h1>Verloren</h1>
+              <p>Deine Hauptstadt wurde Vernichtet</p>
+              <img id="death" src="/media/images/death.png" alt="Tod" />
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
+</html>

@@ -32,17 +32,17 @@ interface saveFile {
 }
 
 interface saveArmy {
-  type:"saveArmy"
+  type: 'saveArmy';
   gotox: number;
   gotoy: number;
 }
 interface saveSchiff {
-  type:"saveSchiff"
+  type: 'saveSchiff';
   gotox: number;
   gotoy: number;
 }
 interface saveStadt {
-  type:"saveStadt"
+  type: 'saveStadt';
   capital: boolean;
   speed: number;
   population: number;
@@ -72,15 +72,10 @@ async function setmap(): Promise<mapMini> {
 }
 
 //image.getPixelColor(x, y); // returns the colour of that pixel e.g. 0xFFFFFFFF
-function getMapPixel(x: number, y: number): RGBColor {
-  if (
-    globalThis.map == undefined ||
-    globalThis.map.set == undefined ||
-    globalThis.map.set == false ||
-    !globalThis.map
-  ) {
+function getMapPixel(x: number, y: number, map: mapMini | undefined): RGBColor {
+  if (map == undefined || map.set == undefined || map.set == false || !map) {
     setmap().then((map) => {
-      globalThis.map = map;
+      map = map;
     });
     return {
       red: 0,
@@ -92,16 +87,16 @@ function getMapPixel(x: number, y: number): RGBColor {
 
   x = Math.round(x);
   y = Math.round(y);
-  let indexred = y * (globalThis.map.width * 4) + x * 4;
+  let indexred = y * (map.width * 4) + x * 4;
   let indexgreen = indexred + 1;
   let indexblue = indexred + 2;
   let indexalpha = indexred + 3;
 
   let pixel: RGBColor = {
-    red: globalThis.map.pixels[indexred],
-    green: globalThis.map.pixels[indexgreen],
-    blue: globalThis.map.pixels[indexblue],
-    alpha: globalThis.map.pixels[indexalpha],
+    red: map.pixels[indexred],
+    green: map.pixels[indexgreen],
+    blue: map.pixels[indexblue],
+    alpha: map.pixels[indexalpha],
   };
   return pixel;
 }

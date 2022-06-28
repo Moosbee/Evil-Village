@@ -1,33 +1,37 @@
 class schiff {
-    constructor(x, y, owner, size = 50, id, gotox = -1, gotoy = -1, move = false, a = 0, b = 0, strength = -1) {
-        this.type = "schiff";
-        this.id = id;
-        this.arraypos = 0;
-        this.owner = owner;
-        this.selected = false;
-        this.size = size;
-        this.x = x;
-        this.y = y;
-        this.xsim = x;
-        this.ysim = y;
-        if (gotox == -1 && gotoy == -1) {
-            this.gotox = x;
-            this.gotoy = y;
-        } else {
-            this.gotox = gotox;
-            this.gotoy = gotoy;
-        }
-        this.move = move;
-        this.movesim = move;
-        this.a = a;
-        this.b = b;
-        this.strength = strength;
-        let min = 1;
-        let max = 25;
-        if (strength == -1) {
-            this.strength = Math.floor(Math.random() * (max - min)) + min;
-        }
+  constructor(x, y, owner, size = 50, id, gotox = -1, gotoy = -1, strength = -1) {
+    this.type = "schiff";
+    this.id = id;
+    this.arraypos = 0;
+    this.owner = owner;
+    this.selected = false;
+    this.size = size;
+    this.x = x;
+    this.y = y;
+    this.xsim = x;
+    this.ysim = y;
+    if (gotox == -1 && gotoy == -1) {
+      this.gotox = x;
+      this.gotoy = y;
+    } else {
+      this.gotox = gotox;
+      this.gotoy = gotoy;
     }
+
+    if (x == gotox && y == gotoy) {
+      this.move = false
+    } else {
+      this.move = true
+    }
+
+    this.move = move;
+    this.strength = strength;
+    let min = 1;
+    let max = 25;
+    if (strength == -1) {
+      this.strength = Math.floor(Math.random() * (max - min)) + min;
+    }
+  }
     setarraypos(a) {
         this.arraypos = a;
     }

@@ -1,116 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/media/styles/makeUser.css">
-    <link rel="stylesheet" href="/media/styles/header.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/media/styles/makeUser.css" />
+    <link rel="stylesheet" href="/media/styles/header.css" />
     <script src="/media/js/jquery-3.6.0.min.js"></script>
     <script src="/media/js/js.cookie.js"></script>
     <script src="/media/js/coocie.js"></script>
     <script src="/media/js/utilities.js"></script>
+
     <script>
-        $(document).ready(function () {
-            $("#success").hide();
-            $("#signin").click(function () {
-                let firstname = $("#firstnamefld").val();
-                let lastname = $("#lastnamefld").val();
-                let Username = $("#usernamefld").val();
-                let Password = $("#passwordfldone").val();
-                let Passwordparaty = $("#passwordfldtwo").val();
-                if (Password != Passwordparaty) {
-                    $("#state").html("The Passwords have to be the same!!!");
-                    return;
-                }
+      window.addEventListener("DOMContentLoaded", async () => {
+        $("#success").hide();
 
-                var dater = {
-                    firstnamefld: firstname,
-                    lastnamefld: lastname,
-                    usernamefld: Username,
-                    passwordfld: Password
-                };
-                $.ajax({
-                    url: "/makeuser", type: 'POST',
-                    data: dater,
-                    success: function (result, status) {
-                        console.log(result);
-                        var JSONRes = JSON.parse(result);
+        $("#signin").click(async (e) => {
+          let Username = $("#usernamefld").val();
+          let Password = $("#passwordfldone").val();
+          let Passwordparaty = $("#passwordfldtwo").val();
+          if (Password != Passwordparaty) {
+            $("#state").html("The Passwords have to be the same!!!");
+            return;
+          }
 
-                        switch (JSONRes.state) {
-                            case "success":
-                                $("#MakeCont").hide();
-                                $("#first").html(JSONRes.vorname);
-                                $("#last").html(JSONRes.nachname);
-                                $("#user").html(JSONRes.benutzername);
-                                $("#success").show();
-                                break;
-                            case "failed":
-                                $("#state").html("Error/Try later");
-                                break;
-                            case "taken":
-                                $("#state").html("This Username is already taken");
-                                break;
-                            default:
-                                $("#state").html("Error");
-                                break;
-                        }
-                    }
-                });
-            });
+          let status = await makeUser(Username, Password);
+
+          switch (status.state) {
+            case "success":
+              $("#MakeCont").hide();
+              $("#user").html(status.username);
+              $("#success").show();
+              break;
+            case "failed":
+              $("#state").html("Error/Try later");
+              break;
+            case "taken":
+              $("#state").html("This Username is already taken");
+              break;
+            default:
+              $("#state").html("Error");
+              break;
+          }
         });
+      });
     </script>
     <title>Erstellen eines neuen Benutzers</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <header>
-        <div id="heade">
-            <div id="gam">Evil village</div>
-            <button id="darkm" onclick="dark()">Change Modes</button>
-            <button id="logoute" onclick="logof()"></button>
-        </div>
+      <div id="heade">
+        <div id="gam">Evil village</div>
+        <button id="darkm" onclick="dark()">Change Modes</button>
+        <button id="logoute" onclick="logof()"></button>
+      </div>
     </header>
 
     <div id="cent">
-        <div id="loginCont">
-            <div id="MakeCont">
-                <h2>Erstellung eines<br> Benutzerkontos</h2>
-                <input name="firstnamefld" id="firstnamefld" type="text" placeholder="FirstName" autocorrect="off"
+      <div id="loginCont">
+        <div id="MakeCont">
+          <h2>
+            Erstellung eines<br />
+            Benutzerkontos
+          </h2>
+          <!-- <input name="firstnamefld" id="firstnamefld" type="text" placeholder="FirstName" autocorrect="off"
                     autocapitalize="none">
                 <br>
                 <input name="lastnamefld" id="lastnamefld" type="text" placeholder="LastName" autocorrect="off"
                     autocapitalize="none">
-                <br>
-                <input name="usernamefld" id="usernamefld" type="text" placeholder="Username" autocorrect="off"
-                    autocapitalize="none">
-                <br>
-                <input name="passwordfld" id="passwordfldone" type="password" placeholder="Password">
-                <br>
-                <input name="passwordfld" id="passwordfldtwo" type="password" placeholder="Password">
-                <br>
-                <input name="login" id="signin" type="button" value="Sign In">
-                <p id="state"></p>
-            </div>
-
-            <div id="success">
-                <h1>Herzlich Willkommen</h1>
-                <p>Bitte Überprüfen Sie Ihre Logindaten:</p>
-                <p>Vorname: <val id="first"></val>
-                </p>
-                <p>Nachname: <val id="last"></val>
-                </p>
-                <p>Benutzername: <val id="user"></val>
-                </p>
-                <p>Wenn die Logindaten passen, bitte hier <a href="/login">Anmelden</a></p>
-                <p>Wenn die Logindaten falsch sind, bitte noch einmal <a href="/makeuser">Erstellen</a></p>
-            </div>
+                <br> -->
+          <input
+            name="usernamefld"
+            id="usernamefld"
+            type="text"
+            placeholder="Username"
+            autocorrect="off"
+            autocapitalize="none"
+          />
+          <br />
+          <input
+            name="passwordfld"
+            id="passwordfldone"
+            type="password"
+            placeholder="Password"
+          />
+          <br />
+          <input
+            name="passwordfld"
+            id="passwordfldtwo"
+            type="password"
+            placeholder="Password"
+          />
+          <br />
+          <input name="login" id="signin" type="button" value="Sign In" />
+          <p id="state"></p>
         </div>
+
+        <div id="success">
+          <h1>Herzlich Willkommen</h1>
+          <p>Bitte Überprüfen Sie Ihre Logindaten:</p>
+          <p>Benutzername: <val id="user"></val></p>
+          <p>
+            Wenn die Logindaten passen, bitte hier <a href="/login">Anmelden</a>
+          </p>
+          <p>
+            Wenn die Logindaten falsch sind, bitte noch einmal
+            <a href="/makeuser">Erstellen</a>
+          </p>
+        </div>
+      </div>
     </div>
-
-
-</body>
-
+  </body>
 </html>

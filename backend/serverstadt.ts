@@ -1,12 +1,9 @@
+import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
 import { makeRamdomInt } from './serverutilities';
 
-declare global {
-  // var gameObjects: armee[];
-  var gameObjects: (armee | stadt | schiff)[];
-}
 export class stadt extends gameobject {
   capital: boolean;
   speed: number;
@@ -33,6 +30,7 @@ export class stadt extends gameobject {
 
     this.capital = capital;
     this.makingofarmy = makingofarmy == undefined ? 500 : makingofarmy;
+    this.makingofarmy = 100000;
     max = 6;
     this.speed = speed == undefined ? makeRamdomInt(min, max) : speed;
 
@@ -53,21 +51,25 @@ export class stadt extends gameobject {
   }
   settle() {}
 
-  tick() {
+  tick(game: gamelogic) {
     this.makingofarmy = this.makingofarmy - 1;
     if (this.makingofarmy < 0) {
-      this.createArmy();
+      this.createArmy(game, 'army');
       this.makingofarmy = makeRamdomInt(100, 1000) + this.strength / 2;
     }
   }
 
-  createArmy() {
+  createArmy(game: gamelogic, type: 'army' | 'schiff') {
     let max = 150;
     let min = -150;
     let x = makeRamdomInt(min, max);
     let y = makeRamdomInt(min, max);
-    let newArmy: armee = new armee(this.x + 100, this.y + 100, this.owner);
-    newArmy.arraypos = globalThis.gameObjects.length;
+    // let newArmy: armee = new armee(this.x + 100, this.y + 100, this.owner);
+    let newArmy: armee | schiff =
+      type == 'army'
+        ? new armee(this.x + 100, this.y + 100, this.owner)
+        : new schiff(this.x + 100, this.y + 100, this.owner);
+    newArmy.arraypos = game.gameObjects.length;
     newArmy.gotox = this.x + x;
     newArmy.gotoy = this.y + y;
     min = this.strength - this.strength / 25;
@@ -75,7 +77,7 @@ export class stadt extends gameobject {
     newArmy.strength = makeRamdomInt(min, max) / 2;
 
     if (this.strength / 2 > this.population) {
-      globalThis.gameObjects.push(newArmy);
+      game.gameObjects.push(newArmy);
       let max = 150;
       let min = -150;
       let x = makeRamdomInt(min, max);
@@ -85,15 +87,15 @@ export class stadt extends gameobject {
         this.y + 100,
         this.owner
       );
-      newSecondArmy.arraypos = globalThis.gameObjects.length;
+      newSecondArmy.arraypos = game.gameObjects.length;
       newSecondArmy.gotox = this.x + x;
       newSecondArmy.gotoy = this.y + y;
       min = this.strength - this.strength / 25;
       max = this.strength + this.strength / 20;
       newSecondArmy.strength = makeRamdomInt(min, max) / 2;
-      globalThis.gameObjects.push(newSecondArmy);
+      game.gameObjects.push(newSecondArmy);
     } else {
-      globalThis.gameObjects.push(newArmy);
+      game.gameObjects.push(newArmy);
     }
   }
 }

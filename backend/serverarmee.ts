@@ -1,13 +1,9 @@
 import { config } from '../config';
+import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
 import { getMapPixel, makeRamdomInt } from './serverutilities';
-
-declare global {
-  // var gameObjects: armee[];
-  var gameObjects: (armee | stadt | schiff)[];
-}
 
 export class armee extends gameobject {
   gotox: number;
@@ -46,20 +42,20 @@ export class armee extends gameobject {
     this.movex = movex;
   }
 
-  settleMerge() {
-    if (this.merge()) return;
+  settleMerge(game: gamelogic) {
+    if (this.merge(game)) return;
     if (this.strength > 500) {
-      this.settle();
+      this.settle(game);
     } else {
       console.log('fehlgeschlagen');
     }
   }
 
-  settle() {
+  settle(game: gamelogic) {
     let min = this.strength - 100;
     let max = this.strength + 100;
-    let population = makeRamdomInt(min,max);
-    globalThis.gameObjects.push(
+    let population = makeRamdomInt(min, max);
+    game.gameObjects.push(
       new stadt(
         this.x,
         this.y,
@@ -70,22 +66,21 @@ export class armee extends gameobject {
       )
     );
 
-    globalThis.gameObjects[globalThis.gameObjects.length - 1].arraypos =
-      globalThis.gameObjects.length - 1;
+    game.gameObjects[game.gameObjects.length - 1].arraypos =
+      game.gameObjects.length - 1;
 
     this.strength = -1;
   }
 
-  merge(): boolean {
-    let selectgameObjects: (armee | stadt | schiff)[] =
-      globalThis.gameObjects.filter(
-        (arm) =>
-          arm instanceof stadt &&
-          this.x > arm.x - this.size / 2 &&
-          this.x < arm.x + this.size / 2 &&
-          this.y > arm.y - this.size / 2 &&
-          this.y < arm.y + this.size / 2
-      );
+  merge(game: gamelogic): boolean {
+    let selectgameObjects: (armee | stadt | schiff)[] = game.gameObjects.filter(
+      (arm) =>
+        arm instanceof stadt &&
+        this.x > arm.x - this.size / 2 &&
+        this.x < arm.x + this.size / 2 &&
+        this.y > arm.y - this.size / 2 &&
+        this.y < arm.y + this.size / 2
+    );
 
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
@@ -107,12 +102,14 @@ export class armee extends gameobject {
     this.movex = 0;
   }
 
-  tick() {
+  tick(game: gamelogic) {
     this.strength = this.strength + 1 / 1000;
 
     if (this.x == this.gotox && this.y == this.gotoy) return;
 
-    let selectgameObject = globalThis.gameObjects.filter(
+    this.move(game);
+
+    let selectgameObject = game.gameObjects.filter(
       (arm) =>
         this.x > arm.x - this.size / 2 &&
         this.x < arm.x + this.size / 2 &&
@@ -124,7 +121,7 @@ export class armee extends gameobject {
       this.interact(selectgameObject[i]);
     }
   }
-  move() {
+  move(game: gamelogic) {
     if (
       this.x > this.gotox - 5 &&
       this.x < this.gotox + 5 &&
@@ -158,7 +155,7 @@ export class armee extends gameobject {
       this.x = this.x + b;
       this.y = this.y - a;
     } else {
-      let rgb = getMapPixel(this.x, this.y);
+      let rgb = getMapPixel(this.x, this.y, game.map);
       let movmentMultiplierer: number;
       if (rgb.red == 0 && rgb.green == 0 && rgb.blue == 255) {
         movmentMultiplierer = 0.5;
