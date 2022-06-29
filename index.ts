@@ -14,7 +14,7 @@ var localGame = new gamelogic();
 //Server aktivieren-----------------------------------------------
 
 app.all('*', function (req, res, next) {
-  console.log(req.method + ' Anfrage ' + req.url);
+  console.log(req.method + ' Anfrage an: ' + req.url);
   next(); // pass control to the next handler
 });
 
@@ -145,7 +145,7 @@ app.get('/game/update', (req, res) => {
 });
 
 app.post('/game/update', (req, res) => {
-  let resiveddata: changes[] = req.body;
+  let resiveddata: changes = req.body;
   console.log(resiveddata);
 
   localGame.update(resiveddata);
@@ -184,14 +184,15 @@ const socketServer = new Server(httpServer);
 
 //Whenever someone connects this gets executed
 socketServer.on('connection', function (socket) {
-  console.log('A user connected');
+  console.log('A user connected: '+socket.id);
 
   socket.on('test', function () {
     console.log('A user tested');
   });
 
   socket.on('update', function (data) {
-    let resiveddata: changes[] = data;
+    console.log(data);
+    let resiveddata: changes = data;
     console.log(resiveddata);
 
     localGame.update(resiveddata);

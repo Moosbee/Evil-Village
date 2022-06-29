@@ -24,7 +24,6 @@ class schiff {
       this.move = true
     }
 
-    this.move = move;
     this.strength = strength;
     let min = 1;
     let max = 25;

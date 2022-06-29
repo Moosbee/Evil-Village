@@ -24,7 +24,6 @@ class armee {
       this.move = true
     }
 
-    this.move = move;
     this.strength = strength;
     let min = 1;
     let max = 25;
@@ -115,9 +114,9 @@ class armee {
     }
     if (this.move) {
       if (this.x > this.gotox) {
-        img.src = "/media/images/armee_walking_right.png";
-      } else {
         img.src = "/media/images/armee_walking_left.png";
+      } else {
+        img.src = "/media/images/armee_walking_right.png";
       }
       let sx = 0;
       let sy = 0;

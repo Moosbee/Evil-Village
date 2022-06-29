@@ -55,7 +55,7 @@ function sockets() {
   window.socket = io();
 
   socket.on("update", function (data) {
-    console.log(data);
+    // console.log(data);
     if (data == "END") {
       $("#loose").show();
     } else {
@@ -102,11 +102,11 @@ async function senden() {
 }
 
 function updateObject(newObject) {
-  console.log(newObject);
+  // console.log(newObject);
   let newObjectJSON = JSON.parse(newObject);
-  console.log(newObjectJSON);
+  // console.log(newObjectJSON);
   let oldobject = Object.assign([], object);
-  console.log(oldobject);
+  // console.log(oldobject);
   object = [];
   for (let i = 0; i < newObjectJSON.length; i++) {
     const element = newObjectJSON[i];
@@ -117,11 +117,11 @@ function updateObject(newObject) {
           element.x,
           element.y,
           element.owner,
-          element.strength,
-          element.id,
           element.size,
+          element.id,
           element.typeof.gotox,
-          element.typeof.gotoy
+          element.typeof.gotoy,
+          element.strength,
         );
         break;
       case "saveSchiff":
@@ -255,11 +255,11 @@ function handleClick(e) {
         if (arm.selected) {
           if (arm.type == "armee" && arm.owner == document.tokenid) {
             //changes.push(new change(arm.id, mausx, mausy, arm.settele = false));
-            socket.emit("putupdate", {
+            socket.emit("update", {
               id: arm.id,
-              x: mausx,
-              y: mausy,
-              settele: false,
+              gotox: mausx,
+              gotoy: mausy,
+              settle: false,
             });
             // arm.gotox = mausx;
             // arm.gotoy = mausy;
@@ -288,11 +288,11 @@ function settle() {
   for (let ist = 0; ist < selectobject.length; ist++) {
     if (selectobject[ist].type == "armee") {
       //changes.push(new change(selectobject[ist].id, -1, -1, selectobject[ist].settele = true));
-      socket.emit("putupdate", {
+      socket.emit("update", {
         id: selectobject[ist].id,
-        x: -1,
-        y: -1,
-        settele: true,
+        x: undefined,
+        y: undefined,
+        settle: true,
       });
     }
   }

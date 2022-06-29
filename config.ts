@@ -13,7 +13,6 @@ let config = {
   },
   favicon: 4,
   expressPort:80,
-  socketPort:3000
 };
 
 export { config };

@@ -51,25 +51,23 @@ export class armee extends gameobject {
     }
   }
 
-  settle(game: gamelogic) {
+  settle(game: gamelogic): boolean {
     let min = this.strength - 100;
     let max = this.strength + 100;
     let population = makeRamdomInt(min, max);
-    game.gameObjects.push(
-      new stadt(
-        this.x,
-        this.y,
-        this.owner,
-        this.strength,
-        undefined,
-        population
-      )
+    let newStadt = new stadt(
+      this.x,
+      this.y,
+      this.owner,
+      this.strength,
+      undefined,
+      population
     );
-
-    game.gameObjects[game.gameObjects.length - 1].arraypos =
-      game.gameObjects.length - 1;
-
+    newStadt.arraypos = game.gameObjects.length;
+    game.gameObjects.push(newStadt);
+    console.log('settle');
     this.strength = -1;
+    return true;
   }
 
   merge(game: gamelogic): boolean {
@@ -81,7 +79,7 @@ export class armee extends gameobject {
         this.y > arm.y - this.size / 2 &&
         this.y < arm.y + this.size / 2
     );
-
+    console.log('try,erge');
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
         let selectgameObject: stadt = selectgameObjects[0];
@@ -168,8 +166,10 @@ export class armee extends gameobject {
       } else {
         movmentMultiplierer = 1;
       }
-      this.x = this.x + this.movex * (movmentMultiplierer / this.strength + 1);
-      this.y = this.y - this.movey * (movmentMultiplierer / this.strength + 1);
+      this.x = this.x + this.movex * movmentMultiplierer;
+      this.y = this.y - this.movey * movmentMultiplierer;
+      // this.x = this.x + this.movex * (movmentMultiplierer / this.strength + 1);
+      // this.y = this.y - this.movey * (movmentMultiplierer / this.strength + 1);
     }
   }
 
@@ -182,6 +182,7 @@ export class armee extends gameobject {
         return;
       }
       console.log('merge');
+
       if (this.strength < arm.strength) {
         arm.strength = arm.strength + this.strength;
         this.strength = -1;
