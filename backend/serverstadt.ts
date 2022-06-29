@@ -30,7 +30,7 @@ export class stadt extends gameobject {
 
     this.capital = capital;
     this.makingofarmy = makingofarmy == undefined ? 500 : makingofarmy;
-    this.makingofarmy = 100000;
+    this.makingofarmy = 100;
     max = 6;
     this.speed = speed == undefined ? makeRamdomInt(min, max) : speed;
 
