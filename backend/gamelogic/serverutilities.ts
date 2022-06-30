@@ -1,5 +1,6 @@
 import { config } from '../config';
 import Jimp from 'jimp';
+import path from 'path';
 
 interface RGBColor {
   red: number;
@@ -53,13 +54,13 @@ interface saveStadt {
 
 async function setmap(): Promise<mapMini> {
   console.log('Setting Map');
-  let mapDir = config.rootPath + './both/maps/map_';
+  let mapDir = config.rootPath + './maps/map_';
   let mapNumber: number = config.Game.Map;
   mapDir = mapDir + mapNumber + '.png';
 
   let image: Jimp;
   try {
-    image = await Jimp.read(mapDir);
+    image = await Jimp.read(path.normalize(mapDir));
   } catch (e) {
     throw console.error(e);
   }
