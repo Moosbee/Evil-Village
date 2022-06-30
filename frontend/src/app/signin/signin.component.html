@@ -1,0 +1,19 @@
+<div>
+  <form (submit)="signin($event)">
+    <label for="username">Benutzername</label>
+    <input
+      type="text"
+      name="username"
+      id="username"
+      [(ngModel)]="user.username"
+    />
+    <label for="password">Passwort</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      [(ngModel)]="user.pass"
+    />
+    <input type="submit" value="Einloggen" />
+  </form>
+</div>

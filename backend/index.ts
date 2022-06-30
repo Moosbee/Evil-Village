@@ -8,7 +8,7 @@ import { changes } from './gamelogic/serverutilities';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { normalize, resolve } from 'path';
-import morgan from "morgan";
+import morgan from 'morgan';
 
 const app = express();
 var localGame = new gamelogic();
@@ -20,7 +20,7 @@ var localGame = new gamelogic();
 //   next(); // pass control to the next handler
 // });
 
-app.use(morgan("dev"))
+app.use(morgan('dev'));
 
 app.use('/media', express.static(config.rootPath + '../frontendd/public'));
 // app.use(urlencoded({ extended: true }));
@@ -44,7 +44,9 @@ app.get('/login', async (req, res) => {
 });
 
 app.get('/makeuser', async (req, res) => {
-  res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/makeuser.html'));
+  res.sendFile(
+    resolve(config.rootPath + '../frontendd/unpublic/makeuser.html')
+  );
 });
 
 app.get('/logedin', async (req, res) => {
@@ -52,7 +54,9 @@ app.get('/logedin', async (req, res) => {
 });
 
 app.get('/game/main', (req, res) => {
-  res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/maingameframe.html'));
+  res.sendFile(
+    resolve(config.rootPath + '../frontendd/unpublic/maingameframe.html')
+  );
 });
 
 app.get('/game/config', (req, res) => {
@@ -62,7 +66,9 @@ app.get('/game/config', (req, res) => {
 app.get('/favicon.ico', async (req, res) => {
   console.log('favicon');
   let faf = config.favicon;
-  let dir = resolve(config.rootPath + '../frontendd/unpublic/farvi/' + faf + '.ico');
+  let dir = resolve(
+    config.rootPath + '../frontendd/unpublic/farvi/' + faf + '.ico'
+  );
   res.sendFile(dir);
 });
 
@@ -136,6 +142,11 @@ app.post('/makeuser', async (req, res) => {
     return;
   }
 });
+
+app.get('/config', (req, res) => {
+  res.json(config)
+});
+app.post('/config', (req, res) => {});
 
 app.get('/game/map', (req, res) => {
   let mapDir = config.rootPath + './maps/map_';
