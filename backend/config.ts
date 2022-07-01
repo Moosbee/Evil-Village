@@ -12,7 +12,7 @@ let config = {
     maxGameObjects:25000
   },
   favicon: 4,
-  expressPort:80,
+  expressPort:3000,
 };
 
 export { config };

@@ -1,11 +1,25 @@
-<div>
-  <form action="">
-    <label for="username">Benutzername</label>
-    <input type="text" name="username" id="username">
-    <label for="password">Passwort</label>
-    <input type="password" name="password" id="password">
-    <label for="password">Passwort erneut eingeben</label>
-    <input type="password" name="passwordtwo" id="passwordtwo">
-    <input type="submit" value="Erstellen">
-  </form>
-</div>
+<form (submit)="signup($event)">
+  <label for="username">Benutzername</label>
+  <input
+    type="text"
+    name="username"
+    id="username"
+    [(ngModel)]="user.username"
+  />
+  <label for="password">Passwort</label>
+  <input
+    type="password"
+    name="password"
+    id="password"
+    [(ngModel)]="user.pass"
+  />
+  <label for="password2">Passwort erneut eingeben</label>
+  <input type="password2" name="password2" id="password2" [(ngModel)]="pass2" />
+  <input type="submit" value="Einloggen" />
+  <div>
+    <div *ngIf="mesage == 'success'">Success</div>
+    <div *ngIf="mesage == 'taken'">Diese Benutzername ist bereits benutzt</div>
+    <div *ngIf="mesage == 'failed'">Etwas ist schief gelaufen</div>
+    <div *ngIf="mesage == 'wrong'">Das Passwort muss übereinstimmen</div>
+  </div>
+</form>

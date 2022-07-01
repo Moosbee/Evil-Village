@@ -2,13 +2,20 @@ import express from 'express';
 // import { urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { config } from './config';
-import { createUser, verify } from './gamelogic/serverauth';
+import {
+  createUser,
+  player,
+  verify,
+  verifyToken,
+} from './gamelogic/serverauth';
 import { gamelogic } from './gamelogic/gamelogic';
 import { changes } from './gamelogic/serverutilities';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { normalize, resolve } from 'path';
 import morgan from 'morgan';
+// import  cors from "cors";
+const cors = require('cors');
 
 const app = express();
 var localGame = new gamelogic();
@@ -20,6 +27,7 @@ var localGame = new gamelogic();
 //   next(); // pass control to the next handler
 // });
 
+app.use(cors());
 app.use(morgan('dev'));
 
 app.use('/media', express.static(config.rootPath + '../frontendd/public'));
@@ -67,7 +75,7 @@ app.get('/favicon.ico', async (req, res) => {
   console.log('favicon');
   let faf = config.favicon;
   let dir = resolve(
-    config.rootPath + '../frontendd/unpublic/farvi/' + faf + '.ico'
+    config.rootPath + '../frontend/src/assets/farvi/' + faf + '.ico'
   );
   res.sendFile(dir);
 });
@@ -77,26 +85,29 @@ app.post('/login', async (req, res) => {
   // console.log(req.body);
   let resiveddata = req.body;
 
+  let erg: player | 'failed' | 'wrong';
+
   if (
-    typeof resiveddata['username'] != 'string' ||
-    typeof resiveddata['password'] != 'string'
+    typeof resiveddata['username'] == 'string' &&
+    typeof resiveddata['password'] == 'string'
   ) {
-    res.json({ state: 'failed' });
-    return;
-  } else {
     let username: string = resiveddata['username'];
     let password: string = resiveddata['password'];
-    let erg = await verify(username, password);
+    erg = await verify(username, password);
+  } else if (typeof req.query.token == 'string') {
+    erg = await verifyToken(req.query.token);
+  } else {
+    res.json({ state: 'failed' });
+    return;
   }
 
-
   if (erg != 'wrong' && erg != 'failed') {
-    res.cookie('token', erg.token);
     res.json({
       state: 'success',
       id: erg.id,
       username: erg.username,
       pass: erg.pass,
+      token: erg.token,
     });
   } else if (erg == 'wrong') {
     res.json({ state: 'wrong' });
@@ -133,6 +144,7 @@ app.post('/makeuser', async (req, res) => {
       id: erg.id,
       username: erg.username,
       pass: erg.pass,
+      token: erg.token,
     });
   } else if (erg == 'taken') {
     res.json({ state: 'taken' });
@@ -157,8 +169,20 @@ app.get('/game/map', (req, res) => {
   res.sendFile(normalize(mapDir));
 });
 
-app.post('/game/main', (req, res) => {
-  let id: string | number | null | undefined = req.body.id;
+app.post('/game/main', async (req, res) => {
+  if (typeof req.query.token != 'string') {
+    res.send(localGame.getUpdate());
+    return;
+  }
+
+  let Token = req.query.token;
+  let erg = await verifyToken(Token);
+  if (erg == 'failed') {
+    res.send(localGame.getUpdate());
+    return;
+  }
+
+  let id = erg.id;
   if (typeof id == 'number' && !localGame.doesCapitolExist(id)) {
     localGame.addCapitol(id);
   }
@@ -168,11 +192,22 @@ app.get('/game/update', (req, res) => {
   res.send(localGame.getUpdate());
 });
 
-app.post('/game/update', (req, res) => {
+app.post('/game/update', async (req, res) => {
+  if (typeof req.query.token != 'string') {
+    res.send(localGame.getUpdate());
+    return;
+  }
+
+  let Token = req.query.token;
+  let erg = await verifyToken(Token);
+  if (erg == 'failed') {
+    res.send(localGame.getUpdate());
+    return;
+  }
   let resiveddata: changes = req.body;
   console.log(resiveddata);
 
-  localGame.update(resiveddata);
+  localGame.update(resiveddata,erg.id);
 
   res.send(localGame.getUpdate());
 });
@@ -202,10 +237,6 @@ const socketServer = new Server(httpServer);
 //Whenever someone connects this gets executed
 socketServer.on('connection', function (socket) {
   console.log('A user connected: ' + socket.id);
-
-  socket.on('test', function () {
-    console.log('A user tested');
-  });
 
   socket.on('update', function (data) {
     console.log(data);

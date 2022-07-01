@@ -15,5 +15,13 @@
       [(ngModel)]="user.pass"
     />
     <input type="submit" value="Einloggen" />
+    <div>
+      <div *ngIf="mesage == 'success'">Success</div>
+      <div *ngIf="mesage == 'taken' || mesage == 'failed'">
+        Etwas ist schief gelaufen
+      </div>
+      <div *ngIf="mesage == 'wrong'">Passwort ist falsch</div>
+    </div>
   </form>
+  <a routerLink="/signup">Erstelle einen Benutzer</a>
 </div>

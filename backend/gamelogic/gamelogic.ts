@@ -203,7 +203,7 @@ export class gamelogic {
     return JSON.stringify(this.gameObjects);
   }
 
-  update(chang: changes) {
+  update(chang: changes,id?:number) {
     let gameObject = this.gameObjects.filter((arm) => arm.id == chang.id);
 
     if (

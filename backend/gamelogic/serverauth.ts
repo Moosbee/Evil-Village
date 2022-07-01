@@ -47,7 +47,9 @@ async function verify(
   return jsonPlayer;
 }
 
-async function verifyToken(token: string): Promise<player | 'failed'> {
+async function verifyToken(
+  token: string
+): Promise<player | 'failed'> {
   let file = '[]';
 
   try {
@@ -62,7 +64,7 @@ async function verifyToken(token: string): Promise<player | 'failed'> {
   if (jsonPlayer == undefined) return 'failed';
 
   let expirer: number = 24 * 60 * 60 * 1000;
-  let timeDiv = now.getTime() - new Date(jsonPlayer.tokenDate).getTime();
+  let timeDiv = new Date().getTime() - new Date(jsonPlayer.tokenDate).getTime();
   if (timeDiv > expirer) {
     return 'failed';
   }
@@ -142,4 +144,4 @@ function createToken(): string {
   return randomBytes(30).toString('hex');
 }
 
-export { verify, createUser, verifyToken };
+export { verify, createUser, verifyToken, player };
