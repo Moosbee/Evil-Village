@@ -1,12 +1,14 @@
 import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
-import { createHmac, pbkdf2 } from 'crypto';
+import { createHmac, pbkdf2, randomBytes } from 'crypto';
 import { makeRamdomInt } from './serverutilities';
 interface player {
   id: number;
   username: string;
   pass: string;
+  token: string;
+  tokenDate: string;
 }
 
 async function verify(
@@ -29,7 +31,42 @@ async function verify(
   if (jsonPlayer == undefined) return 'failed';
   // if (timingSafeEqual(jsonPlayer.pass,passwordHash)) return 'wrong';
   if (jsonPlayer.pass != passwordHash) return 'wrong';
+  let now = new Date();
+  if (jsonPlayer.tokenDate == undefined) {
+    jsonPlayer.tokenDate = now.toJSON();
+    jsonPlayer.token = createToken();
+  }
+  let expirer: number = 24 * 60 * 60 * 1000;
+  let timeDiv = now.getTime() - new Date(jsonPlayer.tokenDate).getTime();
+  if (timeDiv > expirer) {
+    jsonPlayer.token = createToken();
+    jsonPlayer.tokenDate = now.toJSON();
+  }
+
   jsonPlayer.pass = password;
+  return jsonPlayer;
+}
+
+async function verifyToken(token: string): Promise<player | 'failed'> {
+  let file = '[]';
+
+  try {
+    file = await readFile(config.rootPath + config.PlayerFile, {
+      encoding: 'utf8',
+    });
+  } catch (e) {
+    return 'failed';
+  }
+  let jsonPlayers: player[] = JSON.parse(file);
+  let jsonPlayer = jsonPlayers.find((e) => e.token === token);
+  if (jsonPlayer == undefined) return 'failed';
+
+  let expirer: number = 24 * 60 * 60 * 1000;
+  let timeDiv = now.getTime() - new Date(jsonPlayer.tokenDate).getTime();
+  if (timeDiv > expirer) {
+    return 'failed';
+  }
+
   return jsonPlayer;
 }
 
@@ -55,11 +92,15 @@ async function createUser(
   while (jsonPlayers.find((e) => e.id === newid) != undefined) {
     newid = makeRamdomInt(minPlayer, config.MaxPlayers);
   }
+  let token: string = createToken();
+  let now = new Date().toJSON();
 
   let newPlayer: player = {
     id: newid,
     username: user,
     pass: passwordHash,
+    token: token,
+    tokenDate: now,
   };
   jsonPlayers.push(newPlayer);
   try {
@@ -97,4 +138,8 @@ async function hash(password: string, salt: string): Promise<string> {
   // });
 }
 
-export { verify, createUser };
+function createToken(): string {
+  return randomBytes(30).toString('hex');
+}
+
+export { verify, createUser, verifyToken };

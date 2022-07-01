@@ -1,8 +1,8 @@
 import express from 'express';
 // import { urlencoded } from 'body-parser';
-// import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { config } from './config';
-import { createUser, verify } from './gamelogic/auth';
+import { createUser, verify } from './gamelogic/serverauth';
 import { gamelogic } from './gamelogic/gamelogic';
 import { changes } from './gamelogic/serverutilities';
 import { createServer } from 'http';
@@ -25,7 +25,7 @@ app.use(morgan('dev'));
 app.use('/media', express.static(config.rootPath + '../frontendd/public'));
 // app.use(urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 
 // parses request cookies, populating
 // req.cookies and req.signedCookies
@@ -83,13 +83,15 @@ app.post('/login', async (req, res) => {
   ) {
     res.json({ state: 'failed' });
     return;
+  } else {
+    let username: string = resiveddata['username'];
+    let password: string = resiveddata['password'];
+    let erg = await verify(username, password);
   }
-  let username: string = resiveddata['username'];
-  let password: string = resiveddata['password'];
 
-  let erg = await verify(username, password);
 
   if (erg != 'wrong' && erg != 'failed') {
+    res.cookie('token', erg.token);
     res.json({
       state: 'success',
       id: erg.id,
@@ -144,7 +146,7 @@ app.post('/makeuser', async (req, res) => {
 });
 
 app.get('/config', (req, res) => {
-  res.json(config)
+  res.json(config);
 });
 app.post('/config', (req, res) => {});
 
