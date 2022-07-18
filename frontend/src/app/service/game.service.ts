@@ -5,35 +5,30 @@ import { environment } from 'src/environments/environment';
 import { UserRes } from '../model/user-res';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GameService {
-
   private url = environment.backendLink;
   private token = 'ghg';
 
   constructor(private http: HttpClient) {}
-  getUpdate(user: string, pass: string): Observable<UserRes> {
+  getUpdate(token: string): Observable<UserRes> {
     let params = new HttpParams().set('token', this.token);
     return this.http.post<UserRes>(
       this.url + 'makeuser',
-      {
-        username: user,
-        password: pass,
-      },
+      {},
       { params: params }
     );
   }
 
   update(user: string, pass: string): Observable<UserRes> {
     let params = new HttpParams().set('token', this.token);
-    return this.http.post<UserRes>(
-      this.url + 'login',
-      {
-        username: user,
-        password: pass,
-      },
-      { params: params }
-    );
+    return this.http.post<UserRes>(this.url + 'login', {}, { params: params });
+  }
+  getUpdateSocket() {
+    const socketGetObjects = new Observable((observer) => {
+      // socket.fromEvent<T>(eventName: string): Observable<T>
+    });
+    return socketGetObjects;
   }
 }

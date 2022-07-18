@@ -15,8 +15,14 @@ export class SigninComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
-signin(e: Event) {
+  ngOnInit(): void {
+    let token = localStorage.getItem('token');
+    let username = localStorage.getItem('username');
+    if (token != null && username != null) {
+      this.router.navigate(['/signedin']);
+    }
+  }
+  signin(e: Event) {
     e.preventDefault();
     if (this.user.username != undefined && this.user.pass != undefined) {
       this.authService
