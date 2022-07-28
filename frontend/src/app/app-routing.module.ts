@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ConfigComponent } from './config/config.component';
+import { DebugComponent } from './debug/debug.component';
 import { FrameComponent } from './game/frame/frame.component';
 import { MainComponent } from './main/main.component';
 import { SignedinComponent } from './signedin/signedin.component';
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'game',
     component: FrameComponent,
+  },
+  {
+    path: 'debug',
+    component: DebugComponent,
   },
 ];
 

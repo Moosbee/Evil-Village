@@ -4,6 +4,7 @@ let config = {
   rootPath: path.normalize(__dirname + '/'),
   MaxPlayers: 1000,
   PlayerFile: path.normalize('./players.json'),
+  plainTextPassword:true,
   Game: {
     ResetOnStart: true,
     Map: 1,

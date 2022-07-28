@@ -9,30 +9,27 @@ import { UserRes } from '../model/user-res';
 })
 export class AuthService {
   private url = environment.backendLink;
-  private token = 'ghg';
 
   constructor(private http: HttpClient) {}
   createUser(user: string, pass: string): Observable<UserRes> {
-    let params = new HttpParams().set('token', this.token);
-    return this.http.post<UserRes>(
-      this.url + 'makeuser',
-      {
-        username: user,
-        password: pass,
-      },
-      { params: params }
-    );
+    return this.http.post<UserRes>(this.url + 'makeuser', {
+      username: user,
+      password: pass,
+    });
   }
 
   authUser(user: string, pass: string): Observable<UserRes> {
-    let params = new HttpParams().set('token', this.token);
     return this.http.post<UserRes>(
       this.url + 'login',
       {
         username: user,
         password: pass,
       },
-      { params: params }
     );
+  }
+
+  authToken(token: string): Observable<UserRes> {
+    let params = new HttpParams().set('token', token);
+    return this.http.post<UserRes>(this.url + 'login', { params: params });
   }
 }

@@ -12,6 +12,10 @@ import { FrameComponent } from './game/frame/frame.component';
 import { SignedinComponent } from './signedin/signedin.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
+import { DebugComponent } from './debug/debug.component';
+const config: SocketIoConfig = { url: environment.backendLink, options: {} };
 
 @NgModule({
   declarations: [
@@ -22,13 +26,15 @@ import { HttpClientModule } from '@angular/common/http';
     SignupComponent,
     ConfigComponent,
     FrameComponent,
-    SignedinComponent
+    SignedinComponent,
+    DebugComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule 
+    HttpClientModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]

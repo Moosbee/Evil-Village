@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
-import { createHmac, pbkdf2, randomBytes } from 'crypto';
+import { createHmac, randomBytes } from 'crypto';
 import { makeRamdomInt } from './serverutilities';
 interface player {
   id: number;
@@ -29,7 +29,7 @@ async function verify(
   let jsonPlayers: player[] = JSON.parse(file);
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer == undefined) return 'failed';
-  // if (timingSafeEqual(jsonPlayer.pass,passwordHash)) return 'wrong';
+  //if (timingSafeEqual(jsonPlayer.pass,passwordHash)) return 'wrong';
   if (jsonPlayer.pass != passwordHash) return 'wrong';
   let now = new Date();
   if (jsonPlayer.tokenDate == undefined) {
@@ -47,9 +47,7 @@ async function verify(
   return jsonPlayer;
 }
 
-async function verifyToken(
-  token: string
-): Promise<player | 'failed'> {
+async function verifyToken(token: string): Promise<player | 'failed'> {
   let file = '[]';
 
   try {
@@ -77,7 +75,12 @@ async function createUser(
   password: string
 ): Promise<player | 'failed' | 'taken'> {
   let file = '[]';
-  let passwordHash = await hash(password, user);
+  let passwordHash: string;
+  if (config.plainTextPassword) {
+    passwordHash = password;
+  } else {
+    passwordHash = await hash(password, user);
+  }
 
   try {
     file = readFileSync(config.rootPath + config.PlayerFile, {
