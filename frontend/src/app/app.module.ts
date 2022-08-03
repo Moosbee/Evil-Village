@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { DebugComponent } from './debug/debug.component';
+import { WatchFrameComponent } from './watch-frame/watch-frame.component';
 const config: SocketIoConfig = { url: environment.backendLink, options: {} };
 
 @NgModule({
@@ -27,7 +28,8 @@ const config: SocketIoConfig = { url: environment.backendLink, options: {} };
     ConfigComponent,
     FrameComponent,
     SignedinComponent,
-    DebugComponent
+    DebugComponent,
+    WatchFrameComponent
   ],
   imports: [
     BrowserModule,

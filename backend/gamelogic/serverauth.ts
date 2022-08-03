@@ -15,7 +15,12 @@ async function verify(
   user: string,
   password: string
 ): Promise<player | 'failed' | 'wrong'> {
-  let passwordHash = await hash(password, user);
+  let passwordHash="";
+  if(config.plainTextPassword){
+    passwordHash = password;
+  }else{
+    passwordHash = await hash(password, user);
+  }
   let file = '[]';
   // console.log(config.rootPath + config.PlayerFile);
 

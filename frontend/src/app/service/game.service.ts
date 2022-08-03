@@ -29,6 +29,7 @@ export class GameService {
   getUpdateSocket(): Observable<String> {
     const socketGetObjects = new Observable<String>((observer) => {
       this.socket.fromEvent<String>('update').subscribe((erg) => {
+        debugger
         observer.next(erg);
       });
     });
