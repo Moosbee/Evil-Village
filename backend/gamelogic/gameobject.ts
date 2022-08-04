@@ -1,6 +1,6 @@
 import { config } from "../config";
 import { gamelogic } from "./gamelogic";
-import { makeRamdomInt } from "./serverutilities";
+import { makeRandomInt } from "./serverutilities";
 
 export class gameobject {
   public id: number;
@@ -26,14 +26,14 @@ export class gameobject {
 
     let min = 1;
     if (id == -1) {
-      this.id = makeRamdomInt(min,config.Game.maxGameObjects);
+      this.id = makeRandomInt(min,config.Game.maxGameObjects);
     } else {
       this.id = id;
     }
     min = 10;
     let max = 35;
     if (strength == undefined || strength == -1) {
-      this.strength = makeRamdomInt(min,max);
+      this.strength = makeRandomInt(min,max);
     } else {
       this.strength = strength;
     }

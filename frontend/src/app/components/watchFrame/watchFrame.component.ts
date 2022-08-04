@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { GameService } from '../service/game.service';
+import { GameService } from '../../service/game.service';
 
 @Component({
-  selector: 'app-watch-frame',
-  templateUrl: './watch-frame.component.html',
-  styleUrls: ['./watch-frame.component.scss']
+  selector: 'app-WatchFrame',
+  templateUrl: './WatchFrame.component.html',
+  styleUrls: ['./WatchFrame.component.scss']
 })
 export class WatchFrameComponent implements OnInit {
   stuff:any;

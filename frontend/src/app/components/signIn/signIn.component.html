@@ -1,5 +1,5 @@
 <div>
-  <form (submit)="signin($event)">
+  <form (submit)="signIn($event)">
     <label for="username">Benutzername</label>
     <input
       type="text"
@@ -16,12 +16,13 @@
     />
     <input type="submit" value="Einloggen" />
     <div>
-      <div *ngIf="mesage == 'success'">Success</div>
-      <div *ngIf="mesage == 'taken' || mesage == 'failed'">
+      <div *ngIf="message == 'success'">Success</div>
+      <div *ngIf="message == 'taken' || message == 'failed'">
         Etwas ist schief gelaufen
       </div>
-      <div *ngIf="mesage == 'wrong'">Passwort ist falsch</div>
+      <div *ngIf="message == 'wrong'">Passwort ist falsch</div>
     </div>
   </form>
-  <a routerLink="/signup">Erstelle einen Benutzer</a>
+  <a routerLink="/signUp">Erstelle einen Benutzer</a><br>
+  <a routerLink="/watch">Nur Zuschauen</a>
 </div>

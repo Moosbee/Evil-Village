@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
 import { createHmac, randomBytes } from 'crypto';
-import { makeRamdomInt } from './serverutilities';
+import { makeRandomInt } from './serverutilities';
 interface player {
   id: number;
   username: string;
@@ -15,10 +15,10 @@ async function verify(
   user: string,
   password: string
 ): Promise<player | 'failed' | 'wrong'> {
-  let passwordHash="";
-  if(config.plainTextPassword){
+  let passwordHash = '';
+  if (config.plainTextPassword) {
     passwordHash = password;
-  }else{
+  } else {
     passwordHash = await hash(password, user);
   }
   let file = '[]';
@@ -44,8 +44,18 @@ async function verify(
   let expirer: number = 24 * 60 * 60 * 1000;
   let timeDiv = now.getTime() - new Date(jsonPlayer.tokenDate).getTime();
   if (timeDiv > expirer) {
+    console.log('new token');
     jsonPlayer.token = createToken();
     jsonPlayer.tokenDate = now.toJSON();
+  }
+  try {
+    //console.log(jsonPlayers);
+    writeFileSync(
+      config.rootPath + config.PlayerFile,
+      JSON.stringify(jsonPlayers)
+    );
+  } catch (e) {
+    return 'failed';
   }
 
   jsonPlayer.pass = password;
@@ -98,9 +108,9 @@ async function createUser(
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer != undefined) return 'taken';
   let minPlayer = 1;
-  let newid = makeRamdomInt(minPlayer, config.MaxPlayers);
+  let newid = makeRandomInt(minPlayer, config.MaxPlayers);
   while (jsonPlayers.find((e) => e.id === newid) != undefined) {
-    newid = makeRamdomInt(minPlayer, config.MaxPlayers);
+    newid = makeRandomInt(minPlayer, config.MaxPlayers);
   }
   let token: string = createToken();
   let now = new Date().toJSON();
@@ -114,7 +124,7 @@ async function createUser(
   };
   jsonPlayers.push(newPlayer);
   try {
-    console.log(jsonPlayers);
+    //console.log(jsonPlayers);
     writeFileSync(
       config.rootPath + config.PlayerFile,
       JSON.stringify(jsonPlayers)

@@ -3,7 +3,7 @@ import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
-import { getMapPixel, makeRamdomInt } from './serverutilities';
+import { getMapPixel, makeRandomInt } from './serverutilities';
 
 export class armee extends gameobject {
   gotox: number;
@@ -54,7 +54,7 @@ export class armee extends gameobject {
   settle(game: gamelogic): boolean {
     let min = this.strength - 100;
     let max = this.strength + 100;
-    let population = makeRamdomInt(min, max);
+    let population = makeRandomInt(min, max);
     let newStadt = new stadt(
       this.x,
       this.y,

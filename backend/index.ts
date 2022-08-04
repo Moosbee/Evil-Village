@@ -207,7 +207,7 @@ app.post('/game/update', async (req, res) => {
   let resiveddata: changes = req.body;
   console.log(resiveddata);
 
-  localGame.update(resiveddata,erg.id);
+  localGame.update(resiveddata, erg.id);
 
   res.send(localGame.getUpdate());
 });
@@ -232,7 +232,12 @@ app.all('*', function (req, res, next) {
 //Socket.io ----------------------------------------------------
 
 const httpServer = createServer(app);
-const socketServer = new Server(httpServer);
+const socketServer = new Server(httpServer, {
+  cors: {
+    origin: config.frontendURL,
+    methods: ['GET', 'POST'],
+  },
+});
 
 //Whenever someone connects this gets executed
 socketServer.on('connection', function (socket) {

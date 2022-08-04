@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth } from '../model/auth';
-import { UserRes } from '../model/user-res';
-import { AuthService } from '../service/auth.service';
+import { Auth } from '../../model/auth';
+import { UserRes } from '../../model/user-res';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss'],
+  selector: 'app-signUp',
+  templateUrl: './signUp.component.html',
+  styleUrls: ['./signUp.component.scss'],
 })
-export class SignupComponent implements OnInit {
+export class SignUpComponent implements OnInit {
   user: Auth = {};
-  mesage: 'success' | 'taken' | 'failed' | 'wrong' | 'undefined' = 'undefined';
+  message: 'success' | 'taken' | 'failed' | 'wrong' | 'undefined' = 'undefined';
   pass2?: string;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
 
-  signup(e: Event) {
+  signUp(e: Event) {
     e.preventDefault();
     if (
       this.user.username != undefined &&
@@ -28,7 +28,7 @@ export class SignupComponent implements OnInit {
       this.authService
         .createUser(this.user.username, this.user.pass)
         .subscribe((auth: UserRes) => {
-          this.mesage = auth.state;
+          this.message = auth.state;
           if (
             auth.state == 'success' &&
             typeof auth.id == 'number' &&
@@ -38,7 +38,7 @@ export class SignupComponent implements OnInit {
             localStorage.setItem('id', auth.id.toString());
             localStorage.setItem('username', auth.username);
             localStorage.setItem('token', auth.token);
-            this.router.navigate(['/signin']);
+            this.router.navigate(['/signIn']);
           } else if (auth.state == 'failed' || auth.state == 'taken') {
           }
         });

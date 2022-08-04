@@ -5,7 +5,7 @@ import {
   mapMini,
   saveFile,
   setmap,
-  makeRamdomInt,
+  makeRandomInt,
 } from './serverutilities';
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
@@ -123,8 +123,8 @@ export class gamelogic {
   addCapitol(owner: number) {
     if (this.map == undefined) return;
     let capital = new stadt(
-      makeRamdomInt(50, this.map.width),
-      makeRamdomInt(50, this.map.height),
+      makeRandomInt(50, this.map.width),
+      makeRandomInt(50, this.map.height),
       owner,
       undefined,
       -1,

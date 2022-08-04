@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WatchFrameComponent } from './watch-frame.component';
+import { StadtComponent } from './stadt.component';
 
-describe('WatchFrameComponent', () => {
-  let component: WatchFrameComponent;
-  let fixture: ComponentFixture<WatchFrameComponent>;
+describe('StadtComponent', () => {
+  let component: StadtComponent;
+  let fixture: ComponentFixture<StadtComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WatchFrameComponent ]
+      declarations: [ StadtComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WatchFrameComponent);
+    fixture = TestBed.createComponent(StadtComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

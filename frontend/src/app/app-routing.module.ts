@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ConfigComponent } from './config/config.component';
-import { DebugComponent } from './debug/debug.component';
-import { FrameComponent } from './game/frame/frame.component';
-import { MainComponent } from './main/main.component';
-import { SignedinComponent } from './signedin/signedin.component';
-import { SigninComponent } from './signin/signin.component';
-import { SignupComponent } from './signup/signup.component';
-import { WatchFrameComponent } from './watch-frame/watch-frame.component';
+import { ConfigComponent } from './components/config/config.component';
+import { DebugComponent } from './components/debug/debug.component';
+import { GameFrameComponent } from './components/gameFrame/gameFrame.component';
+import { MainComponent } from './components/main/main.component';
+import { SignedInComponent } from './components/signedIn/signedIn.component';
+import { SignInComponent } from './components/signIn/signIn.component';
+import { SignUpComponent } from './components/signUp/signUp.component';
+import { WatchFrameComponent } from './components/watchFrame/watchFrame.component';
 
 const routes: Routes = [
   // {
@@ -20,16 +20,16 @@ const routes: Routes = [
     component: MainComponent,
   },
   {
-    path: 'signin',
-    component: SigninComponent,
+    path: 'signIn',
+    component: SignInComponent,
   },
   {
-    path: 'signup',
-    component: SignupComponent,
+    path: 'signUp',
+    component: SignUpComponent,
   },
   {
-    path: 'signedin',
-    component: SignedinComponent,
+    path: 'signedIn',
+    component: SignedInComponent,
   },
   {
     path: 'config',
@@ -37,7 +37,7 @@ const routes: Routes = [
   },
   {
     path: 'game',
-    component: FrameComponent,
+    component: GameFrameComponent,
   },
   {
     path: 'watch',

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameService } from '../service/game.service';
+import { GameService } from '../../service/game.service';
 
 @Component({
   selector: 'app-main',
@@ -15,7 +15,7 @@ export class MainComponent implements OnInit {
     let username = localStorage.getItem('username');
     if (token != null && username != null) {
     } else {
-      this.router.navigate(['/signin']);
+      this.router.navigate(['/signIn']);
     }
   }
 }

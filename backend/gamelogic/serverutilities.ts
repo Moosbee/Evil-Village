@@ -102,8 +102,8 @@ function getMapPixel(x: number, y: number, map: mapMini | undefined): RGBColor {
   return pixel;
 }
 
-function makeRamdomInt(min: number, max: number): number {
+function makeRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export { setmap, getMapPixel, makeRamdomInt, saveFile, changes, mapMini };
+export { setmap, getMapPixel, makeRandomInt, saveFile, changes, mapMini };

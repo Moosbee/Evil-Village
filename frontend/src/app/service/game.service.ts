@@ -22,6 +22,13 @@ export class GameService {
     );
   }
 
+  getMap(): Observable<UserRes> {
+    return this.http.post<UserRes>(
+      this.url + 'makeuser',
+      {},
+    );
+  }
+
   update(user: string, pass: string): Observable<UserRes> {
     let params = new HttpParams().set('token', this.token);
     return this.http.post<UserRes>(this.url + 'login', {}, { params: params });
@@ -29,7 +36,6 @@ export class GameService {
   getUpdateSocket(): Observable<String> {
     const socketGetObjects = new Observable<String>((observer) => {
       this.socket.fromEvent<String>('update').subscribe((erg) => {
-        debugger
         observer.next(erg);
       });
     });

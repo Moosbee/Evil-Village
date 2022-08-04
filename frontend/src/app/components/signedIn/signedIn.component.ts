@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-signedin',
-  templateUrl: './signedin.component.html',
-  styleUrls: ['./signedin.component.scss'],
+  selector: 'app-signedIn',
+  templateUrl: './signedIn.component.html',
+  styleUrls: ['./signedIn.component.scss'],
 })
-export class SignedinComponent implements OnInit {
+export class SignedInComponent implements OnInit {
   constructor(private router: Router) {}
   username?: string;
   ngOnInit(): void {
@@ -15,7 +15,7 @@ export class SignedinComponent implements OnInit {
     if (token != null && username != null) {
       this.username = username;
     } else {
-      this.router.navigate(['/signin']);
+      this.router.navigate(['/signIn']);
     }
   }
 }
