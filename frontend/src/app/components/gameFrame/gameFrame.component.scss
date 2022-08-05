@@ -1,0 +1,19 @@
+#frame {
+  width: 80%;
+  aspect-ratio: 16/9;
+  border: 3px solid green;
+  overflow: hidden;
+  position: relative;
+
+}
+
+#gameFrame {
+  width: 100%;
+  position: absolute;
+  
+}
+
+img {
+  height: 100%;
+  width: 100%;
+}
