@@ -1,16 +1,19 @@
 #frame {
-  width: 80%;
+  height: 90vh;
+  margin: 10px;
+  margin-inline: auto;
   aspect-ratio: 16/9;
   border: 3px solid green;
   overflow: hidden;
   position: relative;
-
 }
 
 #gameFrame {
   width: 100%;
   position: absolute;
-  
+  transition: top 10ms;
+  transition: left 10ms;
+  // top: 100%;
 }
 
 img {

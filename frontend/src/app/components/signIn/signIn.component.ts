@@ -12,18 +12,18 @@ import { AuthService } from '../../service/auth.service';
 export class SignInComponent implements OnInit {
   user: Auth = {};
   message: 'success' | 'taken' | 'failed' | 'wrong' | 'undefined' = 'undefined';
-  loggedin: boolean;
+  loggedIn: boolean;
 
   constructor(private authService: AuthService, private router: Router) {
     if (localStorage.getItem('token') != null) {
-      this.loggedin = true;
+      this.loggedIn = true;
     } else {
-      this.loggedin = false;
+      this.loggedIn = false;
     }
   }
 
   ngOnInit(): void {
-    if (this.loggedin) {
+    if (this.loggedIn) {
       this.router.navigate(['/signedIn']);
     }
   }
@@ -43,7 +43,7 @@ export class SignInComponent implements OnInit {
             localStorage.setItem('id', auth.id.toString());
             localStorage.setItem('username', auth.username);
             localStorage.setItem('token', auth.token);
-            this.loggedin = true;
+            this.loggedIn = true;
             this.router.navigate(['/signedIn']);
           } else if (auth.state == 'failed' || auth.state == 'taken') {
           }

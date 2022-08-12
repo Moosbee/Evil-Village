@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendLink:"http://localhost:3000/"
+  backendLink:"http://localhost:3000/",
+  name:"Evil-Village"
 };
 
 

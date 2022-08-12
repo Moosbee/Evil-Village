@@ -1,9 +1,18 @@
-<div id="frame" #frame (click)="mouseClick($event, frame)">
+<div
+  id="frame"
+  #frame
+  (mousedown)="mouseClick($event, frame)"
+  (mousemove)="mouseDrag($event, frame)"
+  (touchstart)="touchDrag($event, frame)"
+  (touchmove)="touchDrag($event, frame)"
+>
   <div
     id="gameFrame"
-    [ngStyle]="{ 'aspect-ratio': width / height }"
-    [ngStyle]="{ left: left + 'px' }"
-    [ngStyle]="{ top: top + '%' }"
+    [ngStyle]="{
+      'aspect-ratio': width / height,
+      top: top + 'px',
+      left: left + 'px'
+    }"
   >
     <img src="{{ link }}game/map" (load)="loadedImg($event)" alt="" />
   </div>

@@ -1,0 +1,18 @@
+$primary-color: rgb(31, 189, 0);
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $primary-color;
+
+  h1 {
+    padding: 5px;
+  }
+}
+
+.menuboxdesktop {
+  text-align: center;
+  font-size: larger;
+  padding: 10px;
+}

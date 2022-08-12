@@ -188,6 +188,8 @@ app.post('/game/main', async (req, res) => {
   }
   res.send(localGame.getUpdate());
 });
+
+
 app.get('/game/update', (req, res) => {
   res.send(localGame.getUpdate());
 });
