@@ -23,8 +23,24 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.loggedIn) {
-      this.router.navigate(['/signedIn']);
+    let token = localStorage.getItem('token');
+    if (this.loggedIn && token != null) {
+      this.authService.authToken(token).subscribe((auth: UserRes) => {
+        this.message = auth.state;
+        if (
+          auth.state == 'success' &&
+          typeof auth.id == 'number' &&
+          typeof auth.username == 'string' &&
+          typeof auth.token == 'string'
+        ) {
+          localStorage.setItem('id', auth.id.toString());
+          localStorage.setItem('username', auth.username);
+          localStorage.setItem('token', auth.token);
+          this.loggedIn = true;
+          this.router.navigate(['/signedIn']);
+        } else if (auth.state == 'failed' || auth.state == 'taken') {
+        }
+      });
     }
   }
   signIn(e: Event) {

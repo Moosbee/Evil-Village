@@ -10,7 +10,7 @@ let config = {
   frontendURL: 'http://localhost:4200',
   Game: {
     ResetOnStart: true,
-    Map: 1,
+    MapFileName: "Aihoia.png",
     saveFile: path.normalize('./save.json'),
     runspeed: 2,
     maxGameObjects: 25000,

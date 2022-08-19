@@ -8,10 +8,11 @@ import { environment } from '../../../environments/environment';
 })
 export class GameFrameComponent implements OnInit {
   link = environment.backendLink;
-  width = 0;
-  height = 0;
+  mapWidth = 0;
+  mapHeight = 0;
   left = 0;
   top = 0;
+  zoom = 100;
 
   posX = 0;
   posY = 0;
@@ -26,10 +27,10 @@ export class GameFrameComponent implements OnInit {
 
   loadedImg(e: any) {
     let ImgMap: HTMLImageElement = e.target;
-    this.width = ImgMap.naturalWidth;
-    this.height = ImgMap.naturalHeight;
+    this.mapWidth = ImgMap.naturalWidth;
+    this.mapHeight = ImgMap.naturalHeight;
   }
-  mouseClick(e: MouseEvent, frame: HTMLDivElement) {
+  mouseClick(e: MouseEvent, frame: HTMLDivElement,map:HTMLImageElement) {
     if (e.buttons != 1) {
       return;
     }
@@ -43,7 +44,7 @@ export class GameFrameComponent implements OnInit {
 
     this.calcMove(mausY, mausX, true, frame);
   }
-  mouseDrag(e: MouseEvent, frame: HTMLDivElement) {
+  mouseDrag(e: MouseEvent, frame: HTMLDivElement,map:HTMLImageElement) {
     if (e.buttons != 1) {
       return;
     }
@@ -58,7 +59,25 @@ export class GameFrameComponent implements OnInit {
     this.calcMove(mausY, mausX, false, frame);
   }
 
-  touchDrag(e: TouchEvent, frame: HTMLDivElement) {
+  mouseWheel(e: WheelEvent, frame: HTMLDivElement,map:HTMLImageElement) {
+    let move = e.deltaY;
+    // console.log(move);
+    if (e.deltaY == 0) return;
+    if (e.deltaY < 0 && map.clientWidth<this.mapWidth) {
+      this.zoom = this.zoom + (this.zoom/10);
+      // this.top = this.top - 5;
+      // this.left = this.left- 5;
+    }
+    if (e.deltaY > 0 && this.zoom>90) {
+      this.zoom = this.zoom - (this.zoom/10);
+      // this.top = this.top + 5;
+      // this.left = this.left + 5;
+    }
+
+    e.preventDefault();
+  }
+
+  touchDrag(e: TouchEvent, frame: HTMLDivElement,map:HTMLImageElement) {
     let mausY = 1;
     let mausX = 1;
     let touch = e.touches;
@@ -100,25 +119,37 @@ export class GameFrameComponent implements OnInit {
     let diffX = this.lastPosX - this.posX;
     let diffY = this.lastPosY - this.posY;
 
-    let diffXPX = (diffX / 100) * frame.offsetWidth;
-    let diffYPX = (diffY / 100) * frame.offsetHeight;
+    // let diffXPX = (diffX / 100) * frame.offsetWidth;
+    // let diffYPX = (diffY / 100) * frame.offsetHeight;
 
-    this.left = this.left - diffXPX;
-    this.top = this.top - diffYPX;
+    this.left = this.left - (diffX/(this.zoom/100));
+    this.top = this.top - (diffY/(this.zoom/100));
 
-    // if (this.left < -100) {
-    //   this.left = -100;
-    // }
-    if (this.left > 0) {
-      this.left = 0;
+    if (this.left > 90) {
+      this.left = 90;
     }
-    if (this.top < -+frame.offsetHeight) {
-      this.top = -+frame.offsetHeight;
+    if (this.top > 90) {
+      this.top = 90;
     }
-    if (this.top > 0) {
-      this.top = 0;
+    if (this.left < -90) {
+      this.left = -90;
     }
+    if (this.top < -90) {
+      this.top = -90;
+    }
+
+    // let mapGCD=this.gcd(this.mapWidth, this.mapHeight);
+    // let mapAspectWidth=this.mapWidth/ mapGCD;
+    // let mapAspectHeight=this.mapHeight/ mapGCD;
+    // let ratioRatioWidth=mapAspectWidth/16;
+    // let ratioRatioHeight=mapAspectHeight/9;
   }
 
-  calcProzentToPX(frame: HTMLDivElement) {}
+  gcd(a: number, b: number): number {
+    if (b === 0) {
+      return a;
+    } else {
+      return this.gcd(b, a % b);
+    }
+  }
 }

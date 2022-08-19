@@ -19,17 +19,21 @@ export class AuthService {
   }
 
   authUser(user: string, pass: string): Observable<UserRes> {
-    return this.http.post<UserRes>(
-      this.url + 'login',
-      {
-        username: user,
-        password: pass,
-      },
-    );
+    return this.http.post<UserRes>(this.url + 'login', {
+      username: user,
+      password: pass,
+    });
   }
 
   authToken(token: string): Observable<UserRes> {
-    let params = new HttpParams().set('token', token);
-    return this.http.post<UserRes>(this.url + 'login', { params: params });
+    // let params = new HttpParams().set('token', token);, { params: params }
+    // console.log(token);
+    const options = token
+      ? { params: new HttpParams().set('token', token) }
+      : {};
+
+    // const options = new HttpParams({ fromString: `token=${token}` });
+
+    return this.http.post<UserRes>(this.url + 'login',{}, options);
   }
 }

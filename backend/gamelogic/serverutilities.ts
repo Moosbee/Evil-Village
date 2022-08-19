@@ -54,9 +54,8 @@ interface saveStadt {
 
 async function setmap(): Promise<mapMini> {
   console.log('Setting Map');
-  let mapDir = config.rootPath + './maps/map_';
-  let mapNumber: number = config.Game.Map;
-  mapDir = mapDir + mapNumber + '.png';
+  let mapDir = config.rootPath + './maps/';
+  mapDir = mapDir + config.Game.MapFileName;
 
   let image: Jimp;
   try {

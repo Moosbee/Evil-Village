@@ -13,7 +13,6 @@ import { changes } from './gamelogic/serverutilities';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { normalize, resolve } from 'path';
-import morgan from 'morgan';
 // import  cors from "cors";
 const cors = require('cors');
 
@@ -22,13 +21,13 @@ var localGame = new gamelogic();
 
 //Server aktivieren-----------------------------------------------
 
-// app.all('*', function (req, res, next) {
-//   console.log(req.method + ' Anfrage an: ' + req.url);
-//   next(); // pass control to the next handler
-// });
-
 app.use(cors());
-app.use(morgan('dev'));
+
+app.all('*', function (req, res, next) {
+  console.log(`${req.method} Anfrage an: ${req.url}`);  
+  next(); // pass control to the next handler
+});
+
 
 app.use('/media', express.static(config.rootPath + '../frontendd/public'));
 // app.use(urlencoded({ extended: true }));
@@ -163,9 +162,8 @@ app.get('/config', (req, res) => {
 app.post('/config', (req, res) => {});
 
 app.get('/game/map', (req, res) => {
-  let mapDir = config.rootPath + './maps/map_';
-  let mapNumber: number = config.Game.Map;
-  mapDir = mapDir + mapNumber + '.png';
+  let mapDir = config.rootPath + './maps/';
+  mapDir = mapDir + config.Game.MapFileName;
   res.sendFile(normalize(mapDir));
 });
 
@@ -188,7 +186,6 @@ app.post('/game/main', async (req, res) => {
   }
   res.send(localGame.getUpdate());
 });
-
 
 app.get('/game/update', (req, res) => {
   res.send(localGame.getUpdate());
