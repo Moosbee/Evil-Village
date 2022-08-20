@@ -9,17 +9,14 @@
 }
 
 #gameFrame {
-  // width: 100%;
   position: absolute;
   transition: transform 100ms;
   transition: width 100ms;
   transform: translate(-50%,-50%);
-  // top: 100%;
 }
 
 img {
   height: 100%;
   width: 100&;
   image-rendering: crisp-edges;
-  // image-rendering: pixelated;
 }
