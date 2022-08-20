@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { GameService } from 'src/app/service/game.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -12,16 +13,18 @@ export class GameFrameComponent implements OnInit {
   mapHeight = 0;
   left = 0;
   top = 0;
-  zoom = 100;
+  zoom = 1;
+  loaded = false;
 
   posX = 0;
   posY = 0;
   lastPosX = 0;
   lastPosY = 0;
+  gameObjects: string[] = [];
 
   // @ViewChild('frame') public frame!: ElementRef;
 
-  constructor() {}
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {}
 
@@ -29,8 +32,9 @@ export class GameFrameComponent implements OnInit {
     let ImgMap: HTMLImageElement = e.target;
     this.mapWidth = ImgMap.naturalWidth;
     this.mapHeight = ImgMap.naturalHeight;
+    this.loaded = true;
   }
-  mouseClick(e: MouseEvent, frame: HTMLDivElement,map:HTMLImageElement) {
+  mouseClick(e: MouseEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.buttons != 1) {
       return;
     }
@@ -44,7 +48,7 @@ export class GameFrameComponent implements OnInit {
 
     this.calcMove(mausY, mausX, true, frame);
   }
-  mouseDrag(e: MouseEvent, frame: HTMLDivElement,map:HTMLImageElement) {
+  mouseDrag(e: MouseEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.buttons != 1) {
       return;
     }
@@ -59,25 +63,28 @@ export class GameFrameComponent implements OnInit {
     this.calcMove(mausY, mausX, false, frame);
   }
 
-  mouseWheel(e: WheelEvent, frame: HTMLDivElement,map:HTMLImageElement) {
-    let move = e.deltaY;
-    // console.log(move);
+  mouseWheel(e: WheelEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.deltaY == 0) return;
-    if (e.deltaY < 0 && map.clientWidth<this.mapWidth) {
-      this.zoom = this.zoom + (this.zoom/10);
+    if (e.deltaY < 0) {
+      this.zoom = this.zoom + this.zoom / 10;
       // this.top = this.top - 5;
       // this.left = this.left- 5;
     }
-    if (e.deltaY > 0 && this.zoom>90) {
-      this.zoom = this.zoom - (this.zoom/10);
+    if (e.deltaY > 0) {
+      this.zoom = this.zoom - this.zoom / 10;
       // this.top = this.top + 5;
       // this.left = this.left + 5;
+    }
+    if (this.zoom < 0.9) {
+      this.zoom = 0.9;
+    }
+    if (this.zoom > 1.1) {
     }
 
     e.preventDefault();
   }
 
-  touchDrag(e: TouchEvent, frame: HTMLDivElement,map:HTMLImageElement) {
+  touchDrag(e: TouchEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     let mausY = 1;
     let mausX = 1;
     let touch = e.touches;
@@ -122,21 +129,21 @@ export class GameFrameComponent implements OnInit {
     // let diffXPX = (diffX / 100) * frame.offsetWidth;
     // let diffYPX = (diffY / 100) * frame.offsetHeight;
 
-    this.left = this.left - (diffX/(this.zoom/100));
-    this.top = this.top - (diffY/(this.zoom/100));
+    this.left = this.left - diffX;
+    this.top = this.top - diffY;
 
-    if (this.left > 90) {
-      this.left = 90;
-    }
-    if (this.top > 90) {
-      this.top = 90;
-    }
-    if (this.left < -90) {
-      this.left = -90;
-    }
-    if (this.top < -90) {
-      this.top = -90;
-    }
+    // if (this.left > 90) {
+    //   this.left = 90;
+    // }
+    // if (this.top > 90) {
+    //   this.top = 90;
+    // }
+    // if (this.left < -90) {
+    //   this.left = -90;
+    // }
+    // if (this.top < -90) {
+    //   this.top = -90;
+    // }
 
     // let mapGCD=this.gcd(this.mapWidth, this.mapHeight);
     // let mapAspectWidth=this.mapWidth/ mapGCD;

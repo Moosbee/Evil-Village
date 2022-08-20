@@ -1,18 +1,23 @@
 <div
   id="frame"
   #frame
-  (mousedown)="mouseClick($event, frame,map)"
-  (mousemove)="mouseDrag($event, frame,map)"
-  (touchstart)="touchDrag($event, frame,map)"
-  (touchmove)="touchDrag($event, frame,map)"
-  (wheel)="mouseWheel($event, frame,map)"
+  (mousedown)="mouseClick($event, frame, map)"
+  (mousemove)="mouseDrag($event, frame, map)"
+  (touchstart)="touchDrag($event, frame, map)"
+  (touchmove)="touchDrag($event, frame, map)"
+  (wheel)="mouseWheel($event, frame, map)"
 >
+  <img
+    src="/assets/images/6-dots-scale.svg"
+    alt=""
+    class="loadingIcon"
+  />
+  <!-- width: zoom + '%', -->
   <div
     id="gameFrame"
     [ngStyle]="{
-      width: zoom + '%',
       'aspect-ratio': mapWidth / mapHeight,
-      transform: 'translate(' + left + '%,' + top + '%)'
+      transform: 'translate(' + left + '%,' + top + '%) scale(' + zoom + ')'
     }"
   >
     <img src="{{ link }}game/map" (load)="loadedImg($event)" alt="" #map />
