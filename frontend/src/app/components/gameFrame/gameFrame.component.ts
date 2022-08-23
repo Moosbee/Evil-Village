@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { Update } from 'src/app/model/update';
 import { GameService } from 'src/app/service/game.service';
 import { environment } from '../../../environments/environment';
 
@@ -11,8 +13,10 @@ export class GameFrameComponent implements OnInit {
   link = environment.backendLink;
   mapWidth = 0;
   mapHeight = 0;
-  left = 0;
-  top = 0;
+  left = -50;
+  top = -50;
+  leftImg = -50;
+  topImg = -50;
   zoom = 1;
   loaded = false;
 
@@ -20,13 +24,26 @@ export class GameFrameComponent implements OnInit {
   posY = 0;
   lastPosX = 0;
   lastPosY = 0;
-  gameObjects: string[] = [];
+  gameObjects: Update[] = [];
 
   // @ViewChild('frame') public frame!: ElementRef;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    let token = localStorage.getItem('token');
+    if (token == null) {
+      this.router.navigate(['/signIn']);
+      return;
+    }
+    this.gameService.setToken(token);
+    this.gameService.getUpdate().subscribe((newGameObjects) => {
+      this.gameObjects = newGameObjects;
+    });
+    this.gameService.getUpdateSocket().subscribe((newGameObjects) => {
+      this.gameObjects = newGameObjects;
+    });
+  }
 
   loadedImg(e: any) {
     let ImgMap: HTMLImageElement = e.target;
@@ -46,7 +63,7 @@ export class GameFrameComponent implements OnInit {
 
     e.preventDefault();
 
-    this.calcMove(mausY, mausX, true, frame);
+    this.calcPos(mausY, mausX, true, false);
   }
   mouseDrag(e: MouseEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.buttons != 1) {
@@ -60,13 +77,15 @@ export class GameFrameComponent implements OnInit {
 
     e.preventDefault();
 
-    this.calcMove(mausY, mausX, false, frame);
+    this.calcPos(mausY, mausX, false, false);
   }
 
   mouseWheel(e: WheelEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.deltaY == 0) return;
     if (e.deltaY < 0) {
-      this.zoom = this.zoom + this.zoom / 10;
+      if (!(map.clientWidth > this.mapWidth)) {
+        this.zoom = this.zoom + this.zoom / 10;
+      }
       // this.top = this.top - 5;
       // this.left = this.left- 5;
     }
@@ -78,8 +97,10 @@ export class GameFrameComponent implements OnInit {
     if (this.zoom < 0.9) {
       this.zoom = 0.9;
     }
-    if (this.zoom > 1.1) {
-    }
+
+    this.zoom = Math.round((this.zoom + Number.EPSILON) * 100) / 100;
+
+    this.calcPos(0, 0, true, true);
 
     e.preventDefault();
   }
@@ -95,42 +116,61 @@ export class GameFrameComponent implements OnInit {
     }
     e.preventDefault();
 
-    this.calcMove(mausY, mausX, false, frame);
+    this.calcPos(mausY, mausX, false, false);
   }
-  calcMove(
-    mausY: number,
-    mausX: number,
-    start: boolean,
-    frame: HTMLDivElement
-  ) {
-    if (mausY < 0) {
-      mausY = 0;
-    } else if (mausY > 1) {
-      mausY = 1;
-    }
-    if (mausX < 0) {
-      mausX = 0;
-    } else if (mausX > 1) {
-      mausX = 1;
-    }
 
-    this.lastPosX = this.posX;
-    this.lastPosY = this.posY;
-    this.posX = Math.round(mausX * 100);
-    this.posY = Math.round(mausY * 100);
+  keyPress(e: KeyboardEvent, frame: HTMLDivElement, map: HTMLImageElement) {
+    let key = e.key;
+    switch (key) {
+      case '1':
+        this.zoom = 1;
+        break;
+      case '2':
+        this.zoom = 2;
+        break;
+      case '3':
+        this.calcPos(0, 0, false, true);
+        break;
 
-    if (start) {
+      default:
+        break;
+    }
+  }
+  calcPos(mausY: number, mausX: number, start: boolean, update: boolean) {
+    if (!update) {
+      if (mausY < 0) {
+        mausY = 0;
+      } else if (mausY > 1) {
+        mausY = 1;
+      }
+      if (mausX < 0) {
+        mausX = 0;
+      } else if (mausX > 1) {
+        mausX = 1;
+      }
+
       this.lastPosX = this.posX;
       this.lastPosY = this.posY;
+      this.posX = Math.round(mausX * 100);
+      this.posY = Math.round(mausY * 100);
+
+      if (start) {
+        this.lastPosX = this.posX;
+        this.lastPosY = this.posY;
+      }
+      let diffX = this.lastPosX - this.posX;
+      let diffY = this.lastPosY - this.posY;
+
+      // let diffXPX = (diffX / 100) * frame.offsetWidth;
+      // let diffYPX = (diffY / 100) * frame.offsetHeight;
+
+      this.left = this.left - diffX / this.zoom;
+      this.top = this.top - diffY / this.zoom;
     }
-    let diffX = this.lastPosX - this.posX;
-    let diffY = this.lastPosY - this.posY;
 
-    // let diffXPX = (diffX / 100) * frame.offsetWidth;
-    // let diffYPX = (diffY / 100) * frame.offsetHeight;
-
-    this.left = this.left - diffX;
-    this.top = this.top - diffY;
+    let diff = 50 / this.zoom - 50;
+    this.leftImg = this.left - diff;
+    this.topImg = this.top - diff;
 
     // if (this.left > 90) {
     //   this.left = 90;
@@ -158,5 +198,9 @@ export class GameFrameComponent implements OnInit {
     } else {
       return this.gcd(b, a % b);
     }
+  }
+
+  isSameGameObject(index: number, gameObject: Update) {
+    return gameObject.id;
   }
 }

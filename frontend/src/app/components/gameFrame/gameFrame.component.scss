@@ -4,14 +4,8 @@
   margin-inline: auto;
   aspect-ratio: 16/9;
   border: 3px solid green;
-  overflow: hidden;
+  // overflow: hidden;
   position: relative;
-}
-
-#gameFrame {
-  position: absolute;
-  transition: transform 100ms;
-  transform: translate(-50%, -50%);
 }
 
 .loadingIcon {
@@ -23,7 +17,35 @@
   transform: translate(-50%, -50%);
 }
 
+#gameFrame {
+  position: absolute;
+  width: 100%;
+  transition: transform 100ms;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+}
+
+#gameObjects {
+  position: absolute;
+  width: 100%;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // flex-direction: column;
+  transition: transform 100ms;
+  top: 50%;
+  left: 50%;
+  outline: 1px solid blue;
+}
+
+.selector {
+  width: 100px;
+  height: 100px;
+  background-color: green;
+}
 img {
+  position: absolute;
   height: 100%;
   width: 100%;
 }

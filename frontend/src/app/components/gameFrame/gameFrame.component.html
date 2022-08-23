@@ -7,19 +7,35 @@
   (touchmove)="touchDrag($event, frame, map)"
   (wheel)="mouseWheel($event, frame, map)"
 >
-  <img
-    src="/assets/images/6-dots-scale.svg"
-    alt=""
-    class="loadingIcon"
-  />
-  <!-- width: zoom + '%', -->
+  <!-- <img src="/assets/images/6-dots-scale.svg" alt="" class="loadingIcon" /> -->
   <div
     id="gameFrame"
     [ngStyle]="{
       'aspect-ratio': mapWidth / mapHeight,
-      transform: 'translate(' + left + '%,' + top + '%) scale(' + zoom + ')'
+      transform: 'scale(' + zoom + ') translate(' + leftImg + '%,' + topImg + '%)'
     }"
   >
     <img src="{{ link }}game/map" (load)="loadedImg($event)" alt="" #map />
   </div>
+  <div
+    id="gameObjects"
+    [ngStyle]="{
+      'aspect-ratio': mapWidth / mapHeight,
+      transform: 'translate(' + left+ '%,' + top + '%)',
+      width: zoom * 100 + '%'
+    }"
+  >
+    <div
+      *ngFor="let gameObject of gameObjects; trackBy: isSameGameObject"
+      class="gameObject"
+    >
+      <app-game-object [gameObject]="gameObject"></app-game-object>
+    </div>
+  </div>
+  <!-- width: zoom + '%', -->
 </div>
+<button 
+class="selector"
+(keypress)="keyPress($event, frame, map)"
+></button>
+<!-- [ngSwitch]="gameObject.typeof.type" -->

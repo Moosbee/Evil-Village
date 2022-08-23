@@ -20,6 +20,8 @@ import { DefaultComponent } from './components/gameObjects/default/default.compo
 import { StadtComponent } from './components/gameObjects/stadt/stadt.component';
 import { ArmyComponent } from './components/gameObjects/army/army.component';
 import { SchiffComponent } from './components/gameObjects/schiff/schiff.component';
+import { GameObjectComponent } from './components/gameObjects/game-object/game-object.component';
+import { RoundPipe } from './pipes/round.pipe';
 const config: SocketIoConfig = { url: environment.backendLink, options: {} };
 
 @NgModule({
@@ -38,6 +40,8 @@ const config: SocketIoConfig = { url: environment.backendLink, options: {} };
     StadtComponent,
     ArmyComponent,
     SchiffComponent,
+    GameObjectComponent,
+    RoundPipe,
   ],
   imports: [
     BrowserModule,

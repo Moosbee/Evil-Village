@@ -1,0 +1,39 @@
+#body {
+  background-color: #1e1e1e;
+  width: 100vw;
+  height: 100vh;
+}
+
+#A {
+  height: 50px;
+  width: 200px;
+  margin-inline: auto;
+  position: relative;
+  background-color: #252526;
+  overflow: unset;
+  outline: solid lightblue 2px;
+}
+#B {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 50%;
+  background-color: limegreen;
+  transition: all 100ms;
+}
+#C {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 50%;
+  outline: 1px solid yellow;
+  transform: translate(-50%, 0%);
+  transition: all 100ms;
+}
+#middel {
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  width: 0px;
+  outline: 1px solid pink;
+}

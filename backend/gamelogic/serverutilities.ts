@@ -63,6 +63,7 @@ async function setmap(): Promise<mapMini> {
   } catch (e) {
     throw console.error(e);
   }
+  console.log('Map Set');
   return {
     pixels: image.bitmap.data,
     height: image.getHeight(),

@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserRes } from '../model/user-res';
 import { Socket } from 'ngx-socket-io';
+import { Update } from '../model/update';
+import { Changes } from '../model/changes';
 
 @Injectable({
   providedIn: 'root',
@@ -13,100 +15,46 @@ export class GameService {
   private token = 'ghg';
 
   constructor(private http: HttpClient, private socket: Socket) {}
-  getUpdate(token: string): Observable<UserRes> {
+
+  setToken(token: string) {
+    this.token = token;
+  }
+  getUpdate(): Observable<Update[]> {
     let params = new HttpParams().set('token', this.token);
-    return this.http.post<UserRes>(
-      this.url + 'makeuser',
+    return this.http.post<Update[]>(
+      this.url + 'game/main',
       {},
       { params: params }
     );
   }
 
-  getMap(): Observable<UserRes> {
-    return this.http.post<UserRes>(
-      this.url + 'makeuser',
-      {},
+  update(changes: Changes): Observable<Update[]> {
+    if (this.token == 'ghg') {
+      throw new Error('No Token');
+    }
+    let params = new HttpParams().set('token', this.token);
+    return this.http.post<Update[]>(
+      this.url + 'game/update',
+      { changes },
+      { params: params }
     );
   }
-
-  update(user: string, pass: string): Observable<UserRes> {
-    let params = new HttpParams().set('token', this.token);
-    return this.http.post<UserRes>(this.url + 'login', {}, { params: params });
-  }
-  getUpdateSocket(): Observable<String> {
-    const socketGetObjects = new Observable<String>((observer) => {
-      this.socket.fromEvent<String>('update').subscribe((erg) => {
-        observer.next(erg);
+  getUpdateSocket(): Observable<Update[]> {
+    const socketGetObjects = new Observable<Update[]>((observer) => {
+      this.socket.fromEvent<string>('update').subscribe((erg) => {
+        observer.next(this.toGameObjects(erg));
       });
     });
     return socketGetObjects;
   }
 
-  // async importGameObjects() {
-  //   let savedGameFile: string;
+  private toGameObjects(GameObjectsString: string): Update[] {
+    if (GameObjectsString == '') {
+      GameObjectsString = '[]';
+    }
 
-  //   try {
-  //     savedGameFile = await readFile(config.rootPath + config.Game.saveFile, {
-  //       encoding: 'utf8',
-  //     });
-  //   } catch (e) {
-  //     savedGameFile = '[]';
-  //     throw e;
-  //   }
+    let GameObjects: Update[] = JSON.parse(GameObjectsString);
 
-  //   if (savedGameFile == '' || config.Game.ResetOnStart) {
-  //     savedGameFile = '[]';
-  //   }
-
-  //   let savedGame: saveFile[] = JSON.parse(savedGameFile);
-
-  //   for (let i = 0; i < savedGame.length; i++) {
-  //     const element = savedGame[i];
-  //     let savedObject: armee | schiff | stadt;
-  //     switch (element.typeof.type) {
-  //       case 'saveArmy':
-  //         savedObject = new armee(
-  //           element.x,
-  //           element.y,
-  //           element.owner,
-  //           element.strength,
-  //           element.id,
-  //           element.size,
-  //           element.typeof.gotox,
-  //           element.typeof.gotoy
-  //         );
-  //         break;
-  //       case 'saveSchiff':
-  //         savedObject = new schiff(
-  //           element.x,
-  //           element.y,
-  //           element.owner,
-  //           element.strength,
-  //           element.id,
-  //           element.size,
-  //           element.typeof.gotox,
-  //           element.typeof.gotoy
-  //         );
-  //         break;
-  //       case 'saveStadt':
-  //         savedObject = new stadt(
-  //           element.x,
-  //           element.y,
-  //           element.owner,
-  //           element.strength,
-  //           element.id,
-  //           element.typeof.population,
-  //           element.size,
-  //           element.typeof.capital,
-  //           element.typeof.speed,
-  //           element.typeof.makingofarmy
-  //         );
-  //         break;
-  //       default:
-  //         continue;
-  //         break;
-  //     }
-  //     this.gameObjects.push(savedObject);
-  //   }
-  // }
+    return GameObjects;
+  }
 }
