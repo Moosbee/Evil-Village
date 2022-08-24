@@ -83,7 +83,7 @@ export class GameFrameComponent implements OnInit {
   mouseWheel(e: WheelEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.deltaY == 0) return;
     if (e.deltaY < 0) {
-      if (!(map.clientWidth > this.mapWidth)) {
+      if (!(map.clientWidth * (this.zoom * 0.75) > this.mapWidth)) {
         this.zoom = this.zoom + this.zoom / 10;
       }
       // this.top = this.top - 5;
@@ -135,6 +135,7 @@ export class GameFrameComponent implements OnInit {
       default:
         break;
     }
+    this.calcPos(0, 0, true, true);
   }
   calcPos(mausY: number, mausX: number, start: boolean, update: boolean) {
     if (!update) {

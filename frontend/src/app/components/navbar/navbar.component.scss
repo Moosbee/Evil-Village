@@ -1,5 +1,10 @@
 $primary-color: rgb(31, 189, 0);
 
+#nav {
+  position: relative;
+  z-index: 1;
+}
+
 .menu {
   display: flex;
   justify-content: space-between;

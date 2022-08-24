@@ -12,7 +12,8 @@
     id="gameFrame"
     [ngStyle]="{
       'aspect-ratio': mapWidth / mapHeight,
-      transform: 'scale(' + zoom + ') translate(' + leftImg + '%,' + topImg + '%)'
+      transform:
+        'scale(' + zoom + ') translate(' + leftImg + '%,' + topImg + '%)'
     }"
   >
     <img src="{{ link }}game/map" (load)="loadedImg($event)" alt="" #map />
@@ -21,7 +22,7 @@
     id="gameObjects"
     [ngStyle]="{
       'aspect-ratio': mapWidth / mapHeight,
-      transform: 'translate(' + left+ '%,' + top + '%)',
+      transform: 'translate(' + left + '%,' + top + '%)',
       width: zoom * 100 + '%'
     }"
   >
@@ -29,13 +30,14 @@
       *ngFor="let gameObject of gameObjects; trackBy: isSameGameObject"
       class="gameObject"
     >
-      <app-game-object [gameObject]="gameObject"></app-game-object>
+      <app-game-object
+        [gameObject]="gameObject"
+        [width]="mapWidth"
+        [height]="mapHeight"
+      ></app-game-object>
     </div>
   </div>
   <!-- width: zoom + '%', -->
 </div>
-<button 
-class="selector"
-(keypress)="keyPress($event, frame, map)"
-></button>
+<!-- <button class="selector" (keypress)="keyPress($event, frame, map)"></button> -->
 <!-- [ngSwitch]="gameObject.typeof.type" -->

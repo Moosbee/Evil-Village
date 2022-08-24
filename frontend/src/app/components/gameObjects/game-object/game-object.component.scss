@@ -1,0 +1,14 @@
+.box {
+  position: absolute;
+  //   width: 50px;
+  aspect-ratio: 1/1;
+  transform: translate(-50%, -50%);
+  background-color: green;
+}
+
+.gameObject {
+  position: absolute;
+  aspect-ratio: 1/1;
+  width: 5vmax;
+  min-width: 100%;
+}

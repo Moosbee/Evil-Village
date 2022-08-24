@@ -1,1 +1,16 @@
-<div>{{gameObject.typeof.type}}: {{gameObject.id}},{{gameObject.strength}},{{gameObject.x}},{{gameObject.y}}</div>
+<div
+  class="box"
+  [ngStyle]="{
+    top: (gameObject.y / height) * 100 + '%',
+    left: (gameObject.x / width) * 100 + '%',
+    width: (gameObject.size / width) * 100 + '%'
+  }"
+>
+  <!-- {{ gameObject.typeof.type }}: {{ gameObject.id }},{{ gameObject.strength }} -->
+  <div [ngSwitch]="gameObject.typeof.type" class="gameObject">
+    <app-army *ngSwitchCase="'saveArmy'"></app-army>
+    <app-schiff *ngSwitchCase="'saveSchiff'"></app-schiff>
+    <app-stadt *ngSwitchCase="'saveStadt'"></app-stadt>
+    <app-default *ngSwitchDefault></app-default>
+  </div>
+</div>

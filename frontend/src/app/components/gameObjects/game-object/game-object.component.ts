@@ -8,9 +8,11 @@ import { Update } from 'src/app/model/update';
 })
 export class GameObjectComponent implements OnInit {
   @Input() gameObject!: Update;
+  @Input() width: number = 0;
+  @Input() height: number = 0;
   constructor() {}
 
   ngOnInit(): void {
-    console.log("tetst");
+    console.log('tetst');
   }
 }
