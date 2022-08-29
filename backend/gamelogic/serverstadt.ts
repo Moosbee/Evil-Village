@@ -29,7 +29,7 @@ export class stadt extends gameobject {
     let max = 1;
 
     this.capital = capital;
-    this.makingofarmy = makingofarmy == undefined ? 500 : makingofarmy;
+    this.makingofarmy = makingofarmy == undefined ? 50 : makingofarmy;
     // this.makingofarmy = 100;
     max = 6;
     this.speed = speed == undefined ? makeRandomInt(min, max) : speed;

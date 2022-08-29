@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Update } from 'src/app/model/update';
 import { GameMenuService } from 'src/app/service/game-menu.service';
 
 @Component({
@@ -7,13 +8,13 @@ import { GameMenuService } from 'src/app/service/game-menu.service';
   styleUrls: ['./game-menu.component.scss'],
 })
 export class GameMenuComponent implements OnInit {
-  text = '';
+  menuEntries: Update[] = [];
 
   constructor(private gameMenuService: GameMenuService) {}
 
   ngOnInit(): void {
-    this.gameMenuService.getMenuFast().subscribe((recText)=>{
-      this.text=recText;
-    })
+    this.gameMenuService.getMenuFast().subscribe((menuEntries: Update[]) => {
+      this.menuEntries = menuEntries;
+    });
   }
 }

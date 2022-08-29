@@ -1,6 +1,6 @@
 import { config } from '../config';
 import { gamelogic } from './gamelogic';
-import { makeRandomInt } from './serverutilities';
+import { genName, makeRandomInt } from './serverutilities';
 
 export class gameobject {
   public name: string = '';
@@ -25,10 +25,9 @@ export class gameobject {
     this.selected = false;
 
     if (name == '') {
-      name = this.genName();
-    } else {
-      this.name = name;
+      name = genName();
     }
+    this.name = name;
 
     let min = 1;
     min = 10;
@@ -45,10 +44,5 @@ export class gameobject {
   tick(game: gamelogic) {}
   setarraypos(a: number) {
     this.arraypos = a;
-  }
-  genName(): string {
-    let name = 'Test';
-    name = name + Math.random().toString();
-    return name;
   }
 }

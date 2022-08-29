@@ -107,4 +107,10 @@ function makeRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export { setmap, getMapPixel, makeRandomInt, saveFile, changes, mapMini };
+function genName(): string {
+  let name = 'Test';
+  name = name + Math.random().toString();
+  return name;
+}
+
+export { setmap, getMapPixel, makeRandomInt,genName, saveFile, changes, mapMini };

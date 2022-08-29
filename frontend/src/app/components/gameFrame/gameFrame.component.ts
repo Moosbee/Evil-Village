@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Update } from 'src/app/model/update';
+import { GameMenuService } from 'src/app/service/game-menu.service';
 import { GameService } from 'src/app/service/game.service';
 import { environment } from '../../../environments/environment';
 
@@ -29,7 +30,11 @@ export class GameFrameComponent implements OnInit {
 
   // @ViewChild('frame') public frame!: ElementRef;
 
-  constructor(private gameService: GameService, private router: Router) {}
+  constructor(
+    private gameService: GameService,
+    private gameMenuService: GameMenuService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     let token = localStorage.getItem('token');
@@ -43,6 +48,7 @@ export class GameFrameComponent implements OnInit {
     });
     this.gameService.getUpdateSocket().subscribe((newGameObjects) => {
       this.gameObjects = newGameObjects;
+      this.gameMenuService.updateMenu(newGameObjects);
     });
   }
 

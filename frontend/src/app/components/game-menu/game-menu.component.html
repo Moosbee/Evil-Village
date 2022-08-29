@@ -1,3 +1,11 @@
-<p>game-menu works!</p>
-<p>{{ text }}</p>
-<button>Click</button>
+<div>
+    <div>{{menuEntries.length}}</div>
+    <div *ngFor="let entry of menuEntries;">
+        <div>{{entry.name}}</div>
+        <div>{{entry.x}}</div>
+        <div>{{entry.y}}</div>
+        <div>{{entry.owner}}</div>
+        <div>{{entry.strength}}</div>
+        <div>{{entry.typeof.type}}</div>
+    </div>
+</div>
