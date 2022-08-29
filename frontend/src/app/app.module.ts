@@ -16,10 +16,10 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { DebugComponent } from './components/debug/debug.component';
 import { WatchFrameComponent } from './components/watchFrame/watchFrame.component';
-import { DefaultComponent } from './components/gameObjects/default/default.component';
-import { StadtComponent } from './components/gameObjects/stadt/stadt.component';
-import { ArmyComponent } from './components/gameObjects/army/army.component';
-import { SchiffComponent } from './components/gameObjects/schiff/schiff.component';
+import { AnimationDefaultComponent } from './components/gameObjects/animation-default/animation-default.component';
+import { AnimationStadtComponent } from './components/gameObjects/animation-stadt/animation-stadt.component';
+import { AnimationArmyComponent } from './components/gameObjects/animation-army/animation-army.component';
+import { AnimationSchiffComponent } from './components/gameObjects/animation-schiff/animation-schiff.component';
 import { GameObjectComponent } from './components/gameObjects/game-object/game-object.component';
 import { RoundPipe } from './pipes/round.pipe';
 import { GameMenuComponent } from './components/game-menu/game-menu.component';
@@ -37,10 +37,10 @@ const config: SocketIoConfig = { url: environment.backendLink, options: {} };
     SignedInComponent,
     DebugComponent,
     WatchFrameComponent,
-    DefaultComponent,
-    StadtComponent,
-    ArmyComponent,
-    SchiffComponent,
+    AnimationDefaultComponent,
+    AnimationStadtComponent,
+    AnimationArmyComponent,
+    AnimationSchiffComponent,
     GameObjectComponent,
     RoundPipe,
     GameMenuComponent,

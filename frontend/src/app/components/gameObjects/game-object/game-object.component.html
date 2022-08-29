@@ -12,9 +12,9 @@
     [ngSwitch]="gameObject.typeof.type"
     [ngClass]="{ gameObject: true, activated: click }"
   >
-    <app-army *ngSwitchCase="'saveArmy'" class="object"></app-army>
-    <app-schiff *ngSwitchCase="'saveSchiff'" class="object"></app-schiff>
-    <app-stadt *ngSwitchCase="'saveStadt'" class="object"></app-stadt>
-    <app-default *ngSwitchDefault class="object"></app-default>
+    <app-animation-army *ngSwitchCase="'saveArmy'" class="object"></app-animation-army>
+    <app-animation-schiff *ngSwitchCase="'saveSchiff'" class="object"></app-animation-schiff>
+    <app-animation-stadt *ngSwitchCase="'saveStadt'" class="object"></app-animation-stadt>
+    <app-animation-default *ngSwitchDefault class="object"></app-animation-default>
   </div>
 </div>
