@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ConfigComponent } from './components/config/config.component';
 import { DebugComponent } from './components/debug/debug.component';
+import { GameMenuComponent } from './components/game-menu/game-menu.component';
 import { GameFrameComponent } from './components/gameFrame/gameFrame.component';
 import { MainComponent } from './components/main/main.component';
 import { SignedInComponent } from './components/signedIn/signedIn.component';
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'debug',
     component: DebugComponent,
+  },
+  {
+    path: 'men',
+    component: GameMenuComponent,
   },
 ];
 

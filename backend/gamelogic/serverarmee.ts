@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { config } from '../config';
 import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
@@ -14,9 +15,9 @@ export class armee extends gameobject {
   constructor(
     x: number,
     y: number,
-    owner: number,
+    owner: string,
     strength: number = -1,
-    id: number = -1,
+    name: string = '',
     size = 50,
     gotox = -1,
     gotoy = -1,
@@ -24,7 +25,7 @@ export class armee extends gameobject {
     movex = 0,
     movey = 0
   ) {
-    super(x, y, owner, strength, id, size);
+    super(x, y, owner, name, strength, size);
     this.arraypos = 0;
     this.strength = strength;
     this.owner = owner;
@@ -47,7 +48,7 @@ export class armee extends gameobject {
     if (this.strength > 500) {
       this.settle(game);
     } else {
-      console.log('fehlgeschlagen');
+      console.log(chalk.red('fehlgeschlagen'));
     }
   }
 
@@ -65,7 +66,7 @@ export class armee extends gameobject {
     );
     newStadt.arraypos = game.gameObjects.length;
     game.gameObjects.push(newStadt);
-    console.log('settle');
+    console.log(chalk.cyan('settle'));
     this.strength = -1;
     return true;
   }
@@ -79,14 +80,13 @@ export class armee extends gameobject {
         this.y > arm.y - this.size / 2 &&
         this.y < arm.y + this.size / 2
     );
-    console.log('try,erge');
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
         let selectgameObject: stadt = selectgameObjects[0];
         selectgameObject.strength = selectgameObject.strength + this.strength;
         selectgameObject.makingofarmy = 100;
         this.strength = -1;
-        console.log('Merge');
+        console.log(chalk.cyan('Merge'));
       }
       return true;
     }
@@ -129,13 +129,13 @@ export class armee extends gameobject {
       this.x = this.gotox;
       this.y = this.gotoy;
       this.ismoving = false;
-      console.log('Angekommen');
+      console.log(chalk.cyan('Angekommen'));
       return;
     }
     this.ismoving = true;
 
     if (this.movey == 0 && this.movex == 0) {
-      console.log('startwalk');
+      console.log(chalk.cyan('startwalk'));
       let a = this.y - this.gotoy;
       let b = -(this.x - this.gotox);
       let alpha = Math.atan2(a, b); //G/A
@@ -181,7 +181,7 @@ export class armee extends gameobject {
       if (arm instanceof stadt) {
         return;
       }
-      console.log('merge');
+      console.log(chalk.cyan('Merge'));
 
       if (this.strength < arm.strength) {
         arm.strength = arm.strength + this.strength;
@@ -196,7 +196,7 @@ export class armee extends gameobject {
       return;
     }
 
-    console.log('Kampf');
+    console.log(chalk.cyan('Kampf'));
     if (this.strength != arm.strength) {
       let strengthtthis = this.strength;
       let strengthtarm = arm.strength;
@@ -205,7 +205,7 @@ export class armee extends gameobject {
     } else {
       this.strength = -1;
       arm.strength = -1;
-      console.log('Unentschieden');
+      console.log(chalk.cyan('Unentschieden'));
     }
   }
 }

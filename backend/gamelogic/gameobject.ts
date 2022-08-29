@@ -1,21 +1,21 @@
-import { config } from "../config";
-import { gamelogic } from "./gamelogic";
-import { makeRandomInt } from "./serverutilities";
+import { config } from '../config';
+import { gamelogic } from './gamelogic';
+import { makeRandomInt } from './serverutilities';
 
 export class gameobject {
-  public id: number;
+  public name: string = '';
   public arraypos?: number;
   public x: number;
   public y: number;
-  public owner: number;
+  public owner: string;
   public strength: number;
   public selected: boolean;
   public size: number = 50;
   constructor(
-    x: number, 
+    x: number,
     y: number,
-    owner: number,
-    id: number,
+    owner: string,
+    name: string,
     strength?: number,
     size?: number
   ) {
@@ -24,16 +24,17 @@ export class gameobject {
     this.y = y;
     this.selected = false;
 
-    let min = 1;
-    if (id == -1) {
-      this.id = makeRandomInt(min,config.Game.maxGameObjects);
+    if (name == '') {
+      name = this.genName();
     } else {
-      this.id = id;
+      this.name = name;
     }
+
+    let min = 1;
     min = 10;
     let max = 35;
     if (strength == undefined || strength == -1) {
-      this.strength = makeRandomInt(min,max);
+      this.strength = makeRandomInt(min, max);
     } else {
       this.strength = strength;
     }
@@ -41,8 +42,13 @@ export class gameobject {
       this.size = size;
     }
   }
-  tick(game:gamelogic) {}
+  tick(game: gamelogic) {}
   setarraypos(a: number) {
     this.arraypos = a;
+  }
+  genName(): string {
+    let name = 'Test';
+    name = name + Math.random().toString();
+    return name;
   }
 }

@@ -13,9 +13,9 @@ export class stadt extends gameobject {
   constructor(
     x: number,
     y: number,
-    owner: number,
+    owner: string,
     strength?: number,
-    id: number = -1,
+    name: string = '',
     population: number = -1,
     size: number = 40,
     capital: boolean = false,
@@ -23,7 +23,7 @@ export class stadt extends gameobject {
     makingofarmy?: number
   ) {
     if (strength == undefined) strength = 1;
-    super(x, y, owner, id, strength, size);
+    super(x, y, owner, name, strength, size);
 
     let min = 1;
     let max = 1;

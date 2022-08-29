@@ -3,8 +3,8 @@ import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
 import { createHmac, randomBytes } from 'crypto';
 import { makeRandomInt } from './serverutilities';
+import chalk from 'chalk';
 interface player {
-  id: number;
   username: string;
   pass: string;
   token: string;
@@ -44,7 +44,7 @@ async function verify(
   let expirer: number = 24 * 60 * 60 * 1000;
   let timeDiv = now.getTime() - new Date(jsonPlayer.tokenDate).getTime();
   if (timeDiv > expirer) {
-    console.log('new token');
+    console.log(chalk.dim('new token'));
     jsonPlayer.token = createToken();
     jsonPlayer.tokenDate = now.toJSON();
   }
@@ -108,15 +108,10 @@ async function createUser(
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer != undefined) return 'taken';
   let minPlayer = 1;
-  let newid = makeRandomInt(minPlayer, config.MaxPlayers);
-  while (jsonPlayers.find((e) => e.id === newid) != undefined) {
-    newid = makeRandomInt(minPlayer, config.MaxPlayers);
-  }
   let token: string = createToken();
   let now = new Date().toJSON();
 
   let newPlayer: player = {
-    id: newid,
     username: user,
     pass: passwordHash,
     token: token,

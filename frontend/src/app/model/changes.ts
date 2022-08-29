@@ -1,5 +1,5 @@
 export interface Changes {
-  id: number;
+  name: string;
   gotox?: number;
   gotoy?: number;
   settle?: boolean;

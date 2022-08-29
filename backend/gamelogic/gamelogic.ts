@@ -10,6 +10,7 @@ import {
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
+import chalk from 'chalk';
 
 export class gamelogic {
   gameObjects: (armee | stadt | schiff)[];
@@ -21,11 +22,10 @@ export class gamelogic {
     this.importGameObjects().then(() => {
       setmap().then((mapi) => {
         this.map = mapi;
-        console.log(this.gameObjects);
         setInterval(this.gameloop, 100, this);
         setInterval(this.save, 5000, this);
         // setTimeout(this.gameloop, 1000,this);
-        console.log('Game Startet');
+        console.log(chalk.green.bold('Game Startet'));
       });
     });
   }
@@ -58,7 +58,7 @@ export class gamelogic {
             element.y,
             element.owner,
             element.strength,
-            element.id,
+            element.name,
             element.size,
             element.typeof.gotox,
             element.typeof.gotoy
@@ -70,7 +70,7 @@ export class gamelogic {
             element.y,
             element.owner,
             element.strength,
-            element.id,
+            element.name,
             element.size,
             element.typeof.gotox,
             element.typeof.gotoy
@@ -82,7 +82,7 @@ export class gamelogic {
             element.y,
             element.owner,
             element.strength,
-            element.id,
+            element.name,
             element.typeof.population,
             element.size,
             element.typeof.capital,
@@ -98,7 +98,7 @@ export class gamelogic {
     }
   }
 
-  doesCapitolExist(owner: number) {
+  doesCapitolExist(owner: string) {
     let filterd = this.gameObjects.some((e): boolean => {
       return e instanceof stadt && e.owner == owner && e.capital;
     });
@@ -109,7 +109,7 @@ export class gamelogic {
     }
   }
 
-  doesExistAtAll(owner: number) {
+  doesExistAtAll(owner: string) {
     let filterd = this.gameObjects.some((e): boolean => {
       return e.owner == owner;
     });
@@ -120,14 +120,14 @@ export class gamelogic {
     }
   }
 
-  addCapitol(owner: number) {
+  addCapitol(owner: string) {
     if (this.map == undefined) return;
     let capital = new stadt(
       makeRandomInt(50, this.map.width),
       makeRandomInt(50, this.map.height),
       owner,
       undefined,
-      -1,
+      '',
       -1,
       undefined,
       true
@@ -148,7 +148,7 @@ export class gamelogic {
       let savedObject: saveFile;
       if (element instanceof armee) {
         savedObject = {
-          id: element.id,
+          name: element.name,
           owner: element.owner,
           size: element.size,
           strength: element.strength,
@@ -162,7 +162,7 @@ export class gamelogic {
         };
       } else if (element instanceof schiff) {
         savedObject = {
-          id: element.id,
+          name: element.name,
           owner: element.owner,
           size: element.size,
           strength: element.strength,
@@ -176,7 +176,7 @@ export class gamelogic {
         };
       } else if (element instanceof stadt) {
         savedObject = {
-          id: element.id,
+          name: element.name,
           owner: element.owner,
           size: element.size,
           strength: element.strength,
@@ -203,8 +203,8 @@ export class gamelogic {
     return JSON.stringify(this.gameObjects);
   }
 
-  update(chang: changes,id?:number) {
-    let gameObject = this.gameObjects.filter((arm) => arm.id == chang.id);
+  update(chang: changes, username?: string) {
+    let gameObject = this.gameObjects.filter((arm) => arm.name == chang.name);
 
     if (
       chang.gotox != undefined &&
@@ -213,8 +213,10 @@ export class gamelogic {
     ) {
       gameObject[0].goto(chang.gotox, chang.gotoy);
     }
-    if (chang.settle==true && (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)) {
-      console.log("tes")
+    if (
+      chang.settle == true &&
+      (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)
+    ) {
       gameObject[0].settleMerge(this);
     }
   }

@@ -1,6 +1,7 @@
 import { config } from '../config';
 import Jimp from 'jimp';
 import path from 'path';
+import chalk from 'chalk';
 
 interface RGBColor {
   red: number;
@@ -16,17 +17,17 @@ interface mapMini {
 }
 
 interface changes {
-  id: number;
+  name: string;
   gotox?: number;
   gotoy?: number;
   settle?: boolean;
 }
 
 interface saveFile {
-  id: number;
+  name: string;
   x: number;
   y: number;
-  owner: number;
+  owner: string;
   strength: number;
   size: number;
   typeof: saveArmy | saveSchiff | saveStadt;
@@ -53,7 +54,7 @@ interface saveStadt {
 // declare var map: mapMini;
 
 async function setmap(): Promise<mapMini> {
-  console.log('Setting Map');
+  console.log(chalk.gray('Setting Map'));
   let mapDir = config.rootPath + './maps/';
   mapDir = mapDir + config.Game.MapFileName;
 
@@ -63,7 +64,7 @@ async function setmap(): Promise<mapMini> {
   } catch (e) {
     throw console.error(e);
   }
-  console.log('Map Set');
+  console.log(chalk.gray('Map Set'));
   return {
     pixels: image.bitmap.data,
     height: image.getHeight(),

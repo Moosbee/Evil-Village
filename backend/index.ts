@@ -13,6 +13,8 @@ import { changes } from './gamelogic/serverutilities';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { normalize, resolve } from 'path';
+import chalk from 'chalk';
+
 // import  cors from "cors";
 const cors = require('cors');
 
@@ -24,10 +26,9 @@ var localGame = new gamelogic();
 app.use(cors());
 
 app.all('*', function (req, res, next) {
-  console.log(`${req.method} Anfrage an: ${req.url}`);  
+  console.log(chalk.dim(`${chalk.bold(req.method)} Anfrage an: ${req.url}`));
   next(); // pass control to the next handler
 });
-
 
 app.use('/media', express.static(config.rootPath + '../frontendd/public'));
 // app.use(urlencoded({ extended: true }));
@@ -40,38 +41,39 @@ app.use(cookieParser());
 // for signing the cookies.
 //app.use(cookieParser('my secret here'));
 
-//Handeling anfragen-----------------------------------------------
+// ============================================================================================== //
+// ===================================== Handeling anfragen ===================================== //
+// ============================================================================================== //
 
-app.get('/', async (req, res) => {
-  res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/home.html'));
-});
+// app.get('/', async (req, res) => {
+//   res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/home.html'));
+// });
 
-app.get('/login', async (req, res) => {
-  res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/login.html'));
-});
+// app.get('/login', async (req, res) => {
+//   res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/login.html'));
+// });
 
-app.get('/makeuser', async (req, res) => {
-  res.sendFile(
-    resolve(config.rootPath + '../frontendd/unpublic/makeuser.html')
-  );
-});
+// app.get('/makeuser', async (req, res) => {
+//   res.sendFile(
+//     resolve(config.rootPath + '../frontendd/unpublic/makeuser.html')
+//   );
+// });
 
-app.get('/logedin', async (req, res) => {
-  res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/logedin.html'));
-});
+// app.get('/logedin', async (req, res) => {
+//   res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/logedin.html'));
+// });
 
-app.get('/game/main', (req, res) => {
-  res.sendFile(
-    resolve(config.rootPath + '../frontendd/unpublic/maingameframe.html')
-  );
-});
+// app.get('/game/main', (req, res) => {
+//   res.sendFile(
+//     resolve(config.rootPath + '../frontendd/unpublic/maingameframe.html')
+//   );
+// });
 
-app.get('/game/config', (req, res) => {
-  res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/config.html'));
-});
+// app.get('/game/config', (req, res) => {
+//   res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/config.html'));
+// });
 
 app.get('/favicon.ico', async (req, res) => {
-  console.log('favicon');
   let faf = config.favicon;
   let dir = resolve(
     config.rootPath + '../frontend/src/assets/farvi/' + faf + '.ico'
@@ -80,6 +82,11 @@ app.get('/favicon.ico', async (req, res) => {
 });
 
 //fuer einloggen benutze Node.js Passport
+
+// ============================================================================================== //
+// ============================================= API ============================================ //
+// ============================================================================================== //
+
 app.post('/login', async (req, res) => {
   // console.log(req.body);
   let resiveddata = req.body;
@@ -103,7 +110,6 @@ app.post('/login', async (req, res) => {
   if (erg != 'wrong' && erg != 'failed') {
     res.json({
       state: 'success',
-      id: erg.id,
       username: erg.username,
       pass: erg.pass,
       token: erg.token,
@@ -140,7 +146,6 @@ app.post('/makeuser', async (req, res) => {
   if (erg != 'taken' && erg != 'failed') {
     res.json({
       state: 'success',
-      id: erg.id,
       username: erg.username,
       pass: erg.pass,
       token: erg.token,
@@ -180,9 +185,10 @@ app.post('/game/main', async (req, res) => {
     return;
   }
 
-  let id = erg.id;
-  if (typeof id == 'number' && !localGame.doesCapitolExist(id)) {
-    localGame.addCapitol(id);
+  let owner = erg.username;
+  if (typeof owner == 'string' && !localGame.doesCapitolExist(owner)) {
+    localGame.addCapitol(owner);
+    console.log(chalk.yellow('New Player added!!'));
   }
   res.send(localGame.getUpdate());
 });
@@ -206,7 +212,7 @@ app.post('/game/update', async (req, res) => {
   let resiveddata: changes = req.body;
   console.log(resiveddata);
 
-  localGame.update(resiveddata, erg.id);
+  localGame.update(resiveddata, erg.username);
 
   res.send(localGame.getUpdate());
 });
@@ -220,8 +226,7 @@ app.all('*', function (req, res, next) {
   try {
     //console.log(req);
     res.status(400).send('<h1>Error</h1>');
-    console.log('An Idiot has a typo!');
-    console.log(req.method + ' Anfrage ' + req.url);
+    console.log(chalk.redBright('An Idiot has a typo!'));
   } catch (error) {
     console.log(error);
   }
@@ -240,7 +245,7 @@ const socketServer = new Server(httpServer, {
 
 //Whenever someone connects this gets executed
 socketServer.on('connection', function (socket) {
-  console.log('A user connected: ' + socket.id);
+  console.log(chalk.gray('A user connected: ' + socket.id));
 
   socket.on('update', function (data) {
     console.log(data);
@@ -252,7 +257,7 @@ socketServer.on('connection', function (socket) {
 
   //Whenever someone disconnects this piece of code executed
   socket.on('disconnect', function () {
-    console.log('A user disconnected');
+    console.log(chalk.red('A user disconnected'));
   });
 });
 
@@ -260,10 +265,8 @@ setInterval(() => {
   socketServer.emit('update', localGame.getUpdate());
 }, 100);
 
-// server.listen(app.get('port'), function(){
-//   console.log('Express server listening on port ' + app.get('port'));
-// });
-
 httpServer.listen(config.expressPort, () => {
-  console.log(`Schulprojekt listening on port ${config.expressPort}!`);
+  console.log(
+    chalk.yellow.bold(`Schulprojekt listening on port ${config.expressPort}!`)
+  );
 });

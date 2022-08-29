@@ -1,8 +1,8 @@
 export interface Update {
-  id: number;
+  name: string;
   x: number;
   y: number;
-  owner: number;
+  owner: string;
   strength: number;
   size: number;
   typeof: UpdateArmy | UpdateSchiff | UpdateStadt;

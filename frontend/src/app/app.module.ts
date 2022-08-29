@@ -22,6 +22,7 @@ import { ArmyComponent } from './components/gameObjects/army/army.component';
 import { SchiffComponent } from './components/gameObjects/schiff/schiff.component';
 import { GameObjectComponent } from './components/gameObjects/game-object/game-object.component';
 import { RoundPipe } from './pipes/round.pipe';
+import { GameMenuComponent } from './components/game-menu/game-menu.component';
 const config: SocketIoConfig = { url: environment.backendLink, options: {} };
 
 @NgModule({
@@ -42,6 +43,7 @@ const config: SocketIoConfig = { url: environment.backendLink, options: {} };
     SchiffComponent,
     GameObjectComponent,
     RoundPipe,
+    GameMenuComponent,
   ],
   imports: [
     BrowserModule,

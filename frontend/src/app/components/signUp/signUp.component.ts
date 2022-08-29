@@ -31,11 +31,9 @@ export class SignUpComponent implements OnInit {
           this.message = auth.state;
           if (
             auth.state == 'success' &&
-            typeof auth.id == 'number' &&
             typeof auth.username == 'string' &&
             typeof auth.token == 'string'
           ) {
-            localStorage.setItem('id', auth.id.toString());
             localStorage.setItem('username', auth.username);
             localStorage.setItem('token', auth.token);
             this.router.navigate(['/signIn']);

@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { config } from '../config';
 import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
@@ -14,9 +15,9 @@ export class schiff extends gameobject {
   constructor(
     x: number,
     y: number,
-    owner: number,
+    owner: string,
     strength: number = -1,
-    id: number = -1,
+    name: string = '',
     size = 50,
     gotox = -1,
     gotoy = -1,
@@ -24,7 +25,7 @@ export class schiff extends gameobject {
     movex = 0,
     movey = 0
   ) {
-    super(x, y, owner, strength, id, size);
+    super(x, y, owner, name, strength, size);
     this.arraypos = 0;
     this.strength = strength;
     this.owner = owner;
@@ -46,7 +47,7 @@ export class schiff extends gameobject {
     if (this.strength > 500) {
       this.settle(game);
     } else {
-      console.log('fehlgeschlagen');
+      console.log(chalk.red('fehlgeschlagen'));
     }
   }
 
@@ -87,7 +88,7 @@ export class schiff extends gameobject {
         selectgameObject.strength = selectgameObject.strength + this.strength;
         selectgameObject.makingofarmy = 100;
         this.strength = -1;
-        console.log('Merge');
+        console.log(chalk.cyan('Merge'));
       }
       return true;
     }
@@ -130,13 +131,13 @@ export class schiff extends gameobject {
       this.x = this.gotox;
       this.y = this.gotoy;
       this.ismoving = false;
-      console.log('Angekommen');
+      console.log(chalk.cyan('Angekommen'));
       return;
     }
     this.ismoving = true;
 
     if (this.movey == 0 && this.movex == 0) {
-      console.log('startwalk');
+      console.log(chalk.cyan('startwalk'));
       let a = this.y - this.gotoy;
       let b = -(this.x - this.gotox);
       let alpha = Math.atan2(a, b); //G/A
@@ -180,7 +181,7 @@ export class schiff extends gameobject {
       if (arm instanceof stadt) {
         return;
       }
-      console.log('merge');
+      console.log(chalk.cyan('merge'));
       if (this.strength < arm.strength) {
         arm.strength = arm.strength + this.strength;
         this.strength = -1;
@@ -194,7 +195,7 @@ export class schiff extends gameobject {
       return;
     }
 
-    console.log('Kampf');
+    console.log(chalk.cyan('Kampf'));
     if (this.strength != arm.strength) {
       let strengthtthis = this.strength;
       let strengthtarm = arm.strength;
@@ -203,7 +204,7 @@ export class schiff extends gameobject {
     } else {
       this.strength = -1;
       arm.strength = -1;
-      console.log('Unentschieden');
+      console.log(chalk.cyan('Unentschieden'));
     }
   }
 }

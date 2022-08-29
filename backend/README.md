@@ -9,9 +9,7 @@ How to Start:
 
 Needs 2 or more Players to be good
 
-Map: https://azgaar.github.io/Fantasy-Map-Generator/
-
-
+Map: <https://azgaar.github.io/Fantasy-Map-Generator/>
 
 API:
 
@@ -48,7 +46,7 @@ REST:
 
 - GET /config
 
-- POST /config
+- POST /config QUERY token=
 
 - GET /game/map
 
@@ -56,7 +54,12 @@ REST:
 
 - GET /game/update
 
-- POST /game/update QUERY ?token=
+- POST /game/update QUERY ?token= BODY {  
+  id: number;
+  gotox?: number;
+  gotoy?: number;
+  settle?: boolean;
+  }
 
 SOCKET.IO:
 
@@ -64,6 +67,9 @@ SOCKET.IO:
 
 - server>client "update"
 
-- client>server "update"
-
 - "disconnect"
+
+Terminal-Color:
+
+- game InfoMessages:cyan
+  
