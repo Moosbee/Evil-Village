@@ -25,6 +25,7 @@ export class GameFrameComponent implements OnInit {
   lastPosX = 0;
   lastPosY = 0;
   gameObjects: Update[] = [];
+  unClick = false;
 
   // @ViewChild('frame') public frame!: ElementRef;
 
@@ -193,6 +194,10 @@ export class GameFrameComponent implements OnInit {
     // let ratioRatioHeight=mapAspectHeight/9;
   }
 
+  unClickAll(e: boolean) {
+    this.unClick = !this.unClick;
+  }
+
   gcd(a: number, b: number): number {
     if (b === 0) {
       return a;
@@ -202,6 +207,6 @@ export class GameFrameComponent implements OnInit {
   }
 
   isSameGameObject(index: number, gameObject: Update) {
-    return gameObject.id;
+    return gameObject.name;
   }
 }

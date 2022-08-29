@@ -1,14 +1,28 @@
 .box {
   position: absolute;
+  display: block;
   //   width: 50px;
   aspect-ratio: 1/1;
   transform: translate(-50%, -50%);
-  background-color: green;
+  background-color: rgba($color: #000000, $alpha: 0.25);
 }
 
+.object {
+}
 .gameObject {
   position: absolute;
+  display: block;
+  width: 100%;
+  min-width: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   aspect-ratio: 1/1;
-  width: 5vmax;
-  min-width: 100%;
+}
+:hover {
+  background-color: brown;
+}
+
+.activated{
+  background-color: blueviolet;
 }
