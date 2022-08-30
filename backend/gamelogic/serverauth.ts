@@ -44,7 +44,7 @@ async function verify(
   let expirer: number = 24 * 60 * 60 * 1000;
   let timeDiv = now.getTime() - new Date(jsonPlayer.tokenDate).getTime();
   if (timeDiv > expirer) {
-    console.log(chalk.dim('new token'));
+    console.log(chalk.dim.gray('new token'));
     jsonPlayer.token = createToken();
     jsonPlayer.tokenDate = now.toJSON();
   }

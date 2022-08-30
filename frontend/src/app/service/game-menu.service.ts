@@ -1,6 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { EventManager } from '@angular/platform-browser';
-import { observable, Observable } from 'rxjs';
 import { Update } from '../model/update';
 
 @Injectable({
@@ -8,6 +6,7 @@ import { Update } from '../model/update';
 })
 export class GameMenuService {
   menuEntries: Update[] = [];
+  starts: boolean = false;
 
   setMenusFast: EventEmitter<Update[]> = new EventEmitter(true);
 
@@ -17,7 +16,6 @@ export class GameMenuService {
     this.menuEntries = [];
     this.menuEntries.push(Entry);
     this.setMenusFast.emit(this.menuEntries);
-    // west(test);
   }
 
   addMenu(Entry: Update) {

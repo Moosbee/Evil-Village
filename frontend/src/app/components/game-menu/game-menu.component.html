@@ -1,11 +1,54 @@
-<div>
-    <div>{{menuEntries.length}}</div>
-    <div *ngFor="let entry of menuEntries;">
-        <div>{{entry.name}}</div>
-        <div>{{entry.x}}</div>
-        <div>{{entry.y}}</div>
-        <div>{{entry.owner}}</div>
-        <div>{{entry.strength}}</div>
-        <div>{{entry.typeof.type}}</div>
+<div class="allInfo">
+  <div *ngFor="let entry of menuEntries" class="info">
+    <div>
+      Name:
+      <!-- <div *ngIf="entry.owner != username"> -->
+      {{ entry.name }}
+      <!-- </div> -->
+      <!-- <input type="text" name="name" id="name" [defaultValue]="entry.name" /> -->
     </div>
+    <div>X-Position: {{ entry.x }}</div>
+    <div>Y-Position: {{ entry.y }}</div>
+    <div>Owner: {{ entry.owner }}</div>
+    <div>Strength: {{ entry.strength }}</div>
+    <div
+      *ngIf="entry.typeof.type == 'saveArmy' && entry.typeof.gotox != entry.x"
+    >
+      Target-X: {{ entry.typeof.gotox }}
+    </div>
+    <div
+      *ngIf="entry.typeof.type == 'saveArmy' && entry.typeof.gotoy != entry.y"
+    >
+      Target-Y: {{ entry.typeof.gotoy }}
+    </div>
+    <div
+      *ngIf="entry.typeof.type == 'saveSchiff' && entry.typeof.gotox != entry.x"
+    >
+      Target-X: {{ entry.typeof.gotox }}
+    </div>
+    <div
+      *ngIf="entry.typeof.type == 'saveSchiff' && entry.typeof.gotoy != entry.y"
+    >
+      Target-Y: {{ entry.typeof.gotox }}
+    </div>
+    <div *ngIf="entry.typeof.type == 'saveStadt'">
+      Speed: {{ entry.typeof.speed }}
+    </div>
+    <div *ngIf="entry.typeof.type == 'saveStadt'">
+      Population: {{ entry.typeof.population }}
+    </div>
+    <div *ngIf="entry.typeof.type == 'saveStadt'">
+      Time to new Army: {{ entry.typeof.makingofarmy }}
+    </div>
+    <button
+      *ngIf="
+        entry.strength > 500 &&
+        entry.owner == username &&
+        (entry.typeof.type == 'saveSchiff' || entry.typeof.type == 'saveArmy')
+      "
+    >
+      Settle
+    </button>
+  </div>
+  <div *ngIf="menuEntries.length == 0">No selection</div>
 </div>

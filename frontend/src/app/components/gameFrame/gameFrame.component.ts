@@ -43,6 +43,7 @@ export class GameFrameComponent implements OnInit {
       return;
     }
     this.gameService.setToken(token);
+
     this.gameService.getUpdate().subscribe((newGameObjects) => {
       this.gameObjects = newGameObjects;
     });

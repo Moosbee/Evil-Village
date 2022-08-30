@@ -5,6 +5,10 @@ $primary-color: rgb(31, 189, 0);
   z-index: 1;
 }
 
+.hidden{
+  display: none;
+}
+
 .menu {
   display: flex;
   justify-content: space-between;
@@ -15,9 +19,41 @@ $primary-color: rgb(31, 189, 0);
     padding: 5px;
   }
 }
+.menuItemsDesktop {
+  display: flex;
+}
 
-.menuboxdesktop {
+.menuBoxDesktop {
   text-align: center;
   font-size: larger;
-  padding: 10px;
+  padding: 0.6rem;
+}
+.heading {
+  text-align: center;
+  width: max-content;
+  font-size: larger;
+  margin: 0.4rem;
+
+  div {
+    height: 1rem;
+    aspect-ratio: 1/1;
+    border: 1px solid yellow;
+    fill: yellow;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    .thumbtack {
+      height: 100%;
+      transform: rotate(45deg);
+    }
+  }
+}
+
+.gameSubPanel {
+  text-align: start;
+  margin-top: 0.6rem;
+  position: absolute;
+  background-color: rgba($color: #333333, $alpha: 1);
+  color: yellow;
 }

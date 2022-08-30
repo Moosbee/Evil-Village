@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Update } from 'src/app/model/update';
 import { GameMenuService } from 'src/app/service/game-menu.service';
 
@@ -8,6 +8,7 @@ import { GameMenuService } from 'src/app/service/game-menu.service';
   styleUrls: ['./game-menu.component.scss'],
 })
 export class GameMenuComponent implements OnInit {
+  @Input() username: string = '';
   menuEntries: Update[] = [];
 
   constructor(private gameMenuService: GameMenuService) {}

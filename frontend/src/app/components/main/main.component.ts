@@ -11,11 +11,11 @@ export class MainComponent implements OnInit {
   constructor(private router: Router,private gameService:GameService) {}
 
   ngOnInit(): void {
-    let token = localStorage.getItem('token');
-    let username = localStorage.getItem('username');
-    if (token != null && username != null) {
-    } else {
-      this.router.navigate(['/signIn']);
-    }
+    // let token = localStorage.getItem('token');
+    // let username = localStorage.getItem('username');
+    // if (token != null && username != null) {
+    // } else {
+    //   this.router.navigate(['/signIn']);
+    // }
   }
 }
