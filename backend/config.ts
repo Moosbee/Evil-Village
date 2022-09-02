@@ -12,7 +12,7 @@ let config = {
     ResetOnStart: true,
     MapFileName: "Aihoia.png",
     saveFile: path.normalize('./save.json'),
-    runspeed: 2,
+    runspeed: 4,
     maxGameObjects: 25000,
   },
 };

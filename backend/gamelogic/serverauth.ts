@@ -2,7 +2,6 @@ import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
 import { config } from '../config';
 import { createHmac, randomBytes } from 'crypto';
-import { makeRandomInt } from './serverutilities';
 import chalk from 'chalk';
 interface player {
   username: string;

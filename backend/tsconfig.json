@@ -5,6 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "target": "ESNext",
-    "module": "commonjs"
+    "module": "commonjs",
+    "sourceMap": true
   }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Update } from 'src/app/model/update';
-import { GameMenuService } from 'src/app/service/game-menu.service';
+import { GameService } from 'src/app/service/game.service';
 
 @Component({
   selector: 'app-game-object',
@@ -15,7 +15,7 @@ export class GameObjectComponent implements OnInit {
   click = false;
   @Output('unClick') unClick: EventEmitter<boolean> =
     new EventEmitter<boolean>();
-  constructor(private gameMenuService: GameMenuService) {}
+  constructor(private gameService: GameService) {}
 
   @Input() set setClick(value: boolean) {
     this.click = false;
@@ -27,15 +27,15 @@ export class GameObjectComponent implements OnInit {
     let beforeClick = this.click;
     if (strKey) {
       if (beforeClick) {//true --> false
-        this.gameMenuService.removeMenu(this.gameObject);
+        this.gameService.removeMenu(this.gameObject);
       } else {
-        this.gameMenuService.addMenu(this.gameObject);
+        this.gameService.addMenu(this.gameObject);
       }
     } else {
       if (beforeClick) {//true --> false
-        this.gameMenuService.resetMenu();
+        this.gameService.resetMenu();
       } else {
-        this.gameMenuService.setMenu(this.gameObject);
+        this.gameService.setMenu(this.gameObject);
       }
       this.unClick.emit(strKey);
     }

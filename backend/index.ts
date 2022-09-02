@@ -209,8 +209,7 @@ app.post('/game/update', async (req, res) => {
     res.send(localGame.getUpdate());
     return;
   }
-  let resiveddata: changes = req.body;
-  console.log(resiveddata);
+  let resiveddata: changes = req.body.changes;
 
   localGame.update(resiveddata, erg.username);
 

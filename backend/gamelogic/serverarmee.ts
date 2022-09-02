@@ -101,7 +101,6 @@ export class armee extends gameobject {
   }
 
   tick(game: gamelogic) {
-    this.strength = this.strength + 1 / 1000;
 
     if (this.x == this.gotox && this.y == this.gotoy) return;
 
@@ -121,10 +120,10 @@ export class armee extends gameobject {
   }
   move(game: gamelogic) {
     if (
-      this.x > this.gotox - 5 &&
-      this.x < this.gotox + 5 &&
-      this.y > this.gotoy - 5 &&
-      this.y < this.gotoy + 5
+      this.x > this.gotox - 50 &&
+      this.x < this.gotox + 50 &&
+      this.y > this.gotoy - 50 &&
+      this.y < this.gotoy + 50
     ) {
       this.x = this.gotox;
       this.y = this.gotoy;

@@ -49,6 +49,7 @@
     >
       Settle
     </button>
+    <button *ngIf="entry.owner == username">Rename</button>
   </div>
   <div *ngIf="menuEntries.length == 0">No selection</div>
 </div>

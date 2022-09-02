@@ -203,18 +203,18 @@ export class gamelogic {
     return JSON.stringify(this.gameObjects);
   }
 
-  update(chang: changes, username?: string) {
-    let gameObject = this.gameObjects.filter((arm) => arm.name == chang.name);
+  update(change: changes, username?: string) {
+    let gameObject = this.gameObjects.filter((arm) => arm.name == change.name);
 
     if (
-      chang.gotox != undefined &&
-      chang.gotoy != undefined &&
+      change.gotox != undefined &&
+      change.gotoy != undefined &&
       (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)
     ) {
-      gameObject[0].goto(chang.gotox, chang.gotoy);
+      gameObject[0].goto(change.gotox, change.gotoy);
     }
     if (
-      chang.settle == true &&
+      change.settle == true &&
       (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)
     ) {
       gameObject[0].settleMerge(this);

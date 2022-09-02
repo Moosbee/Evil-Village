@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Update } from 'src/app/model/update';
-import { GameMenuService } from 'src/app/service/game-menu.service';
+import { GameService } from 'src/app/service/game.service';
 
 @Component({
   selector: 'app-game-menu',
@@ -11,10 +11,10 @@ export class GameMenuComponent implements OnInit {
   @Input() username: string = '';
   menuEntries: Update[] = [];
 
-  constructor(private gameMenuService: GameMenuService) {}
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameMenuService.getMenuFast().subscribe((menuEntries: Update[]) => {
+    this.gameService.getMenuFast().subscribe((menuEntries: Update[]) => {
       this.menuEntries = menuEntries;
     });
   }

@@ -103,7 +103,6 @@ export class schiff extends gameobject {
   }
 
   tick(game: gamelogic) {
-    this.strength = this.strength + 1 / 1000;
 
     if (this.x == this.gotox && this.y == this.gotoy) return;
 

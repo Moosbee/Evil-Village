@@ -25,6 +25,10 @@
       transform: 'translate(' + left + '%,' + top + '%)',
       width: zoom * 100 + '%'
     }"
+    #zoomFrame
+    (mouseup)="mouseUp($event, zoomFrame, map)"
+    (touchend)="touchEnd($event, zoomFrame, map)"
+    (contextmenu)="disableContextMenu($event, zoomFrame, map)"
   >
     <div
       *ngFor="let gameObject of gameObjects; trackBy: isSameGameObject"

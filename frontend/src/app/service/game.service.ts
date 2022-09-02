@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UserRes } from '../model/user-res';
@@ -15,6 +15,9 @@ import { Router } from '@angular/router';
 export class GameService {
   private url = environment.backendLink;
   private token = 'ghg';
+  private menuEntries: Update[] = [];
+
+  private setMenusFast: EventEmitter<Update[]> = new EventEmitter(true);
 
   constructor(
     private http: HttpClient,
@@ -61,6 +64,57 @@ export class GameService {
     });
     return socketGetObjects;
   }
+
+  setMenu(Entry: Update) {
+    this.menuEntries = [];
+    this.menuEntries.push(Entry);
+    this.setMenusFast.emit(this.menuEntries);
+  }
+
+  addMenu(Entry: Update) {
+    this.menuEntries.push(Entry);
+    this.setMenusFast.emit(this.menuEntries);
+  }
+
+  removeMenu(Entry: Update) {
+    this.menuEntries = this.menuEntries.filter(
+      (value) => value.name != Entry.name
+    );
+    this.setMenusFast.emit(this.menuEntries);
+  }
+  resetMenu() {
+    this.menuEntries = [];
+    this.setMenusFast.emit(this.menuEntries);
+  }
+
+  updateMenu(gameObjects: Update[]) {
+    this.menuEntries = gameObjects.filter((value) => {
+      return this.menuEntries.some((value2) => value.name == value2.name);
+    });
+    this.setMenusFast.emit(this.menuEntries);
+  }
+
+  getMenu() {
+    return this.menuEntries;
+  }
+  getMenuFast() {
+    return this.setMenusFast;
+  }
+
+  goToPos(posOnMapX: number, posOnMapY: number) {
+    for (let i = 0; i < this.menuEntries.length; i++) {
+      const entry = this.menuEntries[i];
+      let change: Changes = {
+        name: entry.name,
+        gotox: posOnMapX,
+        gotoy: posOnMapY,
+      };
+
+      this.update(change).subscribe((update) => {});
+    }
+  }
+
+  settle() {}
 
   private toGameObjects(GameObjectsString: string): Update[] {
     if (GameObjectsString == '') {
