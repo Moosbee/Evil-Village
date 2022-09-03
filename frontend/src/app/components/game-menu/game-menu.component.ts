@@ -10,6 +10,7 @@ import { GameService } from 'src/app/service/game.service';
 export class GameMenuComponent implements OnInit {
   @Input() username: string = '';
   menuEntries: Update[] = [];
+  nameRegex = '^([^"´\']{5,})$';
 
   constructor(private gameService: GameService) {}
 
@@ -17,5 +18,24 @@ export class GameMenuComponent implements OnInit {
     this.gameService.getMenuFast().subscribe((menuEntries: Update[]) => {
       this.menuEntries = menuEntries;
     });
+  }
+
+  isSameGameObject(index: number, gameObject: Update) {
+    return gameObject.name;
+  }
+
+  settle(gameObjectName: string) {
+    this.gameService.settle(gameObjectName);
+  }
+
+  changeName(e: Event, input: HTMLInputElement, nameBefore: string) {
+    let re = new RegExp(this.nameRegex);
+    let inpText = input.value;
+    if (re.test(inpText)) {
+      // alert(`Yes:${inpText}`);
+      this.gameService.changeName(nameBefore, inpText);
+    } else {
+      // alert(`No:${inpText}`);
+    }
   }
 }

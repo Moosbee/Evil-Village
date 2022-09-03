@@ -21,6 +21,7 @@ interface changes {
   gotox?: number;
   gotoy?: number;
   settle?: boolean;
+  newName?: string;
 }
 
 interface saveFile {
@@ -53,7 +54,7 @@ interface saveStadt {
 
 // declare var map: mapMini;
 
-async function setmap(): Promise<mapMini> {
+async function setMap(): Promise<mapMini> {
   console.log(chalk.gray('Setting Map'));
   let mapDir = config.rootPath + './maps/';
   mapDir = mapDir + config.Game.MapFileName;
@@ -76,7 +77,7 @@ async function setmap(): Promise<mapMini> {
 //image.getPixelColor(x, y); // returns the colour of that pixel e.g. 0xFFFFFFFF
 function getMapPixel(x: number, y: number, map: mapMini | undefined): RGBColor {
   if (map == undefined || map.set == undefined || map.set == false || !map) {
-    setmap().then((map) => {
+    setMap().then((map) => {
       map = map;
     });
     return {
@@ -113,4 +114,12 @@ function genName(): string {
   return name;
 }
 
-export { setmap, getMapPixel, makeRandomInt,genName, saveFile, changes, mapMini };
+export {
+  setMap,
+  getMapPixel,
+  makeRandomInt,
+  genName,
+  saveFile,
+  changes,
+  mapMini,
+};

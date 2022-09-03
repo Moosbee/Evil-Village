@@ -221,6 +221,8 @@ app.get('/shutdown', async (req, res) => {
   localGame.end(0);
 });
 
+app.use('/', express.static('./angularBuild/'));
+
 app.all('*', function (req, res, next) {
   try {
     //console.log(req);

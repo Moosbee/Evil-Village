@@ -1,11 +1,21 @@
 <div class="allInfo">
-  <div *ngFor="let entry of menuEntries" class="info">
+  <div
+    *ngFor="let entry of menuEntries; trackBy: isSameGameObject"
+    class="info"
+  >
     <div>
       Name:
-      <!-- <div *ngIf="entry.owner != username"> -->
-      {{ entry.name }}
-      <!-- </div> -->
-      <!-- <input type="text" name="name" id="name" [defaultValue]="entry.name" /> -->
+      <div *ngIf="entry.owner != username">
+        {{ entry.name }}
+      </div>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        [defaultValue]="entry.name"
+        #nameInput
+        (change)="changeName($event, nameInput, entry.name)"
+      />
     </div>
     <div>X-Position: {{ entry.x }}</div>
     <div>Y-Position: {{ entry.y }}</div>
@@ -46,10 +56,11 @@
         entry.owner == username &&
         (entry.typeof.type == 'saveSchiff' || entry.typeof.type == 'saveArmy')
       "
+      (click)="settle(entry.name)"
     >
       Settle
     </button>
-    <button *ngIf="entry.owner == username">Rename</button>
+    <!-- <button *ngIf="entry.owner == username">Rename</button> -->
   </div>
   <div *ngIf="menuEntries.length == 0">No selection</div>
 </div>

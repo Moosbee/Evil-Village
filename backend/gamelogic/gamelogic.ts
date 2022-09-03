@@ -4,7 +4,7 @@ import {
   changes,
   mapMini,
   saveFile,
-  setmap,
+  setMap,
   makeRandomInt,
 } from './serverutilities';
 import { armee } from './serverarmee';
@@ -20,7 +20,7 @@ export class gamelogic {
     this.gameObjects = [];
 
     this.importGameObjects().then(() => {
-      setmap().then((mapi) => {
+      setMap().then((mapi) => {
         this.map = mapi;
         setInterval(this.gameloop, 100, this);
         setInterval(this.save, 5000, this);
@@ -205,6 +205,8 @@ export class gamelogic {
 
   update(change: changes, username?: string) {
     let gameObject = this.gameObjects.filter((arm) => arm.name == change.name);
+    if (gameObject.length != 1) return;
+    if (gameObject[0].owner != username) return;
 
     if (
       change.gotox != undefined &&
@@ -218,6 +220,9 @@ export class gamelogic {
       (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)
     ) {
       gameObject[0].settleMerge(this);
+    }
+    if (typeof change.newName == 'string') {
+      gameObject[0].name = change.newName;
     }
   }
 

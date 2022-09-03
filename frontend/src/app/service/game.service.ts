@@ -114,7 +114,21 @@ export class GameService {
     }
   }
 
-  settle() {}
+  settle(gameObjectName: string) {
+    let change: Changes = {
+      name: gameObjectName,
+      settle: true,
+    };
+    this.update(change).subscribe((update) => {});
+  }
+
+  changeName(gameObjectName: string, newName: string) {
+    let change: Changes = {
+      name: gameObjectName,
+      newName: newName,
+    };
+    this.update(change).subscribe((update) => {});
+  }
 
   private toGameObjects(GameObjectsString: string): Update[] {
     if (GameObjectsString == '') {

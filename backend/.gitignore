@@ -7,6 +7,8 @@
 logs/*
 nativlog.log
 
+build/*
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

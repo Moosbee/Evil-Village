@@ -3,4 +3,5 @@ export interface Changes {
   gotox?: number;
   gotoy?: number;
   settle?: boolean;
+  newName?: string;
 }
