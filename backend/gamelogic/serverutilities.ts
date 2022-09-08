@@ -1,7 +1,8 @@
-import { config } from '../config';
+import config from '../config';
 import Jimp from 'jimp';
 import path from 'path';
 import chalk from 'chalk';
+import names from '../names.json';
 
 interface RGBColor {
   red: number;
@@ -109,8 +110,19 @@ function makeRandomInt(min: number, max: number): number {
 }
 
 function genName(): string {
-  let name = 'Test';
-  name = name + Math.random().toString();
+  let name = generateName();
+  name = name + makeRandomInt(1000, 9999).toString();
+  return name;
+}
+
+function capFirst(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function generateName() {
+  let name1 = names.names1;
+
+  let name = name1[makeRandomInt(0, name1.length)];
   return name;
 }
 

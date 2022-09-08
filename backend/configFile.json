@@ -1,0 +1,16 @@
+{
+  "rootPath": "/../",
+  "MaxPlayers": 1000,
+  "PlayerFile": "./players.json",
+  "plainTextPassword": true,
+  "favicon": 4,
+  "expressPort": 3000,
+  "frontendURL": "http://localhost:4200",
+  "Game": {
+    "ResetOnStart": true,
+    "MapFileName": "Aihoia.png",
+    "saveFile": "./save.json",
+    "runspeed": 4,
+    "maxGameObjects": 25000
+  }
+}

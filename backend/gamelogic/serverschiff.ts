@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { config } from '../config';
+import config from '../config';
 import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { armee } from './serverarmee';
@@ -27,7 +27,6 @@ export class schiff extends gameobject {
   ) {
     super(x, y, owner, name, strength, size);
     this.arraypos = 0;
-    this.strength = strength;
     this.owner = owner;
     this.selected = false;
 
@@ -69,7 +68,7 @@ export class schiff extends gameobject {
     game.gameObjects[game.gameObjects.length - 1].arraypos =
       game.gameObjects.length - 1;
 
-    this.strength = -1;
+    this.selfKill();
   }
 
   merge(game: gamelogic): boolean {
@@ -85,9 +84,10 @@ export class schiff extends gameobject {
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
         let selectgameObject: stadt = selectgameObjects[0];
-        selectgameObject.strength = selectgameObject.strength + this.strength;
+        selectgameObject.setStrength=(selectgameObject.strength + this.strength);
+
         selectgameObject.makingofarmy = 100;
-        this.strength = -1;
+        this.selfKill();
         console.log(chalk.cyan('Merge'));
       }
       return true;
@@ -103,7 +103,6 @@ export class schiff extends gameobject {
   }
 
   tick(game: gamelogic) {
-
     if (this.x == this.gotox && this.y == this.gotoy) return;
 
     this.move(game);
@@ -182,14 +181,14 @@ export class schiff extends gameobject {
       }
       console.log(chalk.cyan('merge'));
       if (this.strength < arm.strength) {
-        arm.strength = arm.strength + this.strength;
-        this.strength = -1;
+        arm.setStrength=(arm.strength + this.strength);
+        this.selfKill();
       } else if (this.strength > arm.strength) {
-        this.strength = this.strength + arm.strength;
-        arm.strength = -1;
+        this.setStrength=(this.strength + arm.strength);
+        arm.selfKill();
       } else {
-        this.strength = this.strength + arm.strength;
-        arm.strength = -1;
+        this.setStrength=(this.strength + arm.strength);
+        arm.selfKill();
       }
       return;
     }
@@ -198,11 +197,11 @@ export class schiff extends gameobject {
     if (this.strength != arm.strength) {
       let strengthtthis = this.strength;
       let strengthtarm = arm.strength;
-      this.strength = this.strength - strengthtarm;
-      arm.strength = arm.strength - strengthtthis;
+      this.setStrength=(this.strength - strengthtarm);
+      arm.setStrength=(arm.strength - strengthtthis);
     } else {
-      this.strength = -1;
-      arm.strength = -1;
+      this.selfKill();
+      arm.selfKill();
       console.log(chalk.cyan('Unentschieden'));
     }
   }

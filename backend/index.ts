@@ -1,7 +1,7 @@
 import express from 'express';
 // import { urlencoded } from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { config } from './config';
+import config from './config';
 import {
   createUser,
   player,
@@ -221,7 +221,8 @@ app.get('/shutdown', async (req, res) => {
   localGame.end(0);
 });
 
-app.use('/', express.static('./angularBuild/'));
+// app.use('/', express.static('./angularBuild/'));
+app.use('/', express.static('../frontend/dist/evil-vilage/'));
 
 app.all('*', function (req, res, next) {
   try {

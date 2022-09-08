@@ -1,4 +1,3 @@
-import { config } from '../config';
 import { gamelogic } from './gamelogic';
 import { genName, makeRandomInt } from './serverutilities';
 
@@ -8,7 +7,7 @@ export class gameobject {
   public x: number;
   public y: number;
   public owner: string;
-  public strength: number;
+  public strength: number = -1;
   public selected: boolean;
   public size: number = 50;
   constructor(
@@ -33,15 +32,22 @@ export class gameobject {
     min = 10;
     let max = 35;
     if (strength == undefined || strength == -1) {
-      this.strength = makeRandomInt(min, max);
+      this.setStrength=makeRandomInt(min, max);
     } else {
-      this.strength = strength;
+      this.setStrength =strength;
     }
     if (size != undefined) {
       this.size = size;
     }
   }
+
   tick(game: gamelogic) {}
+  set setStrength(newStrength: number) {
+    this.strength = newStrength;
+  }
+  selfKill() {
+    this.strength = -1;
+  }
   setarraypos(a: number) {
     this.arraypos = a;
   }

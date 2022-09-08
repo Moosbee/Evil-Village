@@ -9,6 +9,7 @@ export class stadt extends gameobject {
   speed: number;
   population: number;
   makingofarmy: number;
+  production: boolean;
 
   constructor(
     x: number,
@@ -20,16 +21,18 @@ export class stadt extends gameobject {
     size: number = 40,
     capital: boolean = false,
     speed?: number,
-    makingofarmy?: number
+    makingofarmy?: number,
+    production?: boolean
   ) {
-    if (strength == undefined) strength = 1;
+    if (strength == undefined) strength = -1;
     super(x, y, owner, name, strength, size);
 
     let min = 1;
     let max = 1;
 
     this.capital = capital;
-    this.makingofarmy = makingofarmy == undefined ? 50 : makingofarmy;
+    this.makingofarmy = makingofarmy == undefined ? 100 : makingofarmy;
+    this.production = production == undefined ? false : production;
     // this.makingofarmy = 100;
     max = 6;
     this.speed = speed == undefined ? makeRandomInt(min, max) : speed;
@@ -39,7 +42,7 @@ export class stadt extends gameobject {
       this.size = 60;
       min = 4000;
       max = 50000;
-      this.strength = makeRandomInt(min, max);
+      this.setStrength = makeRandomInt(min, max);
       min = 750;
       max = 1000;
       this.population = makeRandomInt(min, max);
@@ -54,8 +57,12 @@ export class stadt extends gameobject {
   tick(game: gamelogic) {
     this.makingofarmy = this.makingofarmy - 1;
     if (this.makingofarmy < 0) {
-      this.createArmy(game, 'army');
-      this.makingofarmy = makeRandomInt(100, 1000) + this.strength / 2;
+      if (this.production) {
+        this.createArmy(game, 'schiff');
+        this.makingofarmy = makeRandomInt(100, 1000) + this.strength / 2;
+      }else{
+        
+      }
     }
   }
 
@@ -76,7 +83,7 @@ export class stadt extends gameobject {
     newArmy.gotoy = this.y + y;
     min = this.strength - this.strength / 25;
     max = this.strength + this.strength / 20;
-    newArmy.strength = makeRandomInt(min, max) / 2;
+    newArmy.setStrength = Math.floor(makeRandomInt(min, max) / 2);
 
     game.gameObjects.push(newArmy);
     if (this.strength / 2 > this.population) {
@@ -92,8 +99,26 @@ export class stadt extends gameobject {
       newSecondArmy.gotoy = this.y + y;
       min = this.strength - this.strength / 25;
       max = this.strength + this.strength / 20;
-      newSecondArmy.strength = makeRandomInt(min, max) / 2;
+      newSecondArmy.setStrength = Math.floor(makeRandomInt(min, max) / 2);
       game.gameObjects.push(newSecondArmy);
     }
+  }
+
+  settleMerge(game: gamelogic) {
+    this.mobilize(game, 'army');
+  }
+
+  mobilize(game: gamelogic, type: 'army' | 'schiff') {
+    if (this.capital) return;
+    // let newArmy: armee = new armee(this.x + 100, this.y + 100, this.owner);
+    let newArmy: armee | schiff =
+      type == 'army'
+        ? new armee(this.x, this.y, this.owner)
+        : new schiff(this.x, this.y, this.owner);
+    newArmy.arraypos = game.gameObjects.length;
+    newArmy.setStrength = Math.floor(this.strength / 2);
+
+    game.gameObjects.push(newArmy);
+    this.selfKill();
   }
 }

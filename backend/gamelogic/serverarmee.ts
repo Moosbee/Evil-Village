@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { config } from '../config';
+import config from '../config';
 import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { schiff } from './serverschiff';
@@ -27,7 +27,6 @@ export class armee extends gameobject {
   ) {
     super(x, y, owner, name, strength, size);
     this.arraypos = 0;
-    this.strength = strength;
     this.owner = owner;
     this.selected = false;
 
@@ -67,7 +66,7 @@ export class armee extends gameobject {
     newStadt.arraypos = game.gameObjects.length;
     game.gameObjects.push(newStadt);
     console.log(chalk.cyan('settle'));
-    this.strength = -1;
+    this.selfKill();
     return true;
   }
 
@@ -83,9 +82,9 @@ export class armee extends gameobject {
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
         let selectgameObject: stadt = selectgameObjects[0];
-        selectgameObject.strength = selectgameObject.strength + this.strength;
+        selectgameObject.setStrength=(selectgameObject.strength + this.strength);
         selectgameObject.makingofarmy = 100;
-        this.strength = -1;
+        this.selfKill();
         console.log(chalk.cyan('Merge'));
       }
       return true;
@@ -101,7 +100,6 @@ export class armee extends gameobject {
   }
 
   tick(game: gamelogic) {
-
     if (this.x == this.gotox && this.y == this.gotoy) return;
 
     this.move(game);
@@ -183,27 +181,34 @@ export class armee extends gameobject {
       console.log(chalk.cyan('Merge'));
 
       if (this.strength < arm.strength) {
-        arm.strength = arm.strength + this.strength;
-        this.strength = -1;
+        arm.setStrength = arm.strength + this.strength;
+        this.selfKill();
       } else if (this.strength > arm.strength) {
-        this.strength = this.strength + arm.strength;
-        arm.strength = -1;
+        this.setStrength = this.strength + arm.strength;
+        arm.selfKill();
       } else {
-        this.strength = this.strength + arm.strength;
-        arm.strength = -1;
+        this.setStrength = this.strength + arm.strength;
+        arm.selfKill();
       }
       return;
     }
 
+    this.fight(arm);
+  }
+
+  fight(arm: armee | stadt | schiff) {
     console.log(chalk.cyan('Kampf'));
-    if (this.strength != arm.strength) {
-      let strengthtthis = this.strength;
-      let strengthtarm = arm.strength;
-      this.strength = this.strength - strengthtarm;
-      arm.strength = arm.strength - strengthtthis;
+    let strengthtthis = this.strength;
+    let strengthtarm = arm.strength;
+    if (this.strength > arm.strength) {
+      this.setStrength = strengthtthis - strengthtarm;
+      arm.selfKill();
+    } else if (this.strength < arm.strength) {
+      arm.setStrength = strengthtarm - strengthtthis;
+      this.selfKill();
     } else {
-      this.strength = -1;
-      arm.strength = -1;
+      this.selfKill();
+      arm.selfKill();
       console.log(chalk.cyan('Unentschieden'));
     }
   }

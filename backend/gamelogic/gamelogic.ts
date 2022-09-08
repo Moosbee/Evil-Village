@@ -1,5 +1,5 @@
 import { readFile, writeFile } from 'fs/promises';
-import { config } from '../config';
+import config from '../config';
 import {
   changes,
   mapMini,
@@ -32,7 +32,6 @@ export class gamelogic {
 
   async importGameObjects() {
     let savedGameFile: string;
-
     try {
       savedGameFile = await readFile(config.rootPath + config.Game.saveFile, {
         encoding: 'utf8',
@@ -127,7 +126,7 @@ export class gamelogic {
       makeRandomInt(50, this.map.height),
       owner,
       undefined,
-      '',
+      'HomeTown' + owner,
       -1,
       undefined,
       true
@@ -213,12 +212,9 @@ export class gamelogic {
       change.gotoy != undefined &&
       (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)
     ) {
-      gameObject[0].goto(change.gotox, change.gotoy);
+      gameObject[0].goto(Math.floor(change.gotox), Math.floor(change.gotoy));
     }
-    if (
-      change.settle == true &&
-      (gameObject[0] instanceof armee || gameObject[0] instanceof schiff)
-    ) {
+    if (change.settle == true) {
       gameObject[0].settleMerge(this);
     }
     if (typeof change.newName == 'string') {

@@ -1,4 +1,8 @@
 <div class="allInfo">
+  <div *ngIf="menuEntries.length > 1">
+    <button>Settle / Mobilize</button>
+    <button>Toggle army Produktion</button>
+  </div>
   <div
     *ngFor="let entry of menuEntries; trackBy: isSameGameObject"
     class="info"
@@ -15,6 +19,7 @@
         [defaultValue]="entry.name"
         #nameInput
         (change)="changeName($event, nameInput, entry.name)"
+        *ngIf="entry.owner == username"
       />
     </div>
     <div>X-Position: {{ entry.x }}</div>
@@ -59,6 +64,22 @@
       (click)="settle(entry.name)"
     >
       Settle
+    </button>
+    <button
+      *ngIf="
+        entry.owner == username &&
+        entry.typeof.type == 'saveStadt' &&
+        !entry.typeof.capital
+      "
+      (click)="settle(entry.name)"
+    >
+      mobilize
+    </button>
+    <button
+      *ngIf="entry.owner == username && entry.typeof.type == 'saveStadt'"
+      (click)="settle(entry.name)"
+    >
+      Toggle army Produktion
     </button>
     <!-- <button *ngIf="entry.owner == username">Rename</button> -->
   </div>

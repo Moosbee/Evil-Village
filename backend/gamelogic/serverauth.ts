@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 import { readFileSync, writeFileSync } from 'fs';
-import { config } from '../config';
+import config from '../config';
 import { createHmac, randomBytes } from 'crypto';
 import chalk from 'chalk';
 interface player {
@@ -106,7 +106,6 @@ async function createUser(
   let jsonPlayers: player[] = JSON.parse(file);
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
   if (jsonPlayer != undefined) return 'taken';
-  let minPlayer = 1;
   let token: string = createToken();
   let now = new Date().toJSON();
 
