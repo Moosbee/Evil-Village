@@ -1,7 +1,7 @@
 <div class="allInfo">
   <div *ngIf="menuEntries.length > 1">
-    <button>Settle / Mobilize</button>
-    <button>Toggle army Produktion</button>
+    <button (click)="settleAll()">Settle / Mobilize</button>
+    <button (click)="toggleProduktionAll()">Toggle army Produktion</button>
   </div>
   <div
     *ngFor="let entry of menuEntries; trackBy: isSameGameObject"
@@ -26,6 +26,7 @@
     <div>Y-Position: {{ entry.y }}</div>
     <div>Owner: {{ entry.owner }}</div>
     <div>Strength: {{ entry.strength }}</div>
+    <div>Size: {{ entry.size }}</div>
     <div
       *ngIf="entry.typeof.type == 'saveArmy' && entry.typeof.gotox != entry.x"
     >
@@ -52,8 +53,11 @@
     <div *ngIf="entry.typeof.type == 'saveStadt'">
       Population: {{ entry.typeof.population }}
     </div>
-    <div *ngIf="entry.typeof.type == 'saveStadt'">
+    <div *ngIf="entry.typeof.type == 'saveStadt' && entry.typeof.production">
       Time to new Army: {{ entry.typeof.makingofarmy }}
+    </div>
+    <div *ngIf="entry.typeof.type == 'saveStadt' && !entry.typeof.production">
+      Army Production has been stopped({{ entry.typeof.makingofarmy }})
     </div>
     <button
       *ngIf="
@@ -77,7 +81,7 @@
     </button>
     <button
       *ngIf="entry.owner == username && entry.typeof.type == 'saveStadt'"
-      (click)="settle(entry.name)"
+      (click)="toggleProduktion(entry.name)"
     >
       Toggle army Produktion
     </button>

@@ -86,7 +86,8 @@ export class gamelogic {
             element.size,
             element.typeof.capital,
             element.typeof.speed,
-            element.typeof.makingofarmy
+            element.typeof.makingofarmy,
+            element.typeof.production
           );
           break;
         default:
@@ -187,6 +188,7 @@ export class gamelogic {
             makingofarmy: element.makingofarmy,
             population: element.population,
             speed: element.speed,
+            production: element.production,
           },
         };
       } else {
@@ -219,6 +221,11 @@ export class gamelogic {
     }
     if (typeof change.newName == 'string') {
       gameObject[0].name = change.newName;
+    }
+    if (change.toggleArmy === true && gameObject[0] instanceof stadt) {
+      gameObject[0].production = !gameObject[0].production;
+      gameObject[0].makingofarmy =
+        gameObject[0].makingofarmy + makeRandomInt(100, 300);
     }
   }
 

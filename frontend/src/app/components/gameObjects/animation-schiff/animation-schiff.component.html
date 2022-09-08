@@ -1,9 +1,28 @@
-<div class="object">
-    <img
-      src="/assets/images/schiff.png"
-      alt=""
-      class="imgObject"
-      width="100"
-      height="100"
-    />
-  </div>
+<div class="object" *ngIf="gameObject.typeof.type == 'saveSchiff'">
+  <img
+    *ngIf="
+      gameObject.x == gameObject.typeof.gotox &&
+      gameObject.y == gameObject.typeof.gotoy
+    "
+    src="/assets/images/schiff.png"
+    alt=""
+    class="imgObject"
+    width="100"
+    height="100"
+  />
+  <img
+    *ngIf="
+      gameObject.x != gameObject.typeof.gotox ||
+      gameObject.y != gameObject.typeof.gotoy
+    "
+    src="/assets/images/schiff_moving.gif"
+    alt=""
+    class="imgObject"
+    width="100"
+    height="100"
+    [ngStyle]="{
+      transform:
+        'scaleX(' + (gameObject.typeof.gotox < gameObject.x ? '-1' : '1') + ')'
+    }"
+  />
+</div>

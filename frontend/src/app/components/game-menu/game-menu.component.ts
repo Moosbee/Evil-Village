@@ -28,6 +28,10 @@ export class GameMenuComponent implements OnInit {
     this.gameService.settle(gameObjectName);
   }
 
+  toggleProduktion(gameObjectName: string) {
+    this.gameService.toggleProduktion(gameObjectName);
+  }
+
   changeName(e: Event, input: HTMLInputElement, nameBefore: string) {
     let re = new RegExp(this.nameRegex);
     let inpText = input.value;
@@ -37,5 +41,12 @@ export class GameMenuComponent implements OnInit {
     } else {
       // alert(`No:${inpText}`);
     }
+  }
+
+  settleAll() {
+    this.gameService.settleAll();
+  }
+  toggleProduktionAll() {
+    this.gameService.toggleProduktionAll();
   }
 }

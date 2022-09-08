@@ -4,4 +4,5 @@ export interface Changes {
   gotoy?: number;
   settle?: boolean;
   newName?: string;
+  toggleArmy?: boolean;
 }

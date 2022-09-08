@@ -60,7 +60,7 @@ export class schiff extends gameobject {
         this.y,
         this.owner,
         this.strength,
-        undefined,
+        this.name,
         population
       )
     );
@@ -84,7 +84,8 @@ export class schiff extends gameobject {
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
         let selectgameObject: stadt = selectgameObjects[0];
-        selectgameObject.setStrength=(selectgameObject.strength + this.strength);
+        selectgameObject.setStrength =
+          selectgameObject.strength + this.strength;
 
         selectgameObject.makingofarmy = 100;
         this.selfKill();
@@ -181,13 +182,13 @@ export class schiff extends gameobject {
       }
       console.log(chalk.cyan('merge'));
       if (this.strength < arm.strength) {
-        arm.setStrength=(arm.strength + this.strength);
+        arm.setStrength = arm.strength + this.strength;
         this.selfKill();
       } else if (this.strength > arm.strength) {
-        this.setStrength=(this.strength + arm.strength);
+        this.setStrength = this.strength + arm.strength;
         arm.selfKill();
       } else {
-        this.setStrength=(this.strength + arm.strength);
+        this.setStrength = this.strength + arm.strength;
         arm.selfKill();
       }
       return;
@@ -197,8 +198,8 @@ export class schiff extends gameobject {
     if (this.strength != arm.strength) {
       let strengthtthis = this.strength;
       let strengthtarm = arm.strength;
-      this.setStrength=(this.strength - strengthtarm);
-      arm.setStrength=(arm.strength - strengthtthis);
+      this.setStrength = this.strength - strengthtarm;
+      arm.setStrength = arm.strength - strengthtthis;
     } else {
       this.selfKill();
       arm.selfKill();

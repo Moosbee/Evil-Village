@@ -32,7 +32,7 @@ export class stadt extends gameobject {
 
     this.capital = capital;
     this.makingofarmy = makingofarmy == undefined ? 100 : makingofarmy;
-    this.production = production == undefined ? false : production;
+    this.production = production == undefined ? true : production;
     // this.makingofarmy = 100;
     max = 6;
     this.speed = speed == undefined ? makeRandomInt(min, max) : speed;
@@ -60,8 +60,8 @@ export class stadt extends gameobject {
       if (this.production) {
         this.createArmy(game, 'schiff');
         this.makingofarmy = makeRandomInt(100, 1000) + this.strength / 2;
-      }else{
-        
+      } else {
+        this.makingofarmy = 0;
       }
     }
   }
@@ -113,10 +113,21 @@ export class stadt extends gameobject {
     // let newArmy: armee = new armee(this.x + 100, this.y + 100, this.owner);
     let newArmy: armee | schiff =
       type == 'army'
-        ? new armee(this.x, this.y, this.owner)
-        : new schiff(this.x, this.y, this.owner);
+        ? new armee(
+            this.x,
+            this.y,
+            this.owner,
+            Math.floor(this.strength / 2),
+            this.name
+          )
+        : new schiff(
+            this.x,
+            this.y,
+            this.owner,
+            Math.floor(this.strength / 2),
+            this.name
+          );
     newArmy.arraypos = game.gameObjects.length;
-    newArmy.setStrength = Math.floor(this.strength / 2);
 
     game.gameObjects.push(newArmy);
     this.selfKill();

@@ -23,6 +23,7 @@ interface changes {
   gotoy?: number;
   settle?: boolean;
   newName?: string;
+  toggleArmy?: boolean;
 }
 
 interface saveFile {
@@ -51,6 +52,7 @@ interface saveStadt {
   speed: number;
   population: number;
   makingofarmy: number;
+  production: boolean;
 }
 
 // declare var map: mapMini;

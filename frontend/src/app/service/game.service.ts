@@ -26,6 +26,10 @@ export class GameService {
     private router: Router
   ) {}
 
+  // ============================================================================================== //
+  // ============================================ Start =========================================== //
+  // ============================================================================================== //
+
   setToken(token: string) {
     this.token = token;
     this.authService.authToken(token).subscribe((auth: UserRes) => {
@@ -65,6 +69,10 @@ export class GameService {
     return socketGetObjects;
   }
 
+  // ============================================================================================== //
+  // ============================================ Menu ============================================ //
+  // ============================================================================================== //
+
   setMenu(Entry: Update) {
     this.menuEntries = [];
     this.menuEntries.push(Entry);
@@ -101,6 +109,10 @@ export class GameService {
     return this.setMenusFast;
   }
 
+  // ============================================================================================== //
+  // =========================================== Actions ========================================== //
+  // ============================================================================================== //
+
   goToPos(posOnMapX: number, posOnMapY: number) {
     for (let i = 0; i < this.menuEntries.length; i++) {
       const entry = this.menuEntries[i];
@@ -122,12 +134,34 @@ export class GameService {
     this.update(change).subscribe((update) => {});
   }
 
+  settleAll() {
+    for (let i = 0; i < this.menuEntries.length; i++) {
+      const entry = this.menuEntries[i];
+      this.settle(entry.name);
+    }
+  }
+
   changeName(gameObjectName: string, newName: string) {
     let change: Changes = {
       name: gameObjectName,
       newName: newName,
     };
     this.update(change).subscribe((update) => {});
+  }
+
+  toggleProduktion(gameObjectName: string) {
+    let change: Changes = {
+      name: gameObjectName,
+      toggleArmy: true,
+    };
+    this.update(change).subscribe((update) => {});
+  }
+
+  toggleProduktionAll() {
+    for (let i = 0; i < this.menuEntries.length; i++) {
+      const entry = this.menuEntries[i];
+      this.toggleProduktion(entry.name);
+    }
   }
 
   private toGameObjects(GameObjectsString: string): Update[] {

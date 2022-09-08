@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Update } from 'src/app/model/update';
 
 @Component({
   selector: 'app-animation-stadt',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./animation-stadt.component.scss']
 })
 export class AnimationStadtComponent implements OnInit {
-
+  @Input() gameObject!: Update;
+  
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

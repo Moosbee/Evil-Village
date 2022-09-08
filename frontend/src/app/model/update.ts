@@ -24,4 +24,5 @@ interface UpdateStadt {
   speed: number;
   population: number;
   makingofarmy: number;
+  production:boolean;
 }

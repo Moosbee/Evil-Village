@@ -60,7 +60,7 @@ export class armee extends gameobject {
       this.y,
       this.owner,
       this.strength,
-      undefined,
+      this.name,
       population
     );
     newStadt.arraypos = game.gameObjects.length;
@@ -82,7 +82,8 @@ export class armee extends gameobject {
     if (selectgameObjects.length > 0) {
       if (selectgameObjects[0] instanceof stadt) {
         let selectgameObject: stadt = selectgameObjects[0];
-        selectgameObject.setStrength=(selectgameObject.strength + this.strength);
+        selectgameObject.setStrength =
+          selectgameObject.strength + this.strength;
         selectgameObject.makingofarmy = 100;
         this.selfKill();
         console.log(chalk.cyan('Merge'));
