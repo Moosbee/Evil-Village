@@ -33,7 +33,7 @@ export class gamelogic {
   async importGameObjects() {
     let savedGameFile: string;
     try {
-      savedGameFile = await readFile(config.rootPath + config.Game.saveFile, {
+      savedGameFile = await readFile(config.ROOTPATH + config.GAME.SAVEFILE, {
         encoding: 'utf8',
       });
     } catch (e) {
@@ -41,7 +41,7 @@ export class gamelogic {
       throw e;
     }
 
-    if (savedGameFile == '' || config.Game.ResetOnStart) {
+    if (savedGameFile == '' || config.GAME.RESETONSTART) {
       savedGameFile = '[]';
     }
 

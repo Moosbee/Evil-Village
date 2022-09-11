@@ -1,3 +1,5 @@
+@use "../../../styles.scss";
+
 #frame {
   height: 90vh;
   margin: 10px;
@@ -36,7 +38,7 @@
   transition: transform 100ms;
   top: 50%;
   left: 50%;
-  outline: 1px solid blue;
+  outline: 1px solid styles.$blue;
 }
 
 .selector {

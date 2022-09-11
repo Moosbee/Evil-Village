@@ -1,0 +1,11 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

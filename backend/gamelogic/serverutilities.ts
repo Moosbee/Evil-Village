@@ -59,8 +59,8 @@ interface saveStadt {
 
 async function setMap(): Promise<mapMini> {
   console.log(chalk.gray('Setting Map'));
-  let mapDir = config.rootPath + './maps/';
-  mapDir = mapDir + config.Game.MapFileName;
+  let mapDir = config.ROOTPATH + './maps/';
+  mapDir = mapDir + config.GAME.MAPFILENAME;
 
   let image: Jimp;
   try {

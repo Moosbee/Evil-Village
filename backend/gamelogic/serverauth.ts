@@ -15,7 +15,7 @@ async function verify(
   password: string
 ): Promise<player | 'failed' | 'wrong'> {
   let passwordHash = '';
-  if (config.plainTextPassword) {
+  if (config.PLAINTEXTPASSWORD) {
     passwordHash = password;
   } else {
     passwordHash = await hash(password, user);
@@ -24,7 +24,7 @@ async function verify(
   // console.log(config.rootPath + config.PlayerFile);
 
   try {
-    file = await readFile(config.rootPath + config.PlayerFile, {
+    file = await readFile(config.ROOTPATH + config.PLAYERFILE, {
       encoding: 'utf8',
     });
   } catch (e) {
@@ -50,7 +50,7 @@ async function verify(
   try {
     //console.log(jsonPlayers);
     writeFileSync(
-      config.rootPath + config.PlayerFile,
+      config.ROOTPATH + config.PLAYERFILE,
       JSON.stringify(jsonPlayers)
     );
   } catch (e) {
@@ -65,7 +65,7 @@ async function verifyToken(token: string): Promise<player | 'failed'> {
   let file = '[]';
 
   try {
-    file = await readFile(config.rootPath + config.PlayerFile, {
+    file = await readFile(config.ROOTPATH + config.PLAYERFILE, {
       encoding: 'utf8',
     });
   } catch (e) {
@@ -90,14 +90,14 @@ async function createUser(
 ): Promise<player | 'failed' | 'taken'> {
   let file = '[]';
   let passwordHash: string;
-  if (config.plainTextPassword) {
+  if (config.PLAINTEXTPASSWORD) {
     passwordHash = password;
   } else {
     passwordHash = await hash(password, user);
   }
 
   try {
-    file = readFileSync(config.rootPath + config.PlayerFile, {
+    file = readFileSync(config.ROOTPATH + config.PLAYERFILE, {
       encoding: 'utf8',
     });
   } catch (e) {
@@ -119,7 +119,7 @@ async function createUser(
   try {
     //console.log(jsonPlayers);
     writeFileSync(
-      config.rootPath + config.PlayerFile,
+      config.ROOTPATH + config.PLAYERFILE,
       JSON.stringify(jsonPlayers)
     );
   } catch (e) {

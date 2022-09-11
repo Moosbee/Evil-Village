@@ -30,7 +30,7 @@ app.all('*', function (req, res, next) {
   next(); // pass control to the next handler
 });
 
-app.use('/media', express.static(config.rootPath + '../frontendd/public'));
+app.use('/media', express.static(config.ROOTPATH + '../frontendd/public'));
 // app.use(urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -74,9 +74,9 @@ app.use(cookieParser());
 // });
 
 app.get('/favicon.ico', async (req, res) => {
-  let faf = config.favicon;
+  let faf = config.FAVICON;
   let dir = resolve(
-    config.rootPath + '../frontend/src/assets/farvi/' + faf + '.ico'
+    config.ROOTPATH + '../frontend/src/assets/farvi/' + faf + '.ico'
   );
   res.sendFile(dir);
 });
@@ -162,13 +162,34 @@ app.post('/makeuser', async (req, res) => {
 });
 
 app.get('/config', (req, res) => {
-  res.json(config);
+  res.json(config.getAll());
 });
-app.post('/config', (req, res) => {});
+app.post('/config', (req, res) => {
+  let resiveddata = req.body;
+  config.setAllUnk(resiveddata);
+});
+
+app.post('/config/single', async (req, res) => {
+  let resiveddata = req.body;
+  if (
+    (typeof resiveddata['type'] != 'string' && resiveddata['value'] == null) ||
+    resiveddata['value'] == undefined
+  ) {
+    res.status(400);
+  } else {
+    let info = await config.setConfig(resiveddata);
+    if (info) {
+      res.status(200);
+    } else {
+      res.status(400);
+    }
+  }
+  res.send();
+});
 
 app.get('/game/map', (req, res) => {
-  let mapDir = config.rootPath + './maps/';
-  mapDir = mapDir + config.Game.MapFileName;
+  let mapDir = config.ROOTPATH + './maps/';
+  mapDir = mapDir + config.GAME.MAPFILENAME;
   res.sendFile(normalize(mapDir));
 });
 
@@ -240,7 +261,7 @@ app.all('*', function (req, res, next) {
 const httpServer = createServer(app);
 const socketServer = new Server(httpServer, {
   cors: {
-    origin: config.frontendURL,
+    origin: config.FRONTENDURL,
     methods: ['GET', 'POST'],
   },
 });
@@ -267,8 +288,8 @@ setInterval(() => {
   socketServer.emit('update', localGame.getUpdate());
 }, 100);
 
-httpServer.listen(config.expressPort, () => {
+httpServer.listen(config.EXPRESSPORT, () => {
   console.log(
-    chalk.yellow.bold(`Schulprojekt listening on port ${config.expressPort}!`)
+    chalk.yellow.bold(`Schulprojekt listening on port ${config.EXPRESSPORT}!`)
   );
 });

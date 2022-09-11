@@ -1,16 +1,16 @@
 {
-  "rootPath": "/../",
-  "MaxPlayers": 1000,
-  "PlayerFile": "./players.json",
-  "plainTextPassword": true,
-  "favicon": 4,
-  "expressPort": 3000,
-  "frontendURL": "http://localhost:4200",
-  "Game": {
-    "ResetOnStart": true,
-    "MapFileName": "Aihoia.png",
-    "saveFile": "./save.json",
-    "runspeed": 4,
-    "maxGameObjects": 25000
+  "ROOTPATH": "is defined in the config.ts/js file",
+  "MAXPLAYERS": 1000,
+  "PLAYERFILE": "./players.json",
+  "PLAINTEXTPASSWORD": true,
+  "FAVICON": 4,
+  "EXPRESSPORT": 3000,
+  "FRONTENDURL": "http://localhost:4200",
+  "GAME": {
+    "RESETONSTART": true,
+    "MAPFILENAME": "Aihoia.png",
+    "SAVEFILE": "./save.json",
+    "RUNSPEED": 4,
+    "MAXGAMEOBJECTS": 25000
   }
 }

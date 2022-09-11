@@ -143,8 +143,8 @@ export class armee extends gameobject {
 
       a = Math.sin(alpha);
       b = Math.cos(alpha);
-      a = a * config.Game.runspeed;
-      b = b * config.Game.runspeed;
+      a = a * config.GAME.RUNSPEED;
+      b = b * config.GAME.RUNSPEED;
 
       this.movey = a;
       this.movex = b;
