@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WatchFrameComponent } from './watchFrame.component';
+import { OverlayComponent } from './overlay.component';
 
-describe('WatchFrameComponent', () => {
-  let component: WatchFrameComponent;
-  let fixture: ComponentFixture<WatchFrameComponent>;
+describe('OverlayComponent', () => {
+  let component: OverlayComponent;
+  let fixture: ComponentFixture<OverlayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WatchFrameComponent ]
+      declarations: [ OverlayComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WatchFrameComponent);
+    fixture = TestBed.createComponent(OverlayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class GameService {
   private url = environment.backendLink;
-  private token = 'ghg';
+  private token = 'watcher';
   private menuEntries: Update[] = [];
 
   private setMenusFast: EventEmitter<Update[]> = new EventEmitter(true);
@@ -50,9 +50,7 @@ export class GameService {
   }
 
   update(changes: Changes): Observable<Update[]> {
-    if (this.token == 'ghg') {
-      throw new Error('No Token');
-    }
+    if (this.token == 'watcher') throw new Error('No Token');
     let params = new HttpParams().set('token', this.token);
     return this.http.post<Update[]>(
       this.url + 'game/update',

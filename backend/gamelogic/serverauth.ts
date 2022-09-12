@@ -8,6 +8,7 @@ interface player {
   pass: string;
   token: string;
   tokenDate: string;
+  adminLevel: 0 | 1 | 2 | 3 | 4;
 }
 
 async function verify(
@@ -114,6 +115,7 @@ async function createUser(
     pass: passwordHash,
     token: token,
     tokenDate: now,
+    adminLevel: 0,
   };
   jsonPlayers.push(newPlayer);
   try {

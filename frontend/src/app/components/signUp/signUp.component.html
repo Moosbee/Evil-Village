@@ -1,4 +1,4 @@
-<form (submit)="signUp($event)">
+<!-- <form (submit)="signUp($event)">
   <label for="username">Benutzername</label>
   <input
     type="text"
@@ -22,4 +22,100 @@
     <div *ngIf="message == 'failed'">Etwas ist schief gelaufen</div>
     <div *ngIf="message == 'wrong'">Das Passwort muss übereinstimmen</div>
   </div>
-</form>
+</form> -->
+<div
+  class="container"
+  [ngStyle]="{
+    opacity: message == 'success' ? 0 : 1,
+    'background-color':
+      message == 'success' ? 'rgba(0, 128, 0, 0.75)' : 'rgba(0, 0, 0, 0.75)'
+  }"
+>
+  <h1>Sign Up</h1>
+  <form (submit)="signUp($event)">
+    <div class="form-control" style="margin-bottom: 2.5rem">
+      <input
+        type="text"
+        name="username"
+        id="username"
+        [(ngModel)]="user.username"
+        required
+      />
+      <label for="username">
+        <span class="sr-only">Username</span>
+        <span style="transition-delay: 0ms">U</span>
+        <span style="transition-delay: 50ms">s</span>
+        <span style="transition-delay: 100ms">e</span>
+        <span style="transition-delay: 150ms">r</span>
+        <span style="transition-delay: 200ms">n</span>
+        <span style="transition-delay: 250ms">a</span>
+        <span style="transition-delay: 300ms">m</span>
+        <span style="transition-delay: 350ms">e</span>
+      </label>
+    </div>
+    <div class="form-control" style="margin-bottom: 2.5rem">
+      <input
+        type="password"
+        name="password2"
+        id="password2"
+        [(ngModel)]="user.pass"
+        required
+      />
+      <label for="password2">
+        <span class="sr-only">Password</span>
+        <span style="transition-delay: 0ms">P</span>
+        <span style="transition-delay: 50ms">a</span>
+        <span style="transition-delay: 100ms">s</span>
+        <span style="transition-delay: 150ms">s</span>
+        <span style="transition-delay: 200ms">w</span>
+        <span style="transition-delay: 250ms">o</span>
+        <span style="transition-delay: 300ms">r</span>
+        <span style="transition-delay: 350ms">d</span>
+      </label>
+    </div>
+    <div class="form-control">
+      <input
+        type="password"
+        name="password"
+        id="password"
+        [(ngModel)]="pass2"
+        required
+      />
+      <label for="password">
+        <span class="sr-only">Confirm Password</span>
+        <span style="transition-delay: 0ms">C</span>
+        <span style="transition-delay: 50ms">o</span>
+        <span style="transition-delay: 100ms">n</span>
+        <span style="transition-delay: 150ms">f</span>
+        <span style="transition-delay: 200ms">i</span>
+        <span style="transition-delay: 250ms">r</span>
+        <span style="transition-delay: 300ms">m</span>
+        <span style="transition-delay: 350ms"> </span>
+        <span style="transition-delay: 400ms">P</span>
+        <span style="transition-delay: 450ms">a</span>
+        <span style="transition-delay: 500ms">s</span>
+        <span style="transition-delay: 550ms">s</span>
+        <span style="transition-delay: 600ms">w</span>
+        <span style="transition-delay: 650ms">o</span>
+        <span style="transition-delay: 700ms">r</span>
+        <span style="transition-delay: 750ms">d</span>
+      </label>
+    </div>
+    <div class="status">
+      <div *ngIf="message == 'undefined'" class="undefined">&nbsp;</div>
+      <div *ngIf="message == 'success'" class="success">Success</div>
+      <div *ngIf="message == 'taken'" class="error">
+        This Username is already taken
+      </div>
+      <div *ngIf="message == 'failed'" class="error">Something went wrong</div>
+      <div *ngIf="message == 'wrong'" class="error">
+        The passwords do not match
+      </div>
+    </div>
+    <button class="btn">Sign Up</button>
+
+    <p class="text">
+      Already have an account? <a routerLink="/signIp">sign Ip</a>
+    </p>
+  </form>
+</div>

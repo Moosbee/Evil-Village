@@ -20,26 +20,28 @@ export class SignUpComponent implements OnInit {
 
   signUp(e: Event) {
     e.preventDefault();
-    if (
-      this.user.username != undefined &&
-      this.user.pass != undefined &&
-      this.user.pass == this.pass2
-    ) {
-      this.authService
-        .createUser(this.user.username, this.user.pass)
-        .subscribe((auth: UserRes) => {
-          this.message = auth.state;
-          if (
-            auth.state == 'success' &&
-            typeof auth.username == 'string' &&
-            typeof auth.token == 'string'
-          ) {
-            localStorage.setItem('username', auth.username);
-            localStorage.setItem('token', auth.token);
-            this.router.navigate(['/signIn']);
-          } else if (auth.state == 'failed' || auth.state == 'taken') {
-          }
-        });
+    if (this.user.username == undefined || this.user.pass == undefined) {
+      return;
     }
+    if (this.user.pass != this.pass2) {
+      this.message = 'wrong';
+      return;
+    }
+    this.authService
+      .createUser(this.user.username, this.user.pass)
+      .subscribe((auth: UserRes) => {
+        this.message = auth.state;
+        if (
+          auth.state == 'success' &&
+          typeof auth.username == 'string' &&
+          typeof auth.token == 'string'
+        ) {
+          localStorage.setItem('username', auth.username);
+          localStorage.setItem('token', auth.token);
+          setTimeout(() => {
+            this.router.navigate(['/signIn']);
+          }, 1100);
+        }
+      });
   }
 }

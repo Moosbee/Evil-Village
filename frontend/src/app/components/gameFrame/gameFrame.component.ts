@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { Update } from 'src/app/model/update';
 import { GameService } from 'src/app/service/game.service';
 import { environment } from '../../../environments/environment';
@@ -27,21 +27,36 @@ export class GameFrameComponent implements OnInit {
   gameObjects: Update[] = [];
   unClick = false;
 
+  url = '';
+
   // @ViewChild('frame') public frame!: ElementRef;
 
-  constructor(private gameService: GameService, private router: Router) {}
-
-  ngOnInit(): void {
+  constructor(private gameService: GameService, private router: Router) {
     let token = localStorage.getItem('token');
-    if (token == null) {
+    if (token == null && router.url != '/signUn') {
       this.router.navigate(['/signIn']);
       return;
     }
-    this.gameService.setToken(token);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.url = event.url;
 
-    this.gameService.getUpdate().subscribe((newGameObjects) => {
-      this.gameObjects = newGameObjects;
+        if (this.url != '/game') return;
+        let token = localStorage.getItem('token');
+        if (token == null) {
+          // this.router.navigate(['/signIn']);
+          return;
+        }
+        this.gameService.setToken(token);
+
+        this.gameService.getUpdate().subscribe((newGameObjects) => {
+          this.gameObjects = newGameObjects;
+        });
+      }
     });
+  }
+
+  ngOnInit(): void {
     this.gameService.getUpdateSocket().subscribe((newGameObjects) => {
       this.gameObjects = newGameObjects;
       this.gameService.updateMenu(newGameObjects);
@@ -158,8 +173,8 @@ export class GameFrameComponent implements OnInit {
       // this.top = this.top + 5;
       // this.left = this.left + 5;
     }
-    if (this.zoom < 0.9) {
-      this.zoom = 0.9;
+    if (this.zoom < 0.75) {
+      this.zoom = 0.75;
     }
 
     this.zoom = Math.round((this.zoom + Number.EPSILON) * 100) / 100;

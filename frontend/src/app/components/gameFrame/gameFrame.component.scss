@@ -1,11 +1,13 @@
 @use "../../../styles.scss";
 
+$borderColor: green;
+
 #frame {
-  height: 90vh;
-  margin: 10px;
+  height: calc(100vh - 10px);
+  width: calc(100vw - 10px);
   margin-inline: auto;
-  aspect-ratio: 16/9;
-  border: 3px solid green;
+  margin-block: auto;
+  border: 5px solid $borderColor;
   overflow: hidden;
   position: relative;
 }

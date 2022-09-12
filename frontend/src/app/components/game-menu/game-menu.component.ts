@@ -11,6 +11,7 @@ export class GameMenuComponent implements OnInit {
   @Input() username: string = '';
   menuEntries: Update[] = [];
   nameRegex = '^([^"´\']{5,})$';
+  loggedIn = false;
 
   constructor(private gameService: GameService) {}
 

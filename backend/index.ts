@@ -113,6 +113,7 @@ app.post('/login', async (req, res) => {
       username: erg.username,
       pass: erg.pass,
       token: erg.token,
+      adminLevel: erg.adminLevel,
     });
   } else if (erg == 'wrong') {
     res.json({ state: 'wrong' });
@@ -149,6 +150,7 @@ app.post('/makeuser', async (req, res) => {
       username: erg.username,
       pass: erg.pass,
       token: erg.token,
+      adminLevel: erg.adminLevel,
     });
   } else if (erg == 'taken') {
     res.json({ state: 'taken' });

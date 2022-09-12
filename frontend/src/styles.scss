@@ -5,6 +5,19 @@
   padding: 0px;
 }
 
+.sr-only {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
 $blue: #007bff;
 $indigo: #6610f2;
 $purple: #6f42c1;
@@ -26,4 +39,3 @@ $warning: #ffc107;
 $danger: #dc3545;
 $light: #353c42;
 $dark: #1e2226;
-

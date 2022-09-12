@@ -26,7 +26,6 @@ export class SignInComponent implements OnInit {
     let token = localStorage.getItem('token');
     if (this.loggedIn && token != null) {
       this.authService.authToken(token).subscribe((auth: UserRes) => {
-        this.message = auth.state;
         if (
           auth.state == 'success' &&
           typeof auth.username == 'string' &&
@@ -36,7 +35,6 @@ export class SignInComponent implements OnInit {
           localStorage.setItem('token', auth.token);
           this.loggedIn = true;
           this.router.navigate(['/signedIn']);
-        } else if (auth.state == 'failed' || auth.state == 'taken') {
         }
       });
     }
@@ -56,7 +54,9 @@ export class SignInComponent implements OnInit {
             localStorage.setItem('username', auth.username);
             localStorage.setItem('token', auth.token);
             this.loggedIn = true;
-            this.router.navigate(['/signedIn']);
+            setTimeout(() => {
+              this.router.navigate(['/game']);
+            }, 500);
           } else if (auth.state == 'failed' || auth.state == 'taken') {
           }
         });

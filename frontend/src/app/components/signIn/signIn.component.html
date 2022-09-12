@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <form (submit)="signIn($event)">
     <label for="username">Benutzername</label>
     <input
@@ -25,4 +25,63 @@
   </form>
   <a routerLink="/signUp">Erstelle einen Benutzer</a><br>
   <a routerLink="/watch">Nur Zuschauen</a>
+</div> -->
+<!-- message == 'success' ? 0 : 1 -->
+<div class="container" [ngStyle]="{ opacity: message == 'success' ? 0 : 1 }">
+  <h1>Please Login</h1>
+  <form (submit)="signIn($event)">
+    <div class="form-control" style="margin-bottom: 2.5rem">
+      <input
+        type="text"
+        name="username"
+        id="username"
+        [(ngModel)]="user.username"
+        required
+      />
+      <label for="username">
+        <span class="sr-only">Username</span>
+        <span style="transition-delay: 0ms">U</span>
+        <span style="transition-delay: 50ms">s</span>
+        <span style="transition-delay: 100ms">e</span>
+        <span style="transition-delay: 150ms">r</span>
+        <span style="transition-delay: 200ms">n</span>
+        <span style="transition-delay: 250ms">a</span>
+        <span style="transition-delay: 300ms">m</span>
+        <span style="transition-delay: 350ms">e</span>
+      </label>
+    </div>
+    <div class="form-control">
+      <input
+        type="password"
+        name="password"
+        id="password"
+        [(ngModel)]="user.pass"
+        required
+      />
+      <label for="password">
+        <span class="sr-only">Password</span>
+        <span style="transition-delay: 0ms">P</span>
+        <span style="transition-delay: 50ms">a</span>
+        <span style="transition-delay: 100ms">s</span>
+        <span style="transition-delay: 150ms">s</span>
+        <span style="transition-delay: 200ms">w</span>
+        <span style="transition-delay: 250ms">o</span>
+        <span style="transition-delay: 300ms">r</span>
+        <span style="transition-delay: 350ms">d</span>
+      </label>
+    </div>
+    <div class="status">
+      <div *ngIf="message == 'undefined'" class="undefined">&nbsp;</div>
+      <div *ngIf="message == 'success'" class="success">Success</div>
+      <div *ngIf="message == 'taken' || message == 'failed'" class="error">
+        Something went wrong
+      </div>
+      <div *ngIf="message == 'wrong'" class="error">wrong Password</div>
+    </div>
+    <button class="btn">Login</button>
+
+    <p class="text">
+      Don't have an account? <a routerLink="/signUp">sign Up</a>
+    </p>
+  </form>
 </div>
