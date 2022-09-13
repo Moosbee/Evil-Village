@@ -12,7 +12,10 @@
         />
       </svg>
     </div>
-    {{ username }}'s Game Info
+    <span *ngIf="loggedIn">{{ username }}'s Game Info</span>
+    <span *ngIf="!loggedIn"
+      >Game Info (<a routerLink="/signIp">SignUp</a>)</span
+    >
     <button *ngIf="loggedIn" (click)="logout()">Logout</button>
   </div>
   <app-game-menu [username]="username"></app-game-menu>

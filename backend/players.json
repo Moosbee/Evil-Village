@@ -1,9 +1,1 @@
-[
-  {
-    "username": "Frog",
-    "pass": "1234",
-    "token": "07eabab7ac51f74b659bab862e942b7bb3a9b1c5395978c0865301f70e06",
-    "tokenDate": "2022-09-12T18:52:27.141Z",
-    "adminLevel": 4
-  }
-]
+[{"username":"Frog","pass":"1234","token":"57a51ef6c833421c4f0d74293ebce306b69f4c835c82ac40f6b9b1adc5d7","tokenDate":"2022-09-13T19:44:26.205Z","adminLevel":4}]

@@ -32,6 +32,7 @@ export class GameService {
 
   setToken(token: string) {
     this.token = token;
+    console.log('setToken');
     this.authService.authToken(token).subscribe((auth: UserRes) => {
       if (auth.state == 'success' && typeof auth.token == 'string') {
         this.token = auth.token;
@@ -39,6 +40,10 @@ export class GameService {
         this.router.navigate(['/signIn']);
       }
     });
+  }
+  resetToken() {
+    console.log('resetToken');
+    this.token = 'watcher';
   }
   getUpdate(): Observable<Update[]> {
     let params = new HttpParams().set('token', this.token);
@@ -50,7 +55,6 @@ export class GameService {
   }
 
   update(changes: Changes): Observable<Update[]> {
-    if (this.token == 'watcher') throw new Error('No Token');
     let params = new HttpParams().set('token', this.token);
     return this.http.post<Update[]>(
       this.url + 'game/update',
@@ -112,6 +116,8 @@ export class GameService {
   // ============================================================================================== //
 
   goToPos(posOnMapX: number, posOnMapY: number) {
+    if (this.token == 'watcher') return;
+
     for (let i = 0; i < this.menuEntries.length; i++) {
       const entry = this.menuEntries[i];
       let change: Changes = {
@@ -125,6 +131,8 @@ export class GameService {
   }
 
   settle(gameObjectName: string) {
+    if (this.token == 'watcher') return;
+
     let change: Changes = {
       name: gameObjectName,
       settle: true,
@@ -133,6 +141,8 @@ export class GameService {
   }
 
   settleAll() {
+    if (this.token == 'watcher') return;
+
     for (let i = 0; i < this.menuEntries.length; i++) {
       const entry = this.menuEntries[i];
       this.settle(entry.name);
@@ -140,6 +150,8 @@ export class GameService {
   }
 
   changeName(gameObjectName: string, newName: string) {
+    if (this.token == 'watcher') return;
+
     let change: Changes = {
       name: gameObjectName,
       newName: newName,
@@ -148,6 +160,8 @@ export class GameService {
   }
 
   toggleProduktion(gameObjectName: string) {
+    if (this.token == 'watcher') return;
+
     let change: Changes = {
       name: gameObjectName,
       toggleArmy: true,
@@ -156,6 +170,8 @@ export class GameService {
   }
 
   toggleProduktionAll() {
+    if (this.token == 'watcher') return;
+
     for (let i = 0; i < this.menuEntries.length; i++) {
       const entry = this.menuEntries[i];
       this.toggleProduktion(entry.name);

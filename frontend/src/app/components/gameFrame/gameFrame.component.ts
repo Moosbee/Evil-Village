@@ -31,30 +31,7 @@ export class GameFrameComponent implements OnInit {
 
   // @ViewChild('frame') public frame!: ElementRef;
 
-  constructor(private gameService: GameService, private router: Router) {
-    let token = localStorage.getItem('token');
-    if (token == null && router.url != '/signUn') {
-      this.router.navigate(['/signIn']);
-      return;
-    }
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.url = event.url;
-
-        if (this.url != '/game') return;
-        let token = localStorage.getItem('token');
-        if (token == null) {
-          // this.router.navigate(['/signIn']);
-          return;
-        }
-        this.gameService.setToken(token);
-
-        this.gameService.getUpdate().subscribe((newGameObjects) => {
-          this.gameObjects = newGameObjects;
-        });
-      }
-    });
-  }
+  constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.gameService.getUpdateSocket().subscribe((newGameObjects) => {

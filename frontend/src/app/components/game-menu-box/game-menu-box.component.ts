@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { GameService } from 'src/app/service/game.service';
 
 @Component({
   selector: 'app-game-menu-box',
@@ -7,22 +8,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./game-menu-box.component.scss'],
 })
 export class GameMenuBoxComponent implements OnInit {
-  username = '';
-  loggedIn = false;
-  constructor(private router: Router) {}
+  @Input() username = '';
+  @Input() loggedIn = false;
+  constructor(private router: Router, private gameService: GameService) {}
 
-  ngOnInit(): void {
-    let username = localStorage.getItem('username');
-    if (username != null) {
-      this.username = username;
-      this.loggedIn = true;
-    } else {
-      this.loggedIn = false;
-    }
-  }
+  ngOnInit(): void {}
 
   logout() {
     localStorage.clear();
+    this.gameService.resetToken();
     this.router.navigate(['/signIn']);
   }
 }
