@@ -11,6 +11,7 @@ export class GameComponent implements OnInit {
   url = '';
   username: string = '';
   loggedIn: boolean = false;
+  adminLevel = 0;
   constructor(private router: Router, private gameService: GameService) {
     let token = localStorage.getItem('token');
     if (token == null && router.url != '/signUn') {
@@ -20,9 +21,11 @@ export class GameComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.url = event.url;
         let username = localStorage.getItem('username');
-        if (username != null) {
+        let adminLevel = localStorage.getItem('adminLevel');
+        if (username != null && adminLevel != null) {
           this.username = username;
           this.loggedIn = true;
+          this.adminLevel = parseInt(adminLevel);
         } else {
           this.loggedIn = false;
         }
@@ -33,6 +36,8 @@ export class GameComponent implements OnInit {
           return;
         }
         this.gameService.setToken(token);
+
+        this.gameService.getUpdate().subscribe((newGameObjects) => {});
 
         // this.gameService.getUpdate().subscribe((newGameObjects) => {
         //   this.gameObjects = newGameObjects;

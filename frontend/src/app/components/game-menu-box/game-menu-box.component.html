@@ -12,9 +12,11 @@
         />
       </svg>
     </div>
-    <span *ngIf="loggedIn">{{ username }}'s Game Info</span>
-    <span *ngIf="!loggedIn"
-      >Game Info (<a routerLink="/signIp">SignUp</a>)</span
+    <span *ngIf="loggedIn">{{ username }}'s </span>
+    <span> Game Info</span>
+    <span *ngIf="!loggedIn">(<a routerLink="/signIp">SignUp</a>)</span>
+    <span *ngIf="loggedIn && adminLevel >= 1"
+      >(<a routerLink="/config">Config</a>)</span
     >
     <button *ngIf="loggedIn" (click)="logout()">Logout</button>
   </div>

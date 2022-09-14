@@ -10,6 +10,7 @@ import { GameService } from 'src/app/service/game.service';
 export class GameMenuBoxComponent implements OnInit {
   @Input() username = '';
   @Input() loggedIn = false;
+  @Input() adminLevel = 0;
   constructor(private router: Router, private gameService: GameService) {}
 
   ngOnInit(): void {}

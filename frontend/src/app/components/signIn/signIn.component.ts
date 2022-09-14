@@ -49,10 +49,12 @@ export class SignInComponent implements OnInit {
           if (
             auth.state == 'success' &&
             typeof auth.username == 'string' &&
-            typeof auth.token == 'string'
+            typeof auth.token == 'string' &&
+            typeof auth.adminLevel == 'number'
           ) {
             localStorage.setItem('username', auth.username);
             localStorage.setItem('token', auth.token);
+            localStorage.setItem('adminLevel', auth.adminLevel.toString());
             this.loggedIn = true;
             setTimeout(() => {
               this.router.navigate(['/game']);
