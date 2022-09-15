@@ -245,7 +245,7 @@ app.get('/shutdown', async (req, res) => {
 });
 
 // app.use('/', express.static('./angularBuild/'));
-app.use('/', express.static('../frontend/dist/evil-vilage/'));
+app.use('/', express.static(normalize(config.ROOTPATH+config.FRONTENDPATH)));
 
 app.all('*', function (req, res, next) {
   try {

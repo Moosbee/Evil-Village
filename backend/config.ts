@@ -18,6 +18,7 @@ interface interfaceConfig {
   FAVICON: number;
   EXPRESSPORT: number;
   FRONTENDURL: string;
+  FRONTENDPATH: string;
   GAME: gameConfig;
 }
 
@@ -30,14 +31,13 @@ class config {
   FAVICON: number;
   EXPRESSPORT: number;
   FRONTENDURL: string;
+  FRONTENDPATH: string;
 
   GAME: gameConfig;
   constructor() {
-    this.ROOTPATH = path.normalize(path.resolve(this.ROOTPATH) + '\\');
-
-    let jsonConfig = JSON.parse(
-      readFileSync(path.resolve(this.ROOTPATH, './configFile.json'), 'utf8')
-    );
+    this.ROOTPATH = path.normalize(path.resolve(this.ROOTPATH) + '/');
+    let configFilePath = path.normalize(this.ROOTPATH+ './configFile.json');
+    let jsonConfig = JSON.parse(readFileSync(configFilePath, 'utf8'));
 
     if (
       typeof jsonConfig.MAXPLAYERS != 'number' ||
@@ -46,6 +46,7 @@ class config {
       typeof jsonConfig.FAVICON != 'number' ||
       typeof jsonConfig.EXPRESSPORT != 'number' ||
       typeof jsonConfig.FRONTENDURL != 'string' ||
+      typeof jsonConfig.FRONTENDPATH != 'string' ||
       typeof jsonConfig.GAME.MAPFILENAME != 'string' ||
       typeof jsonConfig.GAME.MAXGAMEOBJECTS != 'number' ||
       typeof jsonConfig.GAME.RESETONSTART != 'boolean' ||
@@ -60,6 +61,7 @@ class config {
     this.FAVICON = jsonConfig.FAVICON;
     this.EXPRESSPORT = jsonConfig.EXPRESSPORT;
     this.FRONTENDURL = jsonConfig.FRONTENDURL;
+    this.FRONTENDPATH = path.normalize(jsonConfig.FRONTENDPATH);
     this.GAME = {
       MAPFILENAME: path.normalize(jsonConfig.GAME.MAPFILENAME),
       MAXGAMEOBJECTS: jsonConfig.GAME.MAXGAMEOBJECTS,
@@ -79,6 +81,7 @@ class config {
       typeof newConfig.FAVICON != 'number' ||
       typeof newConfig.EXPRESSPORT != 'number' ||
       typeof newConfig.FRONTENDURL != 'string' ||
+      typeof newConfig.FRONTENDPATH != 'string' ||
       typeof newConfig.GAME.MAPFILENAME != 'string' ||
       typeof newConfig.GAME.MAXGAMEOBJECTS != 'number' ||
       typeof newConfig.GAME.RESETONSTART != 'boolean' ||
@@ -93,6 +96,7 @@ class config {
     this.FAVICON = newConfig.FAVICON;
     this.EXPRESSPORT = newConfig.EXPRESSPORT;
     this.FRONTENDURL = newConfig.FRONTENDURL;
+    this.FRONTENDPATH = newConfig.FRONTENDPATH;
     this.GAME = {
       MAPFILENAME: path.normalize(newConfig.GAME.MAPFILENAME),
       MAXGAMEOBJECTS: newConfig.GAME.MAXGAMEOBJECTS,
@@ -111,6 +115,7 @@ class config {
     this.FAVICON = newConfig.FAVICON;
     this.FRONTENDURL = newConfig.FRONTENDURL;
     this.ROOTPATH = newConfig.ROOTPATH;
+    this.FRONTENDPATH = newConfig.FRONTENDPATH;
     this.GAME.MAPFILENAME = newConfig.GAME.MAPFILENAME;
     this.GAME.MAXGAMEOBJECTS = newConfig.GAME.MAXGAMEOBJECTS;
     this.GAME.RESETONSTART = newConfig.GAME.RESETONSTART;
@@ -128,6 +133,7 @@ class config {
         FAVICON: this.FAVICON,
         EXPRESSPORT: this.EXPRESSPORT,
         FRONTENDURL: this.FRONTENDURL,
+        FRONTENDPATH: this.FRONTENDPATH,
         GAME: {
           RESETONSTART: this.GAME.RESETONSTART,
           MAPFILENAME: this.GAME.MAPFILENAME,
@@ -155,6 +161,7 @@ class config {
       FAVICON: this.FAVICON,
       EXPRESSPORT: this.EXPRESSPORT,
       FRONTENDURL: this.FRONTENDURL,
+      FRONTENDPATH: this.FRONTENDPATH,
       GAME: {
         RESETONSTART: this.GAME.RESETONSTART,
         MAPFILENAME: this.GAME.MAPFILENAME,
@@ -174,6 +181,7 @@ class config {
       | { type: 'FAVICON'; value: number }
       | { type: 'EXPRESSPORT'; value: number }
       | { type: 'FRONTENDURL'; value: string }
+      | { type: 'FRONTENDPATH'; value: string }
       | { type: 'GAME-RESETONSTART'; value: boolean }
       | { type: 'GAME-MAPFILENAME'; value: string }
       | { type: 'GAME-SAVEFILE'; value: string }
@@ -202,6 +210,9 @@ class config {
         break;
 
       case 'FRONTENDURL':
+        this.FRONTENDURL = newConfig.value;
+        break;
+      case 'FRONTENDPATH':
         this.FRONTENDURL = newConfig.value;
         break;
 
