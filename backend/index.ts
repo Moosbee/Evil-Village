@@ -73,13 +73,13 @@ app.use(cookieParser());
 //   res.sendFile(resolve(config.rootPath + '../frontendd/unpublic/config.html'));
 // });
 
-app.get('/favicon.ico', async (req, res) => {
-  let faf = config.FAVICON;
-  let dir = resolve(
-    config.ROOTPATH + '../frontend/src/assets/farvi/' + faf + '.ico'
-  );
-  res.sendFile(dir);
-});
+// app.get('/favicon.ico', async (req, res) => {
+//   let faf = config.FAVICON;
+//   let dir = resolve(
+//     config.ROOTPATH + '../frontend/src/assets/farvi/' + faf + '.ico'
+//   );
+//   res.sendFile(dir);
+// });
 
 //fuer einloggen benutze Node.js Passport
 

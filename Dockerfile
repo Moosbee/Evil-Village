@@ -5,16 +5,13 @@ WORKDIR /app
 
 
 # Install app dependencies
-COPY ./frontend ./build/frontend
+COPY ./frontend/ ./build/frontend/
 
 WORKDIR /app/build/frontend
-
 RUN npm install --force
 RUN npm run build
 RUN mv ./dist/evil-vilage ../../angularBuild/
-
 WORKDIR /app
-
 RUN rm -r ./build/frontend
 
 
@@ -33,11 +30,9 @@ RUN mv ./build/backend/build/* ./
 RUN rm -r ./build/backend
 
 # Bundle app source
-COPY ./backend/package*.json .
-COPY ./backend/names.json .
-COPY ./backend/configFile.json .
-COPY ./backend/players.json .
-COPY ./backend/save.json .
+COPY ./backend/package*.json ./
+COPY ./backend/names.json ./
+COPY ./backend/json/ ./json/
 COPY ./backend/maps/ ./maps/
 
 RUN npm install -P

@@ -1,7 +1,7 @@
 {
   "ROOTPATH": "is defined in the config.ts/js file",
   "MAXPLAYERS": 1000,
-  "PLAYERFILE": "./players.json",
+  "PLAYERFILE": "./json/players.json",
   "PLAINTEXTPASSWORD": true,
   "FAVICON": 4,
   "EXPRESSPORT": 3000,
@@ -10,7 +10,7 @@
   "GAME": {
     "RESETONSTART": true,
     "MAPFILENAME": "Aihoia.png",
-    "SAVEFILE": "./save.json",
+    "SAVEFILE": "./json/save.json",
     "RUNSPEED": 4,
     "MAXGAMEOBJECTS": 25000
   }
