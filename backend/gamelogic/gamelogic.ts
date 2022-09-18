@@ -38,7 +38,7 @@ export class gamelogic {
       });
     } catch (e) {
       savedGameFile = '[]';
-      throw e;
+      // throw e;
     }
 
     if (savedGameFile == '' || config.GAME.RESETONSTART) {
@@ -236,7 +236,7 @@ export class gamelogic {
 
   async save(game: gamelogic) {
     let data = game.getUpdate();
-    await writeFile('./save.json', data);
+    await writeFile(config.ROOTPATH + config.GAME.SAVEFILE, data);
     // console.log('Autosave!');
   }
 

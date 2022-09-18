@@ -3,7 +3,7 @@
   #frame
   (mousedown)="mouseClick($event, frame, map)"
   (mousemove)="mouseDrag($event, frame, map)"
-  (touchstart)="touchDrag($event, frame, map)"
+  (touchstart)="touchStart($event, frame, map)"
   (touchmove)="touchDrag($event, frame, map)"
   (wheel)="mouseWheel($event, frame, map)"
 >
@@ -23,7 +23,7 @@
     [ngStyle]="{
       'aspect-ratio': mapWidth / mapHeight,
       transform: 'translate(' + left + '%,' + top + '%)',
-      width: zoom * 100 + '%'
+      '--zoome': zoom * 100 + '%'
     }"
     #zoomFrame
     (mouseup)="mouseUp($event, zoomFrame, map)"

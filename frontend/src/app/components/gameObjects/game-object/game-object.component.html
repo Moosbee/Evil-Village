@@ -9,6 +9,7 @@
   <!-- {{ gameObject.typeof.type }}: {{ gameObject.id }},{{ gameObject.strength }} -->
   <div
     (click)="objClick($event)"
+    (touchend)="objClick($event)"
     [ngSwitch]="gameObject.typeof.type"
     [ngClass]="{ gameObject: true, activated: click }"
   >

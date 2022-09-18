@@ -22,17 +22,19 @@ export class GameObjectComponent implements OnInit {
   }
 
   ngOnInit(): void {}
-  objClick(e: MouseEvent) {
+  objClick(e: MouseEvent | TouchEvent) {
     let strKey = e.ctrlKey;
     let beforeClick = this.click;
     if (strKey) {
-      if (beforeClick) {//true --> false
+      if (beforeClick) {
+        //true --> false
         this.gameService.removeMenu(this.gameObject);
       } else {
         this.gameService.addMenu(this.gameObject);
       }
     } else {
-      if (beforeClick) {//true --> false
+      if (beforeClick) {
+        //true --> false
         this.gameService.resetMenu();
       } else {
         this.gameService.setMenu(this.gameObject);

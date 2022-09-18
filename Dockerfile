@@ -3,7 +3,6 @@ FROM node:16
 
 WORKDIR /app
 
-
 # Install app dependencies
 COPY ./frontend/ ./build/frontend/
 

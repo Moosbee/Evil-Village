@@ -24,6 +24,8 @@ export class GameFrameComponent implements OnInit {
   posY = 0;
   lastPosX = 0;
   lastPosY = 0;
+  distance = 0;
+  lastDistance = 0;
   gameObjects: Update[] = [];
   unClick = false;
 
@@ -58,7 +60,7 @@ export class GameFrameComponent implements OnInit {
 
     e.preventDefault();
 
-    this.calcPos(mausY, mausX, true, false);
+    this.calcPos(mausY, mausX, true, false, frame, map);
   }
   mouseDrag(e: MouseEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     if (e.buttons != 1 && e.buttons != 2) {
@@ -70,9 +72,16 @@ export class GameFrameComponent implements OnInit {
     mausY = (e.clientY - bounding.y) / frame.offsetHeight;
     mausX = (e.clientX - bounding.x) / frame.offsetWidth;
 
+    // console.log(
+    //   `ClientX: ${e.clientX},FrameWidthX: ${frame.offsetWidth},MausX: ${mausX}`
+    // );
+    // console.log(
+    //   `ClientY: ${e.clientY},FrameHeightY: ${frame.offsetHeight},MausY: ${mausY}`
+    // );
+
     e.preventDefault();
 
-    this.calcPos(mausY, mausX, false, false);
+    this.calcPos(mausY, mausX, false, false, frame, map);
   }
 
   mouseUp(e: MouseEvent, zoomFrame: HTMLDivElement, map: HTMLImageElement) {
@@ -156,12 +165,12 @@ export class GameFrameComponent implements OnInit {
 
     this.zoom = Math.round((this.zoom + Number.EPSILON) * 100) / 100;
 
-    this.calcPos(0, 0, true, true);
+    this.calcPos(0, 0, true, true, frame, map);
 
     e.preventDefault();
   }
 
-  touchDrag(e: TouchEvent, frame: HTMLDivElement, map: HTMLImageElement) {
+  touchStart(e: TouchEvent, frame: HTMLDivElement, map: HTMLImageElement) {
     let mausY = 1;
     let mausX = 1;
     let touch = e.touches;
@@ -172,10 +181,78 @@ export class GameFrameComponent implements OnInit {
     }
     e.preventDefault();
 
-    this.calcPos(mausY, mausX, false, false);
+    this.calcPos(mausY, mausX, true, false, frame, map);
   }
 
-  touchEnd(e: TouchEvent, frame: HTMLDivElement, map: HTMLImageElement) {
+  touchDrag(e: TouchEvent, frame: HTMLDivElement, map: HTMLImageElement) {
+    let mausY = 1;
+    let mausX = 1;
+    let touch = e.touches;
+    let bounding = frame.getBoundingClientRect();
+    if (touch.length == 1) {
+      mausY = touch[0].clientY / frame.offsetHeight;
+      mausX = touch[0].clientX / frame.offsetWidth;
+    }
+    if (touch.length == 2) {
+      let touchY1 = (touch[0].clientY - bounding.y) / frame.offsetHeight;
+      let touchX1 = (touch[0].clientX - bounding.x) / frame.offsetWidth;
+      let touchY2 = (touch[1].clientY - bounding.y) / frame.offsetHeight;
+      let touchX2 = (touch[1].clientX - bounding.x) / frame.offsetWidth;
+
+      this.lastDistance = this.distance;
+      this.distance = Math.sqrt(
+        Math.pow(touchX2 - touchX1, 2) + Math.pow(touchY2 - touchY1, 2)
+      );
+      let diff = this.lastDistance - this.distance;
+      // this.zoom = this.zoom - diff;
+      if (diff < 0) {
+        if (!(map.clientWidth * (this.zoom * 0.75) > this.mapWidth)) {
+          this.zoom = this.zoom + this.zoom / 10;
+        }
+        // this.top = this.top - 5;
+        // this.left = this.left- 5;
+      }
+      if (diff > 0) {
+        this.zoom = this.zoom - this.zoom / 10;
+        // this.top = this.top + 5;
+        // this.left = this.left + 5;
+      }
+      if (this.zoom < 0.75) {
+        this.zoom = 0.75;
+      }
+    }
+    e.preventDefault();
+
+    this.calcPos(mausY, mausX, false, false, frame, map);
+  }
+
+  touchEnd(e: TouchEvent, zoomFrame: HTMLDivElement, map: HTMLImageElement) {
+    let mausY = 1;
+    let mausX = 1;
+    let touch = e.touches;
+    if (touch.length == 1) {
+      mausY = touch[0].clientY / zoomFrame.offsetHeight;
+      mausX = touch[0].clientX / zoomFrame.offsetWidth;
+    } else {
+      return;
+    }
+
+    if (mausY < 0) {
+      mausY = 0;
+    } else if (mausY > 1) {
+      mausY = 1;
+    }
+    if (mausX < 0) {
+      mausX = 0;
+    } else if (mausX > 1) {
+      mausX = 1;
+    }
+
+    let posOnMapX = this.mapWidth * mausX;
+    let posOnMapY = this.mapHeight * mausY;
+    // console.log(`Click at X:${posOnMapX} and Y:${posOnMapY}`);
+
+    this.gameService.goToPos(posOnMapX, posOnMapY);
     e.preventDefault();
   }
 
@@ -189,16 +266,23 @@ export class GameFrameComponent implements OnInit {
         this.zoom = 2;
         break;
       case '3':
-        this.calcPos(0, 0, false, true);
+        this.calcPos(0, 0, false, true, frame, map);
         break;
 
       default:
         break;
     }
-    this.calcPos(0, 0, true, true);
+    this.calcPos(0, 0, true, true, frame, map);
   }
 
-  calcPos(mausY: number, mausX: number, start: boolean, update: boolean) {
+  calcPos(
+    mausY: number,
+    mausX: number,
+    start: boolean,
+    update: boolean,
+    frame: HTMLDivElement,
+    map: HTMLImageElement
+  ) {
     if (!update) {
       if (mausY < 0) {
         mausY = 0;
@@ -210,6 +294,7 @@ export class GameFrameComponent implements OnInit {
       } else if (mausX > 1) {
         mausX = 1;
       }
+      // debugger;
 
       this.lastPosX = this.posX;
       this.lastPosY = this.posY;
@@ -226,8 +311,17 @@ export class GameFrameComponent implements OnInit {
       // let diffXPX = (diffX / 100) * frame.offsetWidth;
       // let diffYPX = (diffY / 100) * frame.offsetHeight;
 
-      this.left = this.left - diffX / this.zoom;
-      this.top = this.top - diffY / this.zoom;
+      // this.left = this.left - diffX / this.zoom;
+      // this.top = this.top - diffY / this.zoom;
+
+      let diffHeight = map.clientHeight / frame.clientHeight;
+      let diffWidth = map.clientWidth / frame.clientWidth;
+
+      let calcDiffY = diffY / this.zoom / diffHeight;
+      let calcDiffX = diffX / this.zoom / diffWidth;
+
+      this.left = this.left - calcDiffX;
+      this.top = this.top - calcDiffY;
     }
 
     let diff = 50 / this.zoom - 50;

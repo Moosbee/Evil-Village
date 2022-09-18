@@ -1,5 +1,4 @@
-import { readFile } from 'fs/promises';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFile, writeFile } from 'fs/promises';
 import config from '../config';
 import { createHmac, randomBytes } from 'crypto';
 import chalk from 'chalk';
@@ -50,7 +49,7 @@ async function verify(
   }
   try {
     //console.log(jsonPlayers);
-    writeFileSync(
+    await writeFile(
       config.ROOTPATH + config.PLAYERFILE,
       JSON.stringify(jsonPlayers)
     );
@@ -98,11 +97,11 @@ async function createUser(
   }
 
   try {
-    file = readFileSync(config.ROOTPATH + config.PLAYERFILE, {
+    file = await readFile(config.ROOTPATH + config.PLAYERFILE, {
       encoding: 'utf8',
     });
   } catch (e) {
-    return 'failed';
+    file = '[]';
   }
   let jsonPlayers: player[] = JSON.parse(file);
   let jsonPlayer = jsonPlayers.find((e) => e.username === user);
@@ -120,7 +119,7 @@ async function createUser(
   jsonPlayers.push(newPlayer);
   try {
     //console.log(jsonPlayers);
-    writeFileSync(
+    await writeFile(
       config.ROOTPATH + config.PLAYERFILE,
       JSON.stringify(jsonPlayers)
     );
