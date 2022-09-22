@@ -26,6 +26,7 @@ export class GameFrameComponent implements OnInit {
   lastPosY = 0;
   distance = 0;
   lastDistance = 0;
+  twoTouch = false;
   gameObjects: Update[] = [];
   unClick = false;
 
@@ -181,6 +182,8 @@ export class GameFrameComponent implements OnInit {
     }
     e.preventDefault();
 
+    this.twoTouch = false;
+
     this.calcPos(mausY, mausX, true, false, frame, map);
   }
 
@@ -189,15 +192,22 @@ export class GameFrameComponent implements OnInit {
     let mausX = 1;
     let touch = e.touches;
     let bounding = frame.getBoundingClientRect();
-    if (touch.length == 1) {
+    if (touch.length == 1 && this.twoTouch == false) {
       mausY = touch[0].clientY / frame.offsetHeight;
       mausX = touch[0].clientX / frame.offsetWidth;
+
+      this.calcPos(mausY, mausX, false, false, frame, map);
     }
     if (touch.length == 2) {
       let touchY1 = (touch[0].clientY - bounding.y) / frame.offsetHeight;
       let touchX1 = (touch[0].clientX - bounding.x) / frame.offsetWidth;
       let touchY2 = (touch[1].clientY - bounding.y) / frame.offsetHeight;
       let touchX2 = (touch[1].clientX - bounding.x) / frame.offsetWidth;
+
+      mausY = touch[1].clientY / frame.offsetHeight;
+      mausX = touch[1].clientX / frame.offsetWidth;
+
+      this.twoTouch = true;
 
       this.lastDistance = this.distance;
       this.distance = Math.sqrt(
@@ -207,23 +217,22 @@ export class GameFrameComponent implements OnInit {
       // this.zoom = this.zoom - diff;
       if (diff < 0) {
         if (!(map.clientWidth * (this.zoom * 0.75) > this.mapWidth)) {
-          this.zoom = this.zoom + this.zoom / 10;
+          this.zoom = this.zoom + this.zoom / 100;
         }
         // this.top = this.top - 5;
         // this.left = this.left- 5;
       }
       if (diff > 0) {
-        this.zoom = this.zoom - this.zoom / 10;
+        this.zoom = this.zoom - this.zoom / 100;
         // this.top = this.top + 5;
         // this.left = this.left + 5;
       }
       if (this.zoom < 0.75) {
         this.zoom = 0.75;
       }
+      this.calcPos(mausY, mausX, false, true, frame, map);
     }
     e.preventDefault();
-
-    this.calcPos(mausY, mausX, false, false, frame, map);
   }
 
   touchEnd(e: TouchEvent, zoomFrame: HTMLDivElement, map: HTMLImageElement) {

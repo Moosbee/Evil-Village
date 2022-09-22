@@ -1,18 +1,9 @@
 # specify the node base image with your desired version node:<version>
-FROM node:16
+FROM node:current-alpine
 
 WORKDIR /app
 
-# Install app dependencies
-COPY ./frontend/ ./build/frontend/
-
-WORKDIR /app/build/frontend
-RUN npm install --force
-RUN npm run build
-RUN mv ./dist/evil-vilage ../../angularBuild/
-WORKDIR /app
-RUN rm -r ./build/frontend
-
+#run from here
 
 COPY ./backend ./build/backend
 
@@ -27,6 +18,17 @@ RUN mv ./build/backend/build/* ./
 
 
 RUN rm -r ./build/backend
+
+#run from here
+
+COPY ./frontend/ ./build/frontend/
+
+WORKDIR /app/build/frontend
+RUN npm install --force
+RUN npm run build
+RUN mv ./dist/evil-vilage ../../angularBuild/
+WORKDIR /app
+RUN rm -r ./build/frontend
 
 # Bundle app source
 COPY ./backend/package*.json ./

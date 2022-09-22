@@ -245,12 +245,16 @@ app.get('/shutdown', async (req, res) => {
 });
 
 // app.use('/', express.static('./angularBuild/'));
-app.use('/', express.static(normalize(config.ROOTPATH+config.FRONTENDPATH)));
+app.use('/', express.static(normalize(config.ROOTPATH + config.FRONTENDPATH)));
 
 app.all('*', function (req, res, next) {
   try {
     //console.log(req);
-    res.status(400).send('<h1>Error</h1>');
+    res
+      .status(404)
+      .sendFile(
+        normalize(config.ROOTPATH + config.FRONTENDPATH + './index.html')
+      );
     console.log(chalk.redBright('An Idiot has a typo!'));
   } catch (error) {
     console.log(error);
