@@ -13,6 +13,7 @@ export class SignUpComponent implements OnInit {
   user: Auth = {};
   message: 'success' | 'taken' | 'failed' | 'wrong' | 'undefined' = 'undefined';
   pass2?: string;
+  showPasswd = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 

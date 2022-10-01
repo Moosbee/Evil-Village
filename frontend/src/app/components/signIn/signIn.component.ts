@@ -13,6 +13,7 @@ export class SignInComponent implements OnInit {
   user: Auth = {};
   message: 'success' | 'taken' | 'failed' | 'wrong' | 'undefined' = 'undefined';
   loggedIn: boolean;
+  showPasswd = false;
 
   constructor(private authService: AuthService, private router: Router) {
     if (localStorage.getItem('token') != null) {
