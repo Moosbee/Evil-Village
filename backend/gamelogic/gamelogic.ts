@@ -231,6 +231,7 @@ export class gamelogic {
 
   async end(a: number) {
     await this.save(this);
+    console.log(chalk.red('Exiting'));
     process.exit(a);
   }
 

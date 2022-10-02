@@ -48,7 +48,7 @@
         <span style="transition-delay: 350ms">d</span>
       </label>
       <div class="showPass">
-        <button (click)="showPasswd = !showPasswd">
+        <button (click)="togglePass($event)">
           <span class="sr-only">Toggle Password view</span>
           <svg
             *ngIf="!showPasswd"
@@ -101,7 +101,7 @@
         <span style="transition-delay: 750ms">d</span>
       </label>
       <div class="showPass">
-        <button (click)="showPasswd = !showPasswd">
+        <button (click)="togglePass($event)">
           <span class="sr-only">Toggle Password view</span>
           <svg
             *ngIf="!showPasswd"

@@ -1,3 +1,3 @@
 {
-    "ignore": ["save.json", "players.json","configFile.json"]
+    "ignore": ["json/", "angularBuild/"]
 }

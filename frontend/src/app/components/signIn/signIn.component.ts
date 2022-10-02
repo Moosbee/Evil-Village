@@ -23,6 +23,11 @@ export class SignInComponent implements OnInit {
     }
   }
 
+  togglePass(e: Event) {
+    this.showPasswd = !this.showPasswd;
+    e.preventDefault();
+  }
+
   ngOnInit(): void {
     let token = localStorage.getItem('token');
     if (this.loggedIn && token != null) {

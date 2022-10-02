@@ -259,7 +259,7 @@ app.all('*', function (req, res, next) {
   } catch (error) {
     console.log(error);
   }
-  next(); // pass control to the next handler
+  // next(); // pass control to the next handler
 });
 
 //Socket.io ----------------------------------------------------
@@ -293,6 +293,13 @@ socketServer.on('connection', function (socket) {
 setInterval(() => {
   socketServer.emit('update', localGame.getUpdate());
 }, 100);
+
+process.on('beforeExit', async (code) => {
+  await localGame.end(code);
+});
+process.on('SIGINT', async (code) => {
+  await localGame.end(1);
+});
 
 httpServer.listen(config.EXPRESSPORT, () => {
   console.log(

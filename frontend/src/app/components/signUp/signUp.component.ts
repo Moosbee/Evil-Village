@@ -18,6 +18,10 @@ export class SignUpComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
+  togglePass(e: Event) {
+    this.showPasswd = !this.showPasswd;
+    e.preventDefault();
+  }
 
   signUp(e: Event) {
     e.preventDefault();
