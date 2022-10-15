@@ -1,6 +1,6 @@
 <div class="infoPanel">
   <div class="heading">
-    <div class="moveBox">
+    <!-- <div class="moveBox">
       <svg
         class="move"
         viewBox="0 0 1025 1024"
@@ -11,14 +11,17 @@
           d="M585.074876 232.47085h-73.618434 237.427243L511.120686 0.743459 275.188355 232.47085h163.800816v216.122744H218.149858v143.479602h220.839313v216.906175h146.085705V592.073196h219.120563V448.593594h-219.120563V232.47085z m-73.906225 790.04115l219.983936-213.532629H292.91146l218.257191 213.524635zM0.740049 519.478017l217.409809 216.07478V305.113993L0.740049 519.478017z m803.45539-214.364024V735.544803l219.120564-216.07478-219.120564-214.364024z"
         />
       </svg>
+    </div> -->
+    <h1>
+      <span *ngIf="loggedIn">{{ username }}'s </span>Game Info
+    </h1>
+    <div>
+      <a routerLink="/signIp" *ngIf="!loggedIn" class="btn">SignUp</a>
+      <a routerLink="/config" *ngIf="loggedIn && adminLevel >= 1" class="btn"
+        >Config</a
+      >
+      <button *ngIf="loggedIn" (click)="logout()" class="btn">Logout</button>
     </div>
-    <span *ngIf="loggedIn">{{ username }}'s </span>
-    <span> Game Info</span>
-    <span *ngIf="!loggedIn">(<a routerLink="/signIp">SignUp</a>)</span>
-    <span *ngIf="loggedIn && adminLevel >= 1"
-      >(<a routerLink="/config">Config</a>)</span
-    >
-    <button *ngIf="loggedIn" (click)="logout()">Logout</button>
   </div>
   <app-game-menu [username]="username"></app-game-menu>
 </div>

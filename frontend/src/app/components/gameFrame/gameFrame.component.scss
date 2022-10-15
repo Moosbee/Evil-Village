@@ -1,13 +1,11 @@
-@use "../../../styles.scss";
-
-$borderColor: green;
+@import "../../vars";
 
 #frame {
   height: calc(100vh - 10px);
   width: calc(100vw - 10px);
   margin-inline: auto;
   margin-block: auto;
-  border: 5px solid $borderColor;
+  border: 5px solid $secondaryA;
   overflow: hidden;
   position: relative;
 }
@@ -38,7 +36,7 @@ $borderColor: green;
   transition: transform 100ms;
   top: 50%;
   left: 50%;
-  outline: 1px solid styles.$blue;
+  outline: 1px solid $secondaryB;
 }
 
 .selector {

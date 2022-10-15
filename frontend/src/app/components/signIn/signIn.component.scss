@@ -1,43 +1,58 @@
+@import "../../vars";
+
 .container {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: transparentize($color: $secondaryB, $amount: 0.15);
   padding: 20px 40px;
   border-radius: 5px;
-  color: #fff;
+  color: $light;
   font-family: Arial, Helvetica, sans-serif;
   transition: opacity 500ms cubic-bezier(0.16, 0.57, 1, 0.5);
 }
 
-.container h1 {
+h1 {
   text-align: center;
   margin-bottom: 30px;
 }
 
-.container a {
+a {
   text-decoration: none;
-  color: lightblue;
+  // color: $light;
+  color: lighten($color: $secondaryB, $amount: 60);
+}
+
+a:hover {
+  color: lighten($color: $secondaryB, $amount: 50);
 }
 
 .btn {
-  cursor: pointer;
-  display: inline-block;
   width: 100%;
-  background-color: lightblue;
   padding: 1rem;
-  font-family: inherit;
   font-size: 1rem;
-  border: 0;
-  border-radius: 5px;
 }
 
-.btn:focus,
-.btn:hover {
-  outline: 0;
-  background-color: lightskyblue;
-}
+// .btn {
+//   cursor: pointer;
+//   display: inline-block;
+//   width: 100%;
+//   // background-color: $light;
+//   background-color: lighten($color: $secondaryB, $amount: 60);
+//   padding: 1rem;
+//   font-family: inherit;
+//   font-size: 1rem;
+//   border: 0;
+//   border-radius: 5px;
+// }
 
-.btn:active {
-  transform: scale(0.98);
-}
+// .btn:focus,
+// .btn:hover {
+//   outline: 0;
+//   // background-color: $light;
+//   background-color: lighten($color: $secondaryB, $amount: 40);
+// }
+
+// .btn:active {
+//   transform: scale(0.98);
+// }
 
 .text {
   margin-top: 30px;
@@ -65,13 +80,14 @@
     width: 100%;
     padding: 15px 0;
     font-size: 1.125rem;
-    color: #fff;
+    color: $light;
   }
 
   input:focus,
   input:valid {
     outline: 0;
-    border-bottom-color: lightblue;
+    // border-bottom-color: $light;
+    border-bottom-color: lighten($color: $secondaryB, $amount: 60);
   }
 
   label {
@@ -90,25 +106,27 @@
 
   input:focus + label span,
   input:valid + label span {
-    color: lightblue;
+    // color: $light;
+    color: lighten($color: $secondaryB, $amount: 60);
     transform: translateY(-1.875rem);
   }
 
   input:focus + label + .showPass,
   input:valid + label + .showPass {
-    color: lightblue;
+    // color: $light;
+    color: lighten($color: $secondaryB, $amount: 60);
     display: inline-block;
   }
 
   .showPass {
     display: none;
-    color: #fff;
+    color: $light;
     top: 15px;
     right: 0px;
     position: absolute;
     aspect-ratio: 1;
     height: 1.125rem;
-    button {
+    a {
       fill: currentColor;
       color: inherit;
       background-color: transparent;
@@ -121,8 +139,10 @@
   color: limegreen;
 }
 .failed {
-  color: lightcoral;
+  // color: $light;
+  color: lighten($color: $secondaryB, $amount: 60);
 }
 .error {
-  color: lightcoral;
+  // color: $light;
+  color: lighten($color: $secondaryB, $amount: 60);
 }

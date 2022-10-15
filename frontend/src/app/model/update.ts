@@ -1,28 +1,8 @@
-export interface Update {
-  name: string;
-  x: number;
-  y: number;
-  owner: string;
-  strength: number;
-  size: number;
-  typeof: UpdateArmy | UpdateSchiff | UpdateStadt;
-}
+import { Stats } from './stats';
+import { GameObject } from './game-object';
 
-interface UpdateArmy {
-  type: 'saveArmy';
-  gotox: number;
-  gotoy: number;
-}
-interface UpdateSchiff {
-  type: 'saveSchiff';
-  gotox: number;
-  gotoy: number;
-}
-interface UpdateStadt {
-  type: 'saveStadt';
-  capital: boolean;
-  speed: number;
-  population: number;
-  makingofarmy: number;
-  production:boolean;
+export interface Update {
+  gameObjects: GameObject[];
+  menuEntries: GameObject[];
+  stats?: Stats;
 }

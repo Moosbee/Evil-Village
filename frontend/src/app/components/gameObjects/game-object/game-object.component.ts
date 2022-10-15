@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Update } from 'src/app/model/update';
+import { GameObject } from 'src/app/model/game-object';
 import { GameService } from 'src/app/service/game.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { GameService } from 'src/app/service/game.service';
   styleUrls: ['./game-object.component.scss'],
 })
 export class GameObjectComponent implements OnInit {
-  @Input() gameObject!: Update;
+  @Input() gameObject!: GameObject;
   @Input() width: number = 0;
   @Input() height: number = 0;
   @Output()

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Update } from 'src/app/model/update';
+import { GameObject } from 'src/app/model/game-object';
 
 @Component({
   selector: 'app-animation-army',
@@ -7,7 +7,7 @@ import { Update } from 'src/app/model/update';
   styleUrls: ['./animation-army.component.scss']
 })
 export class AnimationArmyComponent implements OnInit {
-  @Input() gameObject!: Update;
+  @Input() gameObject!: GameObject;
 
   constructor() { }
 

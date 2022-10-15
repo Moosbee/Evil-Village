@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./app/vars";
 
 * {
   margin: 0px;
@@ -18,24 +19,25 @@
   word-wrap: normal !important;
 }
 
-$blue: #007bff;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #e83e8c;
-$red: #dc3545;
-$orange: #fd7e14;
-$yellow: #ffc107;
-$green: #228639;
-$teal: #20c997;
-$cyan: #17a2b8;
-$white: #23272b;
-$gray: #6c757d;
-$gray-dark: #343a40;
-$primary: #4289c4;
-$secondary: #cad0d8;
-$success: #228639;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
-$light: #353c42;
-$dark: #1e2226;
+.btn {
+  cursor: pointer;
+  display: inline-block;
+  background-color: lighten($color: $secondaryB, $amount: 60);
+  color: $secondaryB;
+  padding: 0.25rem;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  outline: 0;
+  background-color: lighten($color: $secondaryB, $amount: 40);
+  color: $secondaryB;
+}
+
+.btn:active {
+  transform: scaleX(0.98) scaleY(0.88);
+}

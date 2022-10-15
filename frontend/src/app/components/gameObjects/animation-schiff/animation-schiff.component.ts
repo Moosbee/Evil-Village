@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Update } from 'src/app/model/update';
+import { GameObject } from 'src/app/model/game-object';
 
 @Component({
   selector: 'app-animation-schiff',
@@ -7,7 +7,7 @@ import { Update } from 'src/app/model/update';
   styleUrls: ['./animation-schiff.component.scss']
 })
 export class AnimationSchiffComponent implements OnInit {
-  @Input() gameObject!: Update;
+  @Input() gameObject!: GameObject;
 
   constructor() { }
 

@@ -1,3 +1,4 @@
+@import "../../vars";
 .heading {
   text-align: center;
   width: max-content;
@@ -7,8 +8,8 @@
   .moveBox {
     height: 1rem;
     aspect-ratio: 1/1;
-    border: 1px solid yellow;
-    fill: yellow;
+    border: 1px solid $light;
+    fill: $light;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -28,14 +29,11 @@
   top: 20px;
   left: 30px;
   position: fixed;
-  background-color: rgba($color: #333333, $alpha: 1);
-  color: yellow;
   height: max-content;
   width: max-content;
-}
-a {
-  color: hsl(32, 100%, 50%);
-}
-a:hover {
-  color: hsl(46, 100%, 50%);
+  background-color: transparentize($color: $secondaryB, $amount: 0.15);
+  border-radius: 5px;
+  color: $light;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
 }

@@ -37,7 +37,7 @@ export class GameComponent implements OnInit {
         }
         this.gameService.setToken(token);
 
-        this.gameService.getUpdate().subscribe((newGameObjects) => {});
+        this.gameService.start();
 
         // this.gameService.getUpdate().subscribe((newGameObjects) => {
         //   this.gameObjects = newGameObjects;

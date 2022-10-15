@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { GameObject } from 'src/app/model/game-object';
 import { Update } from 'src/app/model/update';
 import { GameService } from 'src/app/service/game.service';
 import { environment } from '../../../environments/environment';
@@ -27,7 +28,7 @@ export class GameFrameComponent implements OnInit {
   distance = 0;
   lastDistance = 0;
   twoTouch = false;
-  gameObjects: Update[] = [];
+  gameObjects: GameObject[] = [];
   unClick = false;
 
   url = '';
@@ -37,9 +38,8 @@ export class GameFrameComponent implements OnInit {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.gameService.getUpdateSocket().subscribe((newGameObjects) => {
-      this.gameObjects = newGameObjects;
-      this.gameService.updateMenu(newGameObjects);
+    this.gameService.getInfoFast().subscribe((update: Update) => {
+      this.gameObjects = update.gameObjects;
     });
   }
 
@@ -369,7 +369,7 @@ export class GameFrameComponent implements OnInit {
     }
   }
 
-  isSameGameObject(index: number, gameObject: Update) {
+  isSameGameObject(index: number, gameObject: GameObject) {
     return gameObject.name;
   }
 }
