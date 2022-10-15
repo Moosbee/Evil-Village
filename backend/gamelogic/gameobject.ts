@@ -1,5 +1,5 @@
 import { gamelogic } from './gamelogic';
-import { genName, makeRandomInt } from './serverutilities';
+import { genName, makeRandomInt, RGBColor } from './serverutilities';
 
 export class gameobject {
   public name: string = '';
@@ -10,10 +10,12 @@ export class gameobject {
   public strength: number = -1;
   public selected: boolean;
   public size: number = 50;
+  public color: RGBColor;
   constructor(
     x: number,
     y: number,
     owner: string,
+    color: RGBColor,
     name: string,
     strength?: number,
     size?: number
@@ -21,6 +23,7 @@ export class gameobject {
     this.owner = owner;
     this.x = x;
     this.y = y;
+    this.color = color;
     this.selected = false;
 
     if (name == '') {
@@ -32,9 +35,9 @@ export class gameobject {
     min = 10;
     let max = 35;
     if (strength == undefined || strength == -1) {
-      this.setStrength=makeRandomInt(min, max);
+      this.setStrength = makeRandomInt(min, max);
     } else {
-      this.setStrength =strength;
+      this.setStrength = strength;
     }
     if (size != undefined) {
       this.size = size;

@@ -3,6 +3,7 @@ export interface GameObject {
   x: number;
   y: number;
   owner: string;
+  color: RGBColor;
   strength: number;
   size: number;
   typeof: GameObjectArmy | GameObjectSchiff | GameObjectStadt;
@@ -24,5 +25,11 @@ interface GameObjectStadt {
   speed: number;
   population: number;
   makingofarmy: number;
-  production:boolean;
+  production: boolean;
+}
+
+interface RGBColor {
+  red: number;
+  green: number;
+  blue: number;
 }

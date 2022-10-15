@@ -2,7 +2,7 @@ import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
-import { makeRandomInt } from './serverutilities';
+import { makeRandomInt, RGBColor } from './serverutilities';
 
 export class stadt extends gameobject {
   capital: boolean;
@@ -15,6 +15,7 @@ export class stadt extends gameobject {
     x: number,
     y: number,
     owner: string,
+    color: RGBColor,
     strength?: number,
     name: string = '',
     population: number = -1,
@@ -25,7 +26,7 @@ export class stadt extends gameobject {
     production?: boolean
   ) {
     if (strength == undefined) strength = -1;
-    super(x, y, owner, name, strength, size);
+    super(x, y, owner, color, name, strength, size);
 
     let min = 1;
     let max = 1;
@@ -74,8 +75,8 @@ export class stadt extends gameobject {
     // let newArmy: armee = new armee(this.x + 100, this.y + 100, this.owner);
     let newArmy: armee | schiff =
       type == 'army'
-        ? new armee(this.x + x, this.y + y, this.owner)
-        : new schiff(this.x + x, this.y + y, this.owner);
+        ? new armee(this.x + x, this.y + y, this.owner, this.color)
+        : new schiff(this.x + x, this.y + y, this.owner, this.color);
     x = makeRandomInt(min, max);
     y = makeRandomInt(min, max);
     newArmy.arraypos = game.gameObjects.length;
@@ -91,7 +92,12 @@ export class stadt extends gameobject {
       let min = -150;
       let x = makeRandomInt(min, max);
       let y = makeRandomInt(min, max);
-      let newSecondArmy: armee = new armee(this.x + x, this.y + y, this.owner);
+      let newSecondArmy: armee = new armee(
+        this.x + x,
+        this.y + y,
+        this.owner,
+        this.color
+      );
       x = makeRandomInt(min, max);
       y = makeRandomInt(min, max);
       newSecondArmy.arraypos = game.gameObjects.length + 1;
@@ -117,6 +123,7 @@ export class stadt extends gameobject {
             this.x,
             this.y,
             this.owner,
+            this.color,
             Math.floor(this.strength / 2),
             this.name
           )
@@ -124,6 +131,7 @@ export class stadt extends gameobject {
             this.x,
             this.y,
             this.owner,
+            this.color,
             Math.floor(this.strength / 2),
             this.name
           );

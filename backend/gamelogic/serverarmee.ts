@@ -4,7 +4,7 @@ import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
-import { getMapPixel, makeRandomInt } from './serverutilities';
+import { getMapPixel, makeRandomInt, RGBColor } from './serverutilities';
 
 export class armee extends gameobject {
   gotox: number;
@@ -16,6 +16,7 @@ export class armee extends gameobject {
     x: number,
     y: number,
     owner: string,
+    color: RGBColor,
     strength: number = -1,
     name: string = '',
     size = 50,
@@ -25,7 +26,7 @@ export class armee extends gameobject {
     movex = 0,
     movey = 0
   ) {
-    super(x, y, owner, name, strength, size);
+    super(x, y, owner, color, name, strength, size);
     this.arraypos = 0;
     this.owner = owner;
     this.selected = false;
@@ -59,6 +60,7 @@ export class armee extends gameobject {
       this.x,
       this.y,
       this.owner,
+      this.color,
       this.strength,
       this.name,
       population

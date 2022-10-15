@@ -31,6 +31,7 @@ interface saveFile {
   x: number;
   y: number;
   owner: string;
+  color: RGBColor;
   strength: number;
   size: number;
   typeof: saveArmy | saveSchiff | saveStadt;
@@ -128,12 +129,22 @@ function generateName() {
   return name;
 }
 
+function genColor(): RGBColor {
+  return {
+    blue: makeRandomInt(1, 254),
+    green: makeRandomInt(1, 254),
+    red: makeRandomInt(1, 254),
+  };
+}
+
 export {
   setMap,
   getMapPixel,
   makeRandomInt,
   genName,
+  genColor,
   saveFile,
   changes,
   mapMini,
+  RGBColor,
 };

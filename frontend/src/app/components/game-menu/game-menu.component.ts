@@ -44,6 +44,11 @@ export class GameMenuComponent implements OnInit {
     strength: 0,
     x: 0,
     y: 0,
+    color: {
+      blue: 0,
+      green: 0,
+      red: 0,
+    },
     typeof: {
       type: 'saveStadt',
       capital: false,

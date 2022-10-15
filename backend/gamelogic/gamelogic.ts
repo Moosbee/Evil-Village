@@ -6,6 +6,7 @@ import {
   saveFile,
   setMap,
   makeRandomInt,
+  genColor,
 } from './serverutilities';
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
@@ -56,6 +57,7 @@ export class gamelogic {
             element.x,
             element.y,
             element.owner,
+            element.color,
             element.strength,
             element.name,
             element.size,
@@ -68,6 +70,7 @@ export class gamelogic {
             element.x,
             element.y,
             element.owner,
+            element.color,
             element.strength,
             element.name,
             element.size,
@@ -80,6 +83,7 @@ export class gamelogic {
             element.x,
             element.y,
             element.owner,
+            element.color,
             element.strength,
             element.name,
             element.typeof.population,
@@ -123,9 +127,10 @@ export class gamelogic {
   addCapitol(owner: string) {
     if (this.map == undefined) return;
     let capital = new stadt(
-      makeRandomInt(50, this.map.width),
-      makeRandomInt(50, this.map.height),
+      makeRandomInt(50, this.map.width - 50),
+      makeRandomInt(50, this.map.height - 50),
       owner,
+      genColor(),
       undefined,
       'HomeTown' + owner,
       -1,
@@ -154,6 +159,7 @@ export class gamelogic {
           strength: element.strength,
           x: element.x,
           y: element.y,
+          color: element.color,
           typeof: {
             type: 'saveArmy',
             gotox: element.gotox,
@@ -168,6 +174,7 @@ export class gamelogic {
           strength: element.strength,
           x: element.x,
           y: element.y,
+          color: element.color,
           typeof: {
             type: 'saveSchiff',
             gotox: element.gotox,
@@ -182,6 +189,7 @@ export class gamelogic {
           strength: element.strength,
           x: element.x,
           y: element.y,
+          color: element.color,
           typeof: {
             type: 'saveStadt',
             capital: element.capital,
