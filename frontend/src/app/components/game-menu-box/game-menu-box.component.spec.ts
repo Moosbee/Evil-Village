@@ -8,9 +8,8 @@ describe('GameMenuBoxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GameMenuBoxComponent ]
-    })
-    .compileComponents();
+      declarations: [GameMenuBoxComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GameMenuBoxComponent);
     component = fixture.componentInstance;

@@ -21,13 +21,16 @@
     "@types/morgan": "^1.9.3",
     "@types/node": "^18.0.0",
     "@types/socket.io": "^3.0.2",
+    "eslint-config-prettier": "^8.5.0",
     "nodemon": "^2.0.16",
+    "prettier": "2.7.1",
     "ts-node": "^10.8.1",
     "typescript": "^4.8.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.ts",
+    "format": "prettier --write .",
     "build": "tsc"
   },
   "author": "",

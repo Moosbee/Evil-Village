@@ -8,9 +8,8 @@ describe('UnsetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UnsetComponent ]
-    })
-    .compileComponents();
+      declarations: [UnsetComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UnsetComponent);
     component = fixture.componentInstance;

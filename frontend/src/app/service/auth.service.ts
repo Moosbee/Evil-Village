@@ -34,6 +34,6 @@ export class AuthService {
 
     // const options = new HttpParams({ fromString: `token=${token}` });
 
-    return this.http.post<UserRes>(this.url + 'login',{}, options);
+    return this.http.post<UserRes>(this.url + 'login', {}, options);
   }
 }

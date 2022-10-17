@@ -4,8 +4,8 @@ a Project for School
 
 How to Start:
 
-- Run ```npm install```
-- Run ```npm start```
+- Run `npm install`
+- Run `npm start`
 
 Needs 2 or more Players to be good
 
@@ -42,11 +42,11 @@ REST:
   EXPRESSPORT: number;
   FRONTENDURL: string;
   GAME: {
-    RESETONSTART: boolean;
-    MAPFILENAME: string;
-    SAVEFILE: string;
-    RUNSPEED: number;
-    MAXGAMEOBJECTS: number;
+  RESETONSTART: boolean;
+  MAPFILENAME: string;
+  SAVEFILE: string;
+  RUNSPEED: number;
+  MAXGAMEOBJECTS: number;
   };
   }
 
@@ -70,14 +70,14 @@ REST:
   }
 
 - POST /game/updates QUERY ?token= BODY []
-    {  
-    name: string;
-    gotox?: number;
-    gotoy?: number;
-    settle?: boolean;
-    newName?: string;
-    toggleArmy?: boolean;
-    }
+  {  
+   name: string;
+  gotox?: number;
+  gotoy?: number;
+  settle?: boolean;
+  newName?: string;
+  toggleArmy?: boolean;
+  }
   ]
 
 SOCKET.IO:
@@ -91,4 +91,3 @@ SOCKET.IO:
 Terminal-Color:
 
 - game InfoMessages:cyan
-  

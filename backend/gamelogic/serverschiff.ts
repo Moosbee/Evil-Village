@@ -26,7 +26,7 @@ export class schiff extends gameobject {
     movex = 0,
     movey = 0
   ) {
-    super(x, y, owner,color, name, strength, size);
+    super(x, y, owner, color, name, strength, size);
     this.arraypos = 0;
     this.owner = owner;
     this.selected = false;

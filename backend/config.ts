@@ -36,7 +36,9 @@ class config {
   GAME: gameConfig;
   constructor() {
     this.ROOTPATH = path.normalize(path.resolve(this.ROOTPATH) + '/');
-    let configFilePath = path.normalize(this.ROOTPATH+ './json/configFile.json');
+    let configFilePath = path.normalize(
+      this.ROOTPATH + './json/configFile.json'
+    );
     let jsonConfig = JSON.parse(readFileSync(configFilePath, 'utf8'));
 
     if (

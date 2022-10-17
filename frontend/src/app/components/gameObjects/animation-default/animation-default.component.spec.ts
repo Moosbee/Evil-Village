@@ -8,9 +8,8 @@ describe('AnimationDefaultComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AnimationDefaultComponent ]
-    })
-    .compileComponents();
+      declarations: [AnimationDefaultComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AnimationDefaultComponent);
     component = fixture.componentInstance;
