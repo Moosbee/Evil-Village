@@ -26,8 +26,11 @@ export class GameFrameComponent implements OnInit {
   lastPosX = 0;
   lastPosY = 0;
   distance = 0;
+  lastTouchX = 0;
+  lastTouchY = 0;
   lastDistance = 0;
   twoTouch = false;
+  hasMoved = false;
   gameObjects: GameObject[] = [];
   unClick = false;
 
@@ -50,7 +53,7 @@ export class GameFrameComponent implements OnInit {
     this.loaded = true;
   }
   mouseClick(e: MouseEvent, frame: HTMLDivElement, map: HTMLImageElement) {
-    if (e.buttons != 1 && e.buttons != 2) {
+    if (e.button != 0 && e.button != 2) {
       return;
     }
     let mausY = 1;
@@ -86,7 +89,7 @@ export class GameFrameComponent implements OnInit {
   }
 
   mouseUp(e: MouseEvent, zoomFrame: HTMLDivElement, map: HTMLImageElement) {
-    if (e.buttons != 2) {
+    if (e.button != 0 && e.button != 2) {
       return;
     }
 
@@ -110,7 +113,9 @@ export class GameFrameComponent implements OnInit {
     let posOnMapX = this.mapWidth * mausX;
     let posOnMapY = this.mapHeight * mausY;
 
-    this.gameService.goToPos(posOnMapX, posOnMapY);
+    if (!this.hasMoved) {
+      this.gameService.goToPos(posOnMapX, posOnMapY);
+    }
 
     e.preventDefault();
   }
@@ -141,7 +146,9 @@ export class GameFrameComponent implements OnInit {
     let posOnMapY = this.mapHeight * mausY;
     // console.log(`Click at X:${posOnMapX} and Y:${posOnMapY}`);
 
-    this.gameService.goToPos(posOnMapX, posOnMapY);
+    if (!this.hasMoved) {
+      this.gameService.goToPos(posOnMapX, posOnMapY);
+    }
 
     e.preventDefault();
   }
@@ -176,9 +183,11 @@ export class GameFrameComponent implements OnInit {
     let mausX = 1;
     let touch = e.touches;
     let bounding = frame.getBoundingClientRect();
+    this.lastTouchX = touch[0].clientX;
+    this.lastTouchY = touch[0].clientY;
     if (touch.length == 1) {
-      mausY = (touch[0].clientY - bounding.y) / frame.offsetHeight;
-      mausX = (touch[0].clientX - bounding.x) / frame.offsetWidth;
+      mausY = (this.lastTouchY - bounding.y) / frame.offsetHeight;
+      mausX = (this.lastTouchX - bounding.x) / frame.offsetWidth;
     }
     e.preventDefault();
 
@@ -196,6 +205,9 @@ export class GameFrameComponent implements OnInit {
       mausY = touch[0].clientY / frame.offsetHeight;
       mausX = touch[0].clientX / frame.offsetWidth;
 
+      this.lastTouchX = touch[0].clientX;
+      this.lastTouchY = touch[0].clientY;
+
       this.calcPos(mausY, mausX, false, false, frame, map);
     }
     if (touch.length == 2) {
@@ -207,23 +219,30 @@ export class GameFrameComponent implements OnInit {
       mausY = touch[1].clientY / frame.offsetHeight;
       mausX = touch[1].clientX / frame.offsetWidth;
 
-      this.twoTouch = true;
-
       this.lastDistance = this.distance;
       this.distance = Math.sqrt(
         Math.pow(touchX2 - touchX1, 2) + Math.pow(touchY2 - touchY1, 2)
       );
+
+      if (!this.twoTouch) {
+        this.lastDistance = this.distance;
+      }
+
+      this.twoTouch = true;
+
       let diff = this.lastDistance - this.distance;
       // this.zoom = this.zoom - diff;
       if (diff < 0) {
         if (!(map.clientWidth * (this.zoom * 0.75) > this.mapWidth)) {
-          this.zoom = this.zoom + this.zoom / 100;
+          // this.zoom = this.zoom + this.zoom / 100;
+          this.zoom = this.zoom + diff * -1 * this.zoom;
         }
         // this.top = this.top - 5;
         // this.left = this.left- 5;
       }
       if (diff > 0) {
-        this.zoom = this.zoom - this.zoom / 100;
+        // this.zoom = this.zoom - this.zoom / 100;
+        this.zoom = this.zoom + diff * -1 * this.zoom;
         // this.top = this.top + 5;
         // this.left = this.left + 5;
       }
@@ -238,13 +257,12 @@ export class GameFrameComponent implements OnInit {
   touchEnd(e: TouchEvent, zoomFrame: HTMLDivElement, map: HTMLImageElement) {
     let mausY = 1;
     let mausX = 1;
-    let touch = e.touches;
-    if (touch.length == 1) {
-      mausY = touch[0].clientY / zoomFrame.offsetHeight;
-      mausX = touch[0].clientX / zoomFrame.offsetWidth;
-    } else {
-      return;
-    }
+    e.preventDefault();
+    if (this.twoTouch) return;
+
+    let bounding = zoomFrame.getBoundingClientRect();
+    mausY = (this.lastTouchY - bounding.y) / zoomFrame.offsetHeight;
+    mausX = (this.lastTouchX - bounding.x) / zoomFrame.offsetWidth;
 
     if (mausY < 0) {
       mausY = 0;
@@ -261,8 +279,10 @@ export class GameFrameComponent implements OnInit {
     let posOnMapY = this.mapHeight * mausY;
     // console.log(`Click at X:${posOnMapX} and Y:${posOnMapY}`);
 
-    this.gameService.goToPos(posOnMapX, posOnMapY);
-    e.preventDefault();
+    if (!this.hasMoved) {
+      // this.gameService.goToPos(mausX * 1000, mausY * 1000);
+      this.gameService.goToPos(posOnMapX, posOnMapY);
+    }
   }
 
   keyPress(e: KeyboardEvent, frame: HTMLDivElement, map: HTMLImageElement) {
@@ -313,9 +333,14 @@ export class GameFrameComponent implements OnInit {
       if (start) {
         this.lastPosX = this.posX;
         this.lastPosY = this.posY;
+        this.hasMoved = false;
       }
       let diffX = this.lastPosX - this.posX;
       let diffY = this.lastPosY - this.posY;
+
+      if (Math.abs(diffX) + Math.abs(diffY) > 0.3) {
+        this.hasMoved = true;
+      }
 
       // let diffXPX = (diffX / 100) * frame.offsetWidth;
       // let diffYPX = (diffY / 100) * frame.offsetHeight;

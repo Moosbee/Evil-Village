@@ -130,13 +130,18 @@ export class GameService {
 
     for (let i = 0; i < this.Update.menuEntries.length; i++) {
       const entry = this.Update.menuEntries[i];
-      let change: Changes = {
-        name: entry.name,
-        gotox: posOnMapX,
-        gotoy: posOnMapY,
-      };
+      if (
+        entry.typeof.type == 'saveArmy' ||
+        entry.typeof.type == 'saveSchiff'
+      ) {
+        let change: Changes = {
+          name: entry.name,
+          gotox: posOnMapX,
+          gotoy: posOnMapY,
+        };
 
-      this.update(change).subscribe((update) => {});
+        this.update(change).subscribe((update) => {});
+      }
     }
   }
 

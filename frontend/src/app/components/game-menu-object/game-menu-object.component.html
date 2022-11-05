@@ -30,7 +30,8 @@
   <div>Size: {{ menuEntry.size }}</div>
   <div
     *ngIf="
-      menuEntry.typeof.type == 'saveArmy' &&
+      (menuEntry.typeof.type == 'saveArmy' ||
+        menuEntry.typeof.type == 'saveSchiff') &&
       menuEntry.typeof.gotox != menuEntry.x
     "
   >
@@ -38,27 +39,12 @@
   </div>
   <div
     *ngIf="
-      menuEntry.typeof.type == 'saveArmy' &&
+      (menuEntry.typeof.type == 'saveArmy' ||
+        menuEntry.typeof.type == 'saveSchiff') &&
       menuEntry.typeof.gotoy != menuEntry.y
     "
   >
     Target-Y: {{ menuEntry.typeof.gotoy }}
-  </div>
-  <div
-    *ngIf="
-      menuEntry.typeof.type == 'saveSchiff' &&
-      menuEntry.typeof.gotox != menuEntry.x
-    "
-  >
-    Target-X: {{ menuEntry.typeof.gotox }}
-  </div>
-  <div
-    *ngIf="
-      menuEntry.typeof.type == 'saveSchiff' &&
-      menuEntry.typeof.gotoy != menuEntry.y
-    "
-  >
-    Target-Y: {{ menuEntry.typeof.gotox }}
   </div>
   <div *ngIf="menuEntry.typeof.type == 'saveStadt'">
     Speed: {{ menuEntry.typeof.speed }}

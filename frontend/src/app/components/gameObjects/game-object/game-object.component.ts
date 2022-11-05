@@ -46,5 +46,6 @@ export class GameObjectComponent implements OnInit {
     setTimeout(() => {
       this.click = !beforeClick;
     }, 1);
+    e.preventDefault();
   }
 }
