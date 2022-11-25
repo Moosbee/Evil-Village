@@ -1,8 +1,9 @@
 import { gamelogic } from './gamelogic';
 import { gameobject } from './gameobject';
 import { armee } from './serverarmee';
+import { RGBColor } from './serverinterfaces';
 import { schiff } from './serverschiff';
-import { makeRandomInt, RGBColor } from './serverutilities';
+import { makeRandomInt } from './serverutilities';
 
 export class stadt extends gameobject {
   capital: boolean;
@@ -59,7 +60,7 @@ export class stadt extends gameobject {
     this.makingofarmy = this.makingofarmy - 1;
     if (this.makingofarmy < 0) {
       if (this.production) {
-        this.createArmy(game, 'schiff');
+        this.createArmy(game, 'schiffe');
         this.makingofarmy = makeRandomInt(100, 1000) + this.strength / 2;
       } else {
         this.makingofarmy = 0;
@@ -67,7 +68,7 @@ export class stadt extends gameobject {
     }
   }
 
-  createArmy(game: gamelogic, type: 'army' | 'schiff') {
+  createArmy(game: gamelogic, type: 'army' | 'schiffe') {
     let max = 150;
     let min = -150;
     let x = makeRandomInt(min, max);
@@ -114,7 +115,7 @@ export class stadt extends gameobject {
     this.mobilize(game, 'army');
   }
 
-  mobilize(game: gamelogic, type: 'army' | 'schiff') {
+  mobilize(game: gamelogic, type: 'army' | 'schiffe') {
     if (this.capital) return;
     // let newArmy: armee = new armee(this.x + 100, this.y + 100, this.owner);
     let newArmy: armee | schiff =

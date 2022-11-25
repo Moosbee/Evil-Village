@@ -1,6 +1,18 @@
 {
   "cSpell.words": [
-    "maus"
+    "maus",
+    "ROOTPATH",
+    "MAXPLAYERS",
+    "PLAYERFILE",
+    "PLAINTEXTPASSWORD",
+    "EXPRESSPORT",
+    "FRONTENDURL",
+    "FRONTENDPATH",
+    "RESETONSTART",
+    "MAPFILENAME",
+    "SAVEFILE",
+    "RUNSPEED",
+    "MAXGAMEOBJECTS"
   ],
   "cSpell.language": "en,de-DE"
 }

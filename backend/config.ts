@@ -73,7 +73,7 @@ class config {
     };
   }
 
-  setAllUnk(newConfig: any): boolean {
+  async setAllUnk(newConfig: any): Promise<boolean> {
     if (typeof newConfig != 'object') return false;
 
     if (
@@ -106,10 +106,11 @@ class config {
       RUNSPEED: newConfig.GAME.RUNSPEED,
       SAVEFILE: path.normalize(newConfig.GAME.SAVEFILE),
     };
-    return true;
+    let worked = await this.saveToFile();
+    return worked;
   }
 
-  setAll(newConfig: interfaceConfig) {
+  async setAll(newConfig: interfaceConfig) {
     this.MAXPLAYERS = newConfig.MAXPLAYERS;
     this.PLAYERFILE = newConfig.PLAYERFILE;
     this.PLAINTEXTPASSWORD = newConfig.PLAINTEXTPASSWORD;
@@ -123,6 +124,8 @@ class config {
     this.GAME.RESETONSTART = newConfig.GAME.RESETONSTART;
     this.GAME.RUNSPEED = newConfig.GAME.RUNSPEED;
     this.GAME.SAVEFILE = newConfig.GAME.SAVEFILE;
+    let worked = await this.saveToFile();
+    return worked;
   }
 
   async saveToFile() {
@@ -144,10 +147,10 @@ class config {
           MAXGAMEOBJECTS: this.GAME.MAXGAMEOBJECTS,
         },
       };
-      await writeFile(
-        path.resolve(this.ROOTPATH, './configFile.json'),
-        JSON.stringify(toSave)
+      let configFilePath = path.normalize(
+        this.ROOTPATH + './json/configFile.json'
       );
+      await writeFile(configFilePath, JSON.stringify(toSave, null, 2));
       return true;
     } catch {
       return false;

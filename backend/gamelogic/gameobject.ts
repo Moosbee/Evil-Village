@@ -1,5 +1,6 @@
 import { gamelogic } from './gamelogic';
-import { genName, makeRandomInt, RGBColor } from './serverutilities';
+import { RGBColor } from './serverinterfaces';
+import { genName, makeRandomInt } from './serverutilities';
 
 export class gameobject {
   public name: string = '';

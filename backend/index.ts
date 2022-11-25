@@ -9,11 +9,11 @@ import {
   verifyToken,
 } from './gamelogic/serverauth';
 import { gamelogic } from './gamelogic/gamelogic';
-import { changes } from './gamelogic/serverutilities';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { normalize, resolve } from 'path';
 import chalk from 'chalk';
+import { changes } from './gamelogic/serverinterfaces';
 
 // import  cors from "cors";
 const cors = require('cors');
@@ -163,12 +163,27 @@ app.post('/makeuser', async (req, res) => {
   }
 });
 
-app.get('/config', (req, res) => {
+app.get('/config', async (req, res) => {
+  if (typeof req.query.token != 'string') {
+    res.json(config.getAll());
+    return;
+  }
+
+  let Token = req.query.token;
+  let erg = await verifyToken(Token);
+  if (erg == 'failed' || erg.adminLevel < 3) {
+    res.json(config.getAll());
+    return;
+  }
   res.json(config.getAll());
 });
-app.post('/config', (req, res) => {
+app.post('/config', async (req, res) => {
   let resiveddata = req.body;
-  config.setAllUnk(resiveddata);
+  if (await config.setAllUnk(resiveddata)) {
+    res.status(200).json(config.getAll());
+  } else {
+    res.status(400).json(config.getAll());
+  }
 });
 
 app.post('/config/single', async (req, res) => {
@@ -190,9 +205,13 @@ app.post('/config/single', async (req, res) => {
 });
 
 app.get('/game/map', (req, res) => {
-  let mapDir = config.ROOTPATH + './maps/';
-  mapDir = mapDir + config.GAME.MAPFILENAME;
-  res.sendFile(normalize(mapDir));
+  const mapDir = config.ROOTPATH + './maps/';
+  if (localGame.map == undefined) {
+    res.status(500).send('');
+    return;
+  }
+  const mapSrc = normalize(mapDir + localGame.map.mapSRC);
+  res.sendFile(mapSrc);
 });
 
 app.post('/game/main', async (req, res) => {

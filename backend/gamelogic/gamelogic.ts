@@ -1,17 +1,12 @@
 import { readFile, writeFile } from 'fs/promises';
 import config from '../config';
-import {
-  changes,
-  mapMini,
-  saveFile,
-  setMap,
-  makeRandomInt,
-  genColor,
-} from './serverutilities';
+import { makeRandomInt, genColor } from './serverutilities';
 import { armee } from './serverarmee';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
 import chalk from 'chalk';
+import { changes, mapMini, saveFile } from './serverinterfaces';
+import { setMap } from './gamemap';
 
 export class gamelogic {
   gameObjects: (armee | stadt | schiff)[];
@@ -21,8 +16,8 @@ export class gamelogic {
     this.gameObjects = [];
 
     this.importGameObjects().then(() => {
-      setMap().then((mapi) => {
-        this.map = mapi;
+      setMap().then((map) => {
+        this.map = map;
         setInterval(this.gameloop, 100, this);
         setInterval(this.save, 5000, this);
         // setTimeout(this.gameloop, 1000,this);

@@ -1,10 +1,12 @@
 import chalk from 'chalk';
 import config from '../config';
 import { gamelogic } from './gamelogic';
+import { getPixelMovementMultiplier } from './gamemap';
 import { gameobject } from './gameobject';
+import { RGBColor } from './serverinterfaces';
 import { schiff } from './serverschiff';
 import { stadt } from './serverstadt';
-import { getMapPixel, makeRandomInt, RGBColor } from './serverutilities';
+import { makeRandomInt } from './serverutilities';
 
 export class armee extends gameobject {
   gotox: number;
@@ -153,23 +155,16 @@ export class armee extends gameobject {
       this.x = this.x + b;
       this.y = this.y - a;
     } else {
-      let rgb = getMapPixel(this.x, this.y, game.map);
-      let movmentMultiplierer: number;
-      if (rgb.red == 0 && rgb.green == 0 && rgb.blue == 255) {
-        movmentMultiplierer = 0.5;
-      } else if (rgb.red == 125 && rgb.green == 255 && rgb.blue == 125) {
-        movmentMultiplierer = 0.75;
-      } else if (rgb.red == 188 && rgb.green == 255 && rgb.blue == 188) {
-        movmentMultiplierer = 0.5;
-      } else if (rgb.red == 220 && rgb.green == 255 && rgb.blue == 220) {
-        movmentMultiplierer = 0.25;
-      } else {
-        movmentMultiplierer = 1;
-      }
-      this.x = this.x + this.movex * movmentMultiplierer;
-      this.y = this.y - this.movey * movmentMultiplierer;
-      // this.x = this.x + this.movex * (movmentMultiplierer / this.strength + 1);
-      // this.y = this.y - this.movey * (movmentMultiplierer / this.strength + 1);
+      let movementMultiplier = getPixelMovementMultiplier(
+        this.x,
+        this.y,
+        'schiffe',
+        game.map
+      );
+      this.x = this.x + this.movex * movementMultiplier;
+      this.y = this.y - this.movey * movementMultiplier;
+      // this.x = this.x + this.movex * (movementMultiplier / this.strength + 1);
+      // this.y = this.y - this.movey * (movementMultiplier / this.strength + 1);
     }
   }
 

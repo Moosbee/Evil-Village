@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { Update } from '../model/update';
 import { nameSpaces, Stats } from '../model/stats';
+import { Config } from '../model/config';
 
 @Injectable({
   providedIn: 'root',
@@ -85,6 +86,18 @@ export class GameService {
 
   getInfoFast() {
     return this.getInfo;
+  }
+
+  // ============================================================================================== //
+  // =========================================== Config =========================================== //
+  // ============================================================================================== //
+
+  getConfig(): Observable<Config> {
+    return this.http.get<Config>(this.url + 'config');
+  }
+  setConfig(newConfig: Config): Observable<Config> {
+    let params = new HttpParams().set('token', this.token);
+    return this.http.post<Config>(this.url + 'config', newConfig);
   }
 
   // ============================================================================================== //

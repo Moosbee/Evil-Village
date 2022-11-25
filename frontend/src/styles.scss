@@ -22,8 +22,8 @@
 .btn {
   cursor: pointer;
   display: inline-block;
-  background-color: lighten($color: $secondaryB, $amount: 60);
-  color: $secondaryB;
+  background-color: $primary;
+  color: $secondaryA;
   padding: 0.25rem;
   font-family: inherit;
   font-size: 1rem;
@@ -34,8 +34,8 @@
 
 .btn:hover {
   outline: 0;
-  background-color: lighten($color: $secondaryB, $amount: 40);
-  color: $secondaryB;
+  background-color: darken($color: $primary, $amount: 10);
+  color: $secondaryA;
 }
 
 .btn:active {

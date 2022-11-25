@@ -1,0 +1,16 @@
+{
+  "mapSRC": "./Aihoia.png",
+  "description": "Two big Islands one of them with an Mountain and some small Islands.",
+  "defaultMovementMultiplier": 1,
+  "colors": [
+    {
+      "color": {
+        "red": 255,
+        "green": 255,
+        "blue": 255
+      },
+      "isWater": true,
+      "movementMultiplier": 1
+    }
+  ]
+}

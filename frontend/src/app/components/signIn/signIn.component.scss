@@ -1,10 +1,10 @@
 @import '../../vars';
 
 .container {
-  background-color: transparentize($color: $secondaryB, $amount: 0.15);
+  background-color: transparentize($color: $secondaryA, $amount: 0.1);
   padding: 20px 40px;
   border-radius: 5px;
-  color: $light;
+  color: $primary;
   font-family: Arial, Helvetica, sans-serif;
   transition: opacity 500ms cubic-bezier(0.16, 0.57, 1, 0.5);
 }
@@ -17,11 +17,11 @@ h1 {
 a {
   text-decoration: none;
   // color: $light;
-  color: lighten($color: $secondaryB, $amount: 60);
+  color: darken($color: $primary, $amount: 20);
 }
 
 a:hover {
-  color: lighten($color: $secondaryB, $amount: 50);
+  color: darken($color: $primary, $amount: 10);
 }
 
 .btn {
@@ -35,7 +35,7 @@ a:hover {
 //   display: inline-block;
 //   width: 100%;
 //   // background-color: $light;
-//   background-color: lighten($color: $secondaryB, $amount: 60);
+//   background-color: darken($color: $secondaryA, $amount: 20);
 //   padding: 1rem;
 //   font-family: inherit;
 //   font-size: 1rem;
@@ -47,7 +47,7 @@ a:hover {
 // .btn:hover {
 //   outline: 0;
 //   // background-color: $light;
-//   background-color: lighten($color: $secondaryB, $amount: 40);
+//   background-color: darken($color: $secondaryA, $amount: 5);
 // }
 
 // .btn:active {
@@ -80,14 +80,14 @@ a:hover {
     width: 100%;
     padding: 15px 0;
     font-size: 1.125rem;
-    color: $light;
+    color: $primary;
   }
 
   input:focus,
   input:valid {
     outline: 0;
     // border-bottom-color: $light;
-    border-bottom-color: lighten($color: $secondaryB, $amount: 60);
+    border-bottom-color: darken($color: $primary, $amount: 20);
   }
 
   label {
@@ -107,14 +107,14 @@ a:hover {
   input:focus + label span,
   input:valid + label span {
     // color: $light;
-    color: lighten($color: $secondaryB, $amount: 60);
+    color: darken($color: $primary, $amount: 20);
     transform: translateY(-1.875rem);
   }
 
   input:focus + label + .showPass,
   input:valid + label + .showPass {
     // color: $light;
-    color: lighten($color: $secondaryB, $amount: 60);
+    color: darken($color: $primary, $amount: 20);
     display: inline-block;
   }
 
@@ -140,9 +140,9 @@ a:hover {
 }
 .failed {
   // color: $light;
-  color: lighten($color: $secondaryB, $amount: 60);
+  color: darken($color: $primary, $amount: 20);
 }
 .error {
   // color: $light;
-  color: lighten($color: $secondaryB, $amount: 60);
+  color: darken($color: $primary, $amount: 20);
 }

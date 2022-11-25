@@ -1,46 +1,131 @@
-<form action="">
-  <div class="info">
-    <label for="MAXPLAYERS">MAXPLAYERS</label
-    ><input type="text" name="MAXPLAYERS" id="MAXPLAYERS" />
-  </div>
-  <div class="info">
-    <label for="PLAYERFILE">PLAYERFILE</label
-    ><input type="text" name="PLAYERFILE" id="PLAYERFILE" />
-  </div>
-  <div class="info">
-    <label for="PLAINTEXTPASSWORD">PLAINTEXTPASSWORD</label
-    ><input type="text" name="PLAINTEXTPASSWORD" id="PLAINTEXTPASSWORD" />
-  </div>
-  <div class="info">
-    <label for="FAVICON">FAVICON</label
-    ><input type="text" name="FAVICON" id="FAVICON" />
-  </div>
-  <div class="info">
-    <label for="EXPRESSPORT">EXPRESSPORT</label
-    ><input type="text" name="EXPRESSPORT" id="EXPRESSPORT" />
-  </div>
-  <div class="info">
-    <label for="FRONTENDURL">FRONTENDURL</label
-    ><input type="text" name="FRONTENDURL" id="FRONTENDURL" />
-  </div>
-  <div class="info">
-    <label for="GAME-RESETONSTART">GAME-RESETONSTART</label
-    ><input type="text" name="GAME-RESETONSTART" id="GAME-RESETONSTART" />
-  </div>
-  <div class="info">
-    <label for="GAME-MAPFILENAME">GAME-MAPFILENAME</label
-    ><input type="text" name="GAME-MAPFILENAME" id="GAME-MAPFILENAME" />
-  </div>
-  <div class="info">
-    <label for="GAME-SAVEFILE">GAME-SAVEFILE</label
-    ><input type="text" name="GAME-SAVEFILE" id="GAME-SAVEFILE" />
-  </div>
-  <div class="info">
-    <label for="GAME-RUNSPEED">GAME-RUNSPEED</label
-    ><input type="text" name="GAME-RUNSPEED" id="GAME-RUNSPEED" />
-  </div>
-  <div class="info">
-    <label for="GAME-MAXGAMEOBJECTS">GAME-MAXGAMEOBJECTS</label
-    ><input type="text" name="GAME-MAXGAMEOBJECTS" id="GAME-MAXGAMEOBJECTS" />
-  </div>
-</form>
+<div class="container">
+  <h1>Settings</h1>
+  <form action="">
+    <div class="info">
+      <label for="GAME-MAPFILENAME">The games Map: </label
+      ><input
+        [(ngModel)]="config.GAME.MAPFILENAME"
+        type="text"
+        name="GAME-MAPFILENAME"
+        id="GAME-MAPFILENAME"
+      />
+    </div>
+    <div class="info">
+      <label for="FAVICON">Which Favicon to use: </label
+      ><input
+        [(ngModel)]="config.FAVICON"
+        type="number"
+        name="FAVICON"
+        id="FAVICON"
+      />
+    </div>
+    <div class="info">
+      <label for="GAME-RUNSPEED">Sets the speed of the game: </label>
+      <div>
+        <button
+          class="btn btnLeft"
+          (click)="config.GAME.RUNSPEED = config.GAME.RUNSPEED - 1"
+        >
+          -1</button
+        ><input
+          [(ngModel)]="config.GAME.RUNSPEED"
+          type="number"
+          name="GAME-RUNSPEED"
+          id="GAME-RUNSPEED"
+        /><button
+          class="btn btnRight"
+          (click)="config.GAME.RUNSPEED = config.GAME.RUNSPEED + 1"
+        >
+          +1
+        </button>
+      </div>
+    </div>
+    <div class="info">
+      <label for="EXPRESSPORT">Sets the Port of the Application: </label
+      ><input
+        [(ngModel)]="config.EXPRESSPORT"
+        type="number"
+        name="EXPRESSPORT"
+        id="EXPRESSPORT"
+      />
+    </div>
+    <div class="info">
+      <label for="MAXPLAYERS">The maximum amount of Players: </label>
+      <div>
+        <button
+          class="btn btnLeft"
+          (click)="config.MAXPLAYERS = config.MAXPLAYERS - 10"
+        >
+          -10</button
+        ><input
+          [(ngModel)]="config.MAXPLAYERS"
+          type="number"
+          name="MAXPLAYERS"
+          id="MAXPLAYERS"
+        />
+        <button
+          class="btn btnRight"
+          (click)="config.MAXPLAYERS = config.MAXPLAYERS + 10"
+        >
+          +10
+        </button>
+      </div>
+    </div>
+    <div class="info">
+      <label for="GAME-MAXGAMEOBJECTS"
+        >Sets the maximum amount of Game Objects:
+      </label>
+      <div>
+        <button
+          class="btn btnLeft"
+          (click)="config.GAME.MAXGAMEOBJECTS = config.GAME.MAXGAMEOBJECTS - 50"
+        >
+          -50</button
+        ><input
+          [(ngModel)]="config.GAME.MAXGAMEOBJECTS"
+          type="number"
+          name="GAME-MAXGAMEOBJECTS"
+          id="GAME-MAXGAMEOBJECTS"
+        /><button
+          class="btn btnRight"
+          (click)="config.GAME.MAXGAMEOBJECTS = config.GAME.MAXGAMEOBJECTS + 50"
+        >
+          +50
+        </button>
+      </div>
+    </div>
+    <div class="info">
+      <label for="PLAINTEXTPASSWORD">Save passwords in plaintext: </label>
+      <label class="toggler-wrapper style-12">
+        <input
+          [(ngModel)]="config.PLAINTEXTPASSWORD"
+          type="checkbox"
+          name="PLAINTEXTPASSWORD"
+          id="PLAINTEXTPASSWORD"
+        />
+        <div class="toggler-slider">
+          <div class="toggler-knob"></div>
+        </div>
+      </label>
+    </div>
+    <div class="info">
+      <label for="GAME-RESETONSTART">Reset the game on start: </label>
+      <label class="toggler-wrapper style-12">
+        <input
+          [(ngModel)]="config.GAME.RESETONSTART"
+          type="checkbox"
+          name="GAME-RESETONSTART"
+          id="GAME-RESETONSTART"
+        />
+        <div class="toggler-slider">
+          <div class="toggler-knob"></div>
+        </div>
+      </label>
+    </div>
+    <div class="buttonlist">
+      <button class="btn" (click)="apply()">
+        {{ status ? 'Applied' : 'Apply' }}</button
+      ><a routerLink="/game" class="btn">Back</a>
+    </div>
+  </form>
+</div>
