@@ -165,7 +165,7 @@ app.post('/makeuser', async (req, res) => {
 
 app.get('/config', async (req, res) => {
   if (typeof req.query.token != 'string') {
-    res.json(config.getAll());
+    res.status(400).json(config.getAll());
     return;
   }
 
@@ -175,7 +175,7 @@ app.get('/config', async (req, res) => {
     res.json(config.getAll());
     return;
   }
-  res.json(config.getAll());
+  res.status(403).json(config.getAll());
 });
 app.post('/config', async (req, res) => {
   let resiveddata = req.body;

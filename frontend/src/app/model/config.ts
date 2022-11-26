@@ -10,7 +10,6 @@ export interface Config {
   MAXPLAYERS: number;
   PLAYERFILE: string;
   PLAINTEXTPASSWORD: boolean;
-  FAVICON: number;
   EXPRESSPORT: number;
   FRONTENDURL: string;
   FRONTENDPATH: string;

@@ -7,6 +7,7 @@ import { stadt } from './serverstadt';
 import chalk from 'chalk';
 import { changes, mapMini, saveFile } from './serverinterfaces';
 import { setMap } from './gamemap';
+import { normalize, resolve } from 'path';
 
 export class gamelogic {
   gameObjects: (armee | stadt | schiff)[];
@@ -29,9 +30,12 @@ export class gamelogic {
   async importGameObjects() {
     let savedGameFile: string;
     try {
-      savedGameFile = await readFile(config.ROOTPATH + config.GAME.SAVEFILE, {
-        encoding: 'utf8',
-      });
+      savedGameFile = await readFile(
+        normalize(config.ROOTPATH + config.GAME.SAVEFILE),
+        {
+          encoding: 'utf8',
+        }
+      );
     } catch (e) {
       savedGameFile = '[]';
       // throw e;
@@ -239,8 +243,8 @@ export class gamelogic {
   }
 
   async save(game: gamelogic) {
-    let data = game.getUpdate();
-    await writeFile(config.ROOTPATH + config.GAME.SAVEFILE, data);
+    const data = game.getUpdate();
+    await writeFile(normalize(config.ROOTPATH + config.GAME.SAVEFILE), data);
     // console.log('Autosave!');
   }
 

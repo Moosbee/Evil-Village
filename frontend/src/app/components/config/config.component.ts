@@ -19,7 +19,6 @@ export class ConfigComponent implements OnInit {
     MAXPLAYERS: 1000,
     PLAYERFILE: './json/players.json',
     PLAINTEXTPASSWORD: true,
-    FAVICON: 4,
     EXPRESSPORT: 3000,
     FRONTENDURL: 'http://localhost:4200',
     FRONTENDPATH: './angularBuild/',
