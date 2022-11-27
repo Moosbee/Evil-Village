@@ -29,7 +29,7 @@ export class GameComponent implements OnInit {
         } else {
           this.loggedIn = false;
         }
-        if (this.url != '/game') return;
+        if (this.url != '/game' && this.url != '/config') return;
         let token = localStorage.getItem('token');
         if (token == null) {
           // this.router.navigate(['/signIn']);

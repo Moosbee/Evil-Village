@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { Update } from '../model/update';
 import { nameSpaces, Stats } from '../model/stats';
 import { Config } from '../model/config';
+import { MapFile } from '../model/map-file';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,10 @@ export class GameService {
   ) {
     this.socket.fromEvent<string>('update').subscribe((erg) => {
       this.setGameObjects(this.toGameObjects(erg));
+    });
+
+    this.socket.fromEvent<string>('restart').subscribe(() => {
+      window.location.reload();
     });
   }
 
@@ -97,7 +102,31 @@ export class GameService {
   }
   setConfig(newConfig: Config): Observable<Config> {
     let params = new HttpParams().set('token', this.token);
-    return this.http.post<Config>(this.url + 'config', newConfig);
+    return this.http.post<Config>(this.url + 'config', newConfig, {
+      params: params,
+    });
+  }
+
+  setMap(
+    name: string,
+    option: 'none' | 'reboot' | 'reset'
+  ): Observable<Config> {
+    let params = new HttpParams().set('token', this.token);
+    return this.http.post<Config>(
+      this.url + 'config/single',
+      {
+        type: 'GAME-MAPFILENAME',
+        value: name,
+        info: option,
+      },
+      {
+        params: params,
+      }
+    );
+  }
+
+  getMaps() {
+    return this.http.get<MapFile[]>(this.url + 'game/maps');
   }
 
   // ============================================================================================== //

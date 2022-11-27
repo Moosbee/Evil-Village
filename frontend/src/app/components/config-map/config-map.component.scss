@@ -1,0 +1,42 @@
+@import '../../vars';
+
+.boxes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 85vw;
+  max-height: calc(85vh - 38px - 20px - 24px - 28px);
+  overflow-y: scroll;
+}
+
+.infobox {
+  border: 1px solid $primary;
+  border-radius: 5px;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min-content;
+  text-align: center;
+  color: darken($color: $primary, $amount: 20);
+
+  img {
+    width: 18rem;
+  }
+}
+
+input[type='radio']:checked + .infobox {
+  border: 3.5px solid $primary;
+  color: $primary;
+}
+
+.infobox:hover {
+  color: $primary;
+}
+
+input[type='radio'] {
+  display: none;
+}

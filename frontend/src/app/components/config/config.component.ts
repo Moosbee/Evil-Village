@@ -16,22 +16,24 @@ export class ConfigComponent implements OnInit {
   }
 
   config: Config = {
-    MAXPLAYERS: 1000,
-    PLAYERFILE: './json/players.json',
-    PLAINTEXTPASSWORD: true,
-    EXPRESSPORT: 3000,
-    FRONTENDURL: 'http://localhost:4200',
-    FRONTENDPATH: './angularBuild/',
+    MAXPLAYERS: 0,
+    PLAYERFILE: '',
+    PLAINTEXTPASSWORD: false,
+    EXPRESSPORT: 0,
+    FRONTENDURL: '',
+    FRONTENDPATH: '',
     GAME: {
-      RESETONSTART: true,
-      MAPFILENAME: 'Aihoia.png',
-      SAVEFILE: './json/save.json',
-      RUNSPEED: 4,
-      MAXGAMEOBJECTS: 25000,
+      RESETONSTART: false,
+      MAPFILENAME: '',
+      SAVEFILE: '',
+      RUNSPEED: 0,
+      MAXGAMEOBJECTS: 0,
     },
   };
 
-  status = false;
+  status = 0;
+
+  changeMap = false;
 
   ngOnInit(): void {
     this.gameService.getConfig().subscribe((config) => {
@@ -40,13 +42,31 @@ export class ConfigComponent implements OnInit {
   }
 
   apply() {
+    this.status = 1;
     this.gameService.setConfig(this.config).subscribe((config) => {
       this.config = config;
-      this.status = true;
+      this.status = 2;
 
       setTimeout(() => {
-        this.status = false;
+        this.status = 0;
       }, 6000);
     });
+  }
+
+  selectMap() {
+    this.changeMap = !this.changeMap;
+  }
+
+  setMap(e: MouseEvent, option: 'none' | 'reboot' | 'reset') {
+    this.gameService
+      .setMap(this.config.GAME.MAPFILENAME, option)
+      .subscribe((config) => {
+        this.config = config;
+        this.status = 2;
+
+        setTimeout(() => {
+          this.status = 0;
+        }, 6000);
+      });
   }
 }

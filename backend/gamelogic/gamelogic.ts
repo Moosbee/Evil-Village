@@ -7,7 +7,8 @@ import { stadt } from './serverstadt';
 import chalk from 'chalk';
 import { changes, mapMini, saveFile } from './serverinterfaces';
 import { setMap } from './gamemap';
-import { normalize, resolve } from 'path';
+import { normalize } from 'path';
+import { socketServer } from '..';
 
 export class gamelogic {
   gameObjects: (armee | stadt | schiff)[];
@@ -212,6 +213,8 @@ export class gamelogic {
   }
 
   update(change: changes, username?: string) {
+    console.log(this.map);
+
     let gameObject = this.gameObjects.filter((arm) => arm.name == change.name);
     if (gameObject.length != 1) return;
     if (gameObject[0].owner != username) return;
@@ -252,6 +255,19 @@ export class gamelogic {
     // console.log("Looped");
 
     // console.log(game);
+
+    if (config.resetGame == 1) {
+      console.log(chalk.dim.red('reloading map'));
+      game.map = await setMap();
+      socketServer.emit('restart');
+    }
+    if (config.resetGame == 2) {
+      console.log(chalk.red('resetting map'));
+      game.map = await setMap();
+      game.gameObjects = [];
+      socketServer.emit('restart');
+    }
+    config.resetGame = 0;
 
     for (let i = 0; i < game.gameObjects.length; i++) {
       let Object = game.gameObjects[i];

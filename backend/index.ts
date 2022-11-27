@@ -11,9 +11,10 @@ import {
 import { gamelogic } from './gamelogic/gamelogic';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { normalize, resolve } from 'path';
+import { extname, normalize, parse } from 'path';
 import chalk from 'chalk';
-import { changes } from './gamelogic/serverinterfaces';
+import { changes, mapFile, mapMini } from './gamelogic/serverinterfaces';
+import { readdir, readFile } from 'fs/promises';
 
 // import  cors from "cors";
 const cors = require('cors');
@@ -164,6 +165,9 @@ app.post('/makeuser', async (req, res) => {
 });
 
 app.get('/config', async (req, res) => {
+  res.json(config.getAll());
+});
+app.post('/config', async (req, res) => {
   if (typeof req.query.token != 'string') {
     res.status(400).json(config.getAll());
     return;
@@ -172,36 +176,27 @@ app.get('/config', async (req, res) => {
   let Token = req.query.token;
   let erg = await verifyToken(Token);
   if (erg == 'failed' || erg.adminLevel < 3) {
-    res.json(config.getAll());
+    res.status(403).json(config.getAll());
     return;
   }
-  res.status(403).json(config.getAll());
-});
-app.post('/config', async (req, res) => {
+
   let resiveddata = req.body;
   if (await config.setAllUnk(resiveddata)) {
     res.status(200).json(config.getAll());
   } else {
-    res.status(400).json(config.getAll());
+    res.status(500).json(config.getAll());
   }
 });
 
 app.post('/config/single', async (req, res) => {
   let resiveddata = req.body;
-  if (
-    (typeof resiveddata['type'] != 'string' && resiveddata['value'] == null) ||
-    resiveddata['value'] == undefined
-  ) {
-    res.status(400);
+
+  let info = await config.setUnknownConfig(resiveddata);
+  if (info) {
+    res.status(200).json(config.getAll());
   } else {
-    let info = await config.setConfig(resiveddata);
-    if (info) {
-      res.status(200);
-    } else {
-      res.status(400);
-    }
+    res.status(400).json(config.getAll());
   }
-  res.send();
 });
 
 app.get('/game/map', (req, res) => {
@@ -212,6 +207,45 @@ app.get('/game/map', (req, res) => {
   }
   const mapSrc = normalize(mapDir + localGame.map.mapSRC);
   res.sendFile(mapSrc);
+});
+
+app.get('/game/map/:id', async (req, res) => {
+  const id = req.params.id;
+  const mapDir = config.ROOTPATH + './maps/';
+  const mapConfFile = mapDir + id + '.json';
+
+  const mapConf: mapFile = JSON.parse(
+    await readFile(normalize(mapConfFile), { encoding: 'utf-8' })
+  );
+
+  const mapPath =
+    mapConf.smallMapSRC == undefined ? mapConf.mapSRC : mapConf.smallMapSRC;
+
+  const mapSrc = normalize(mapDir + mapPath);
+  res.sendFile(mapSrc);
+});
+
+app.get('/game/maps', async (req, res) => {
+  const mapDir = config.ROOTPATH + './maps/';
+  const dir = await readdir(mapDir);
+  const files = dir.filter((value) => {
+    return extname(value) == '.json';
+  });
+  let maps: {
+    name: string;
+    description: string;
+  }[] = [];
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const map: mapFile = JSON.parse(
+      await readFile(normalize(mapDir + file), { encoding: 'utf-8' })
+    );
+    maps.push({
+      name: parse(file).name,
+      description: map.description,
+    });
+  }
+  res.send(maps);
 });
 
 app.post('/game/main', async (req, res) => {
@@ -327,3 +361,5 @@ httpServer.listen(config.EXPRESSPORT, () => {
     chalk.yellow.bold(`Schulprojekt listening on port ${config.EXPRESSPORT}!`)
   );
 });
+
+export { socketServer };

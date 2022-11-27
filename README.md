@@ -4,8 +4,24 @@ a Project for School
 
 How to Start:
 
-- Run `npm install`
-- Run `npm start`
+1. Use docker `docker compose up`
+
+2. semi build
+   1. `cd frontend`
+   2. `npm i`
+   3. `npm run buildToBackend`
+   4. `cd ../backend`
+   5. `npm start`
+
+3. Dev(2 command lines)
+   1. Start terminal 1
+   2. `cd backend`
+   3. `npm i`
+   4. `npm start`
+   5. Start terminal 2
+   6. `cd frontend`
+   7. `npm i`
+   8. `npm start`
 
 Needs 2 or more Players to be good
 
@@ -50,11 +66,14 @@ REST:
   };
   }
 
-- POST /config/$config$ ?token= BODY {
-  newValue: number|string|boolean
-  }
-
 - GET /game/map
+
+- GET /game/map/$id$
+
+- GET /game/maps BODY {
+    name: string;
+    description: string;
+  }[]
 
 - POST /game/main QUERY ?token=
 

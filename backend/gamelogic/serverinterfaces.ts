@@ -7,6 +7,7 @@ interface RGBColor {
 interface mapMini {
   set?: boolean;
   mapSRC: string;
+  smallMapSRC?: string;
   pixels: Buffer;
   width: number;
   height: number;
@@ -59,6 +60,7 @@ interface saveStadt {
 }
 
 interface mapFile {
+  smallMapSRC?: string;
   mapSRC: string;
   description: string;
   defaultMovementMultiplier: number;

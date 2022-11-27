@@ -32,6 +32,8 @@ class config {
   FRONTENDURL: string;
   FRONTENDPATH: string;
 
+  resetGame = 0;
+
   GAME: gameConfig;
   constructor() {
     this.ROOTPATH = path.normalize(path.resolve(this.ROOTPATH) + '/');
@@ -62,7 +64,7 @@ class config {
     this.FRONTENDURL = jsonConfig.FRONTENDURL;
     this.FRONTENDPATH = path.normalize(jsonConfig.FRONTENDPATH);
     this.GAME = {
-      MAPFILENAME: path.normalize(jsonConfig.GAME.MAPFILENAME),
+      MAPFILENAME: jsonConfig.GAME.MAPFILENAME,
       MAXGAMEOBJECTS: jsonConfig.GAME.MAXGAMEOBJECTS,
       RESETONSTART: jsonConfig.GAME.RESETONSTART,
       RUNSPEED: jsonConfig.GAME.RUNSPEED,
@@ -144,7 +146,7 @@ class config {
         this.ROOTPATH + './json/configFile.json'
       );
       await writeFile(configFilePath, JSON.stringify(toSave, null, 2));
-      console.log(chalk.dim.greenBright("Saving Config"))
+      console.log(chalk.dim.greenBright('Saving Config'));
       return true;
     } catch {
       return false;
@@ -171,6 +173,36 @@ class config {
     return toSave;
   }
 
+  async setUnknownConfig(unknown: any) {
+    if (
+      typeof unknown == 'object' &&
+      typeof unknown.type == 'string' &&
+      ((unknown.type == 'MAXPLAYERS' && typeof unknown.value == 'number') ||
+        (unknown.type == 'PLAYERFILE' && typeof unknown.value == 'string') ||
+        (unknown.type == 'PLAINTEXTPASSWORD' &&
+          typeof unknown.value == 'boolean') ||
+        (unknown.type == 'EXPRESSPORT' && typeof unknown.value == 'number') ||
+        (unknown.type == 'FRONTENDURL' && typeof unknown.value == 'string') ||
+        (unknown.type == 'FRONTENDPATH' && typeof unknown.value == 'string') ||
+        (unknown.type == 'GAME-MAPFILENAME' &&
+          typeof unknown.value == 'string' &&
+          (unknown.info === 'none' ||
+            unknown.info === 'reboot' ||
+            unknown.info === 'reset')) ||
+        (unknown.type == 'GAME-MAXGAMEOBJECTS' &&
+          typeof unknown.value == 'number') ||
+        (unknown.type == 'GAME-RESETONSTART' &&
+          typeof unknown.value == 'boolean') ||
+        (unknown.type == 'GAME-RUNSPEED' && typeof unknown.value == 'number') ||
+        (unknown.type == 'GAME-SAVEFILE' && typeof unknown.value == 'string'))
+    ) {
+      let worked = await this.setConfig(unknown);
+      return worked;
+    } else {
+      return false;
+    }
+  }
+
   async setConfig(
     newConfig:
       | { type: 'MAXPLAYERS'; value: number }
@@ -180,7 +212,11 @@ class config {
       | { type: 'FRONTENDURL'; value: string }
       | { type: 'FRONTENDPATH'; value: string }
       | { type: 'GAME-RESETONSTART'; value: boolean }
-      | { type: 'GAME-MAPFILENAME'; value: string }
+      | {
+          type: 'GAME-MAPFILENAME';
+          value: string;
+          info: 'none' | 'reboot' | 'reset';
+        }
       | { type: 'GAME-SAVEFILE'; value: string }
       | { type: 'GAME-RUNSPEED'; value: number }
       | { type: 'GAME-MAXGAMEOBJECTS'; value: number }
@@ -211,6 +247,12 @@ class config {
 
       case 'GAME-MAPFILENAME':
         this.GAME.MAPFILENAME = newConfig.value;
+        if (newConfig.info == 'reboot') {
+          this.resetGame = 1;
+        }
+        if (newConfig.info == 'reset') {
+          this.resetGame = 2;
+        }
         break;
 
       case 'GAME-MAXGAMEOBJECTS':

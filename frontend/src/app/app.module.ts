@@ -24,6 +24,7 @@ import { GameComponent } from './components/game/game.component';
 import { UnsetComponent } from './components/unset/unset.component';
 import { GameMenuBoxComponent } from './components/game-menu-box/game-menu-box.component';
 import { GameMenuObjectComponent } from './components/game-menu-object/game-menu-object.component';
+import { ConfigMapComponent } from './components/config-map/config-map.component';
 const config: SocketIoConfig = { url: environment.backendLink, options: {} };
 
 @NgModule({
@@ -46,6 +47,7 @@ const config: SocketIoConfig = { url: environment.backendLink, options: {} };
     UnsetComponent,
     GameMenuBoxComponent,
     GameMenuObjectComponent,
+    ConfigMapComponent,
   ],
   imports: [
     BrowserModule,

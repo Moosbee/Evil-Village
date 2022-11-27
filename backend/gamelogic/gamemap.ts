@@ -27,6 +27,7 @@ async function setMap(): Promise<mapMini> {
     pixels: image.bitmap.data,
     height: image.getHeight(),
     width: image.getHeight(),
+    smallMapSRC: mapConf.smallMapSRC,
     mapSRC: mapConf.mapSRC,
     description: mapConf.description,
     defaultMovementMultiplier: mapConf.defaultMovementMultiplier,
