@@ -11,7 +11,8 @@ How to Start:
    2. `npm i`
    3. `npm run buildToBackend`
    4. `cd ../backend`
-   5. `npm start`
+   5. `npm i`
+   6. `npm start`
 
 3. Dev(2 command lines)
    1. Start terminal 1
@@ -106,7 +107,3 @@ SOCKET.IO:
 - server>client "update"
 
 - "disconnect"
-
-Terminal-Color:
-
-- game InfoMessages:cyan
