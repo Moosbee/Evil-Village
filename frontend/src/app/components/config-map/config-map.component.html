@@ -1,0 +1,17 @@
+<h2>Select Map:</h2>
+<div class="boxes">
+  <div *ngFor="let map1 of maps">
+    <input
+      type="radio"
+      name="map"
+      id="{{ map1.name }}"
+      value="{{ map1.name }}"
+      [ngModel]="map" (ngModelChange)="mapModelChange($event)"
+    />
+    <label class="infobox" for="{{ map1.name }}">
+      <h3>{{ map1.name }}</h3>
+      <img src="{{ link }}game/map/{{ map1.name }}" alt="" />
+      <p>{{ map1.description }}</p>
+    </label>
+  </div>
+</div>

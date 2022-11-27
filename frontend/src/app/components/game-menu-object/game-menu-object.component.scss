@@ -1,0 +1,65 @@
+@import '../../vars';
+
+.you {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba($color: $success, $alpha: 1) 100%
+  );
+}
+
+.notYou {
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba($color: $danger, $alpha: 1) 100%
+  );
+}
+
+.invalide {
+  animation: invalide 0.2s ease-in-out 0s 2;
+}
+
+#name {
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-align: center;
+  width: calc(100% - 1rem);
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+.pencil {
+  height: 1rem;
+  aspect-ratio: 1/1;
+  fill: currentColor;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  .thumbtack {
+    height: 100%;
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes invalide {
+  0% {
+    translate: 0%;
+    color: inherit;
+  }
+  25% {
+    translate: 10%;
+    color: $danger;
+  }
+  75% {
+    translate: -10%;
+    color: $danger;
+  }
+  100% {
+    translate: 0%;
+    color: inherit;
+  }
+}

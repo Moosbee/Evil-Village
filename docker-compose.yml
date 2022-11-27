@@ -1,0 +1,9 @@
+version: "3.9" # optional since v1.27.0
+services:
+  village:
+    container_name: villageCompose
+    build: .
+    ports:
+      - "80:3000"
+    volumes:
+      - ./backend/json:/app/json

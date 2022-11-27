@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+@import './app/vars';
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+.btn {
+  cursor: pointer;
+  display: inline-block;
+  background-color: $primary;
+  color: $secondaryA;
+  padding: 0.25rem;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  outline: 0;
+  background-color: darken($color: $primary, $amount: 10);
+  color: $secondaryA;
+}
+
+.btn:active {
+  transform: scaleX(0.98) scaleY(0.88);
+}

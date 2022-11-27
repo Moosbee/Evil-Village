@@ -1,0 +1,16 @@
+{
+  "ROOTPATH": "D:\\Programierung\\nodejs\\Evil-Village\\backend\\",
+  "MAXPLAYERS": 1000,
+  "PLAYERFILE": "json\\players.json",
+  "PLAINTEXTPASSWORD": true,
+  "EXPRESSPORT": 3000,
+  "FRONTENDURL": "http://localhost:4200",
+  "FRONTENDPATH": "angularBuild\\",
+  "GAME": {
+    "RESETONSTART": true,
+    "MAPFILENAME": "Aihoia",
+    "SAVEFILE": "json\\save.json",
+    "RUNSPEED": 10,
+    "MAXGAMEOBJECTS": 25000
+  }
+}

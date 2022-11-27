@@ -1,0 +1,134 @@
+@import '../../vars';
+
+.container {
+  padding: 20px 40px;
+  border-radius: 5px;
+  color: $light;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: opacity 1000ms cubic-bezier(1, -0.01, 0.52, 1),
+    background-color 250ms ease;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  a {
+    text-decoration: none;
+    // color: $light;
+    color: lighten($color: $secondaryB, $amount: 60);
+  }
+
+  a:hover {
+    color: lighten($color: $secondaryB, $amount: 40);
+  }
+}
+
+.btn {
+  cursor: pointer;
+  display: inline-block;
+  width: 100%;
+  background-color: lighten($color: $secondaryB, $amount: 60);
+  padding: 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 5px;
+}
+
+.btn:focus,
+.btn:hover {
+  outline: 0;
+  background-color: lighten($color: $secondaryB, $amount: 50);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.text {
+  margin-top: 30px;
+}
+
+.status {
+  font-size: 1rem;
+  margin-block-start: 0.75rem;
+  margin-block-end: 0.75rem;
+}
+.form-control {
+  position: relative;
+  //   margin: 20px 0 40px;
+  margin-top: 1.25rem;
+  //   margin-bottom: 2.5rem;
+
+  min-width: 18.75rem;
+
+  input {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px $light solid;
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    font-size: 1.125rem;
+    color: $light;
+  }
+
+  input:focus,
+  input:valid {
+    outline: 0;
+    border-bottom-color: lighten($color: $secondaryB, $amount: 60);
+  }
+
+  label {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    pointer-events: none;
+  }
+
+  label span {
+    display: inline-block;
+    font-size: 1.125rem;
+    min-width: 5px;
+    transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  input:focus + label span,
+  input:valid + label span {
+    color: lighten($color: $secondaryB, $amount: 60);
+    transform: translateY(-1.875rem);
+  }
+
+  input:focus + label + .showPass,
+  input:valid + label + .showPass {
+    color: lighten($color: $secondaryB, $amount: 60);
+    display: inline-block;
+  }
+
+  .showPass {
+    display: none;
+    color: $light;
+    top: 15px;
+    right: 0px;
+    position: absolute;
+    aspect-ratio: 1;
+    height: 1.125rem;
+    a {
+      fill: currentColor;
+      color: inherit;
+      background-color: transparent;
+      border: none;
+    }
+  }
+}
+
+.success {
+  color: limegreen;
+}
+.failed {
+  color: $danger;
+}
+.error {
+  color: $danger;
+}

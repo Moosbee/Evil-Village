@@ -1,0 +1,139 @@
+<div class="container">
+  <h1>Settings</h1>
+  <form action="">
+    <div class="info">
+      <span for="GAME-MAPFILENAME">The games Map: </span>
+      <div>
+        <button class="btn pdinline" (click)="setMap($event, 'reset')" *ngIf="changeMap">
+          Set map and reset game
+        </button>
+        <button
+          class="btn pdinline"
+          (click)="setMap($event, 'reboot')"
+          *ngIf="changeMap"
+        >
+          Set map and reload game
+        </button>
+        <button class="btn pdinline" (click)="selectMap()" *ngIf="changeMap">
+          Just set map: {{ config.GAME.MAPFILENAME }}
+        </button>
+        <button class="btn" (click)="selectMap()" *ngIf="!changeMap">
+          Select: {{ config.GAME.MAPFILENAME }}
+        </button>
+      </div>
+    </div>
+    <app-config-map
+      [(map)]="config.GAME.MAPFILENAME"
+      *ngIf="changeMap"
+    ></app-config-map>
+    <div class="info" *ngIf="!changeMap">
+      <label for="GAME-RUNSPEED">Sets the speed of the game: </label>
+      <div>
+        <button
+          class="btn btnLeft"
+          (click)="config.GAME.RUNSPEED = config.GAME.RUNSPEED - 1"
+        >
+          -1</button
+        ><input
+          [(ngModel)]="config.GAME.RUNSPEED"
+          type="number"
+          name="GAME-RUNSPEED"
+          id="GAME-RUNSPEED"
+        /><button
+          class="btn btnRight"
+          (click)="config.GAME.RUNSPEED = config.GAME.RUNSPEED + 1"
+        >
+          +1
+        </button>
+      </div>
+    </div>
+    <div class="info" *ngIf="!changeMap">
+      <label for="EXPRESSPORT">Sets the Port of the Application: </label
+      ><input
+        [(ngModel)]="config.EXPRESSPORT"
+        type="number"
+        name="EXPRESSPORT"
+        id="EXPRESSPORT"
+      />
+    </div>
+    <div class="info" *ngIf="!changeMap">
+      <label for="MAXPLAYERS">The maximum amount of Players: </label>
+      <div>
+        <button
+          class="btn btnLeft"
+          (click)="config.MAXPLAYERS = config.MAXPLAYERS - 10"
+        >
+          -10</button
+        ><input
+          [(ngModel)]="config.MAXPLAYERS"
+          type="number"
+          name="MAXPLAYERS"
+          id="MAXPLAYERS"
+        />
+        <button
+          class="btn btnRight"
+          (click)="config.MAXPLAYERS = config.MAXPLAYERS + 10"
+        >
+          +10
+        </button>
+      </div>
+    </div>
+    <div class="info" *ngIf="!changeMap">
+      <label for="GAME-MAXGAMEOBJECTS"
+        >Sets the maximum amount of Game Objects:
+      </label>
+      <div>
+        <button
+          class="btn btnLeft"
+          (click)="config.GAME.MAXGAMEOBJECTS = config.GAME.MAXGAMEOBJECTS - 50"
+        >
+          -50</button
+        ><input
+          [(ngModel)]="config.GAME.MAXGAMEOBJECTS"
+          type="number"
+          name="GAME-MAXGAMEOBJECTS"
+          id="GAME-MAXGAMEOBJECTS"
+        /><button
+          class="btn btnRight"
+          (click)="config.GAME.MAXGAMEOBJECTS = config.GAME.MAXGAMEOBJECTS + 50"
+        >
+          +50
+        </button>
+      </div>
+    </div>
+    <div class="info" *ngIf="!changeMap">
+      <label for="PLAINTEXTPASSWORD">Save passwords in plaintext: </label>
+      <label class="toggler-wrapper">
+        <input
+          [(ngModel)]="config.PLAINTEXTPASSWORD"
+          type="checkbox"
+          name="PLAINTEXTPASSWORD"
+          id="PLAINTEXTPASSWORD"
+        />
+        <div class="toggler-slider">
+          <div class="toggler-knob"></div>
+        </div>
+      </label>
+    </div>
+    <div class="info" *ngIf="!changeMap">
+      <label for="GAME-RESETONSTART">Reset the game on start: </label>
+      <label class="toggler-wrapper">
+        <input
+          [(ngModel)]="config.GAME.RESETONSTART"
+          type="checkbox"
+          name="GAME-RESETONSTART"
+          id="GAME-RESETONSTART"
+        />
+        <div class="toggler-slider">
+          <div class="toggler-knob"></div>
+        </div>
+      </label>
+    </div>
+    <div class="buttonlist" *ngIf="!changeMap">
+      <button class="btn" (click)="apply()">
+        {{ status == 0 ? 'Apply' : '' }}{{ status == 1 ? 'Applying' : ''
+        }}{{ status == 2 ? 'Applied' : '' }}</button
+      ><a routerLink="/game" class="btn">Back</a>
+    </div>
+  </form>
+</div>

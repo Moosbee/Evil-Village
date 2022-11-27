@@ -1,0 +1,76 @@
+@import '../../vars';
+
+#frame {
+  height: calc(100vh - 10px);
+  width: calc(100vw - 10px);
+  margin-inline: auto;
+  margin-block: auto;
+  border: 5px solid $secondaryA;
+  overflow: hidden;
+  position: relative;
+}
+
+.loadingIcon {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#gameFrame {
+  position: absolute;
+  transition: transform 100ms;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+}
+
+#gameObjects {
+  position: absolute;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // flex-direction: column;
+  transition: transform 100ms;
+  top: 50%;
+  left: 50%;
+  outline: 1px solid $secondaryB;
+}
+
+.selector {
+  width: 100px;
+  height: 100px;
+  background-color: green;
+}
+img {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+@media (min-aspect-ratio: 1/1) {
+  #gameObjects {
+    width: var(--zoome);
+  }
+  #gameFrame {
+    width: 100%;
+  }
+}
+@media (aspect-ratio: 1/1) {
+  #gameObjects {
+    height: var(--zoome);
+  }
+  #gameFrame {
+    height: 100%;
+  }
+}
+@media (max-aspect-ratio: 1/1) {
+  #gameObjects {
+    height: var(--zoome);
+  }
+  #gameFrame {
+    height: 100%;
+  }
+}

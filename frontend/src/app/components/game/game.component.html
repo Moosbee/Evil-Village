@@ -1,0 +1,15 @@
+<app-gameFrame
+  [ngStyle]="{
+    filter: url == '/game' || url == '/watch' ? 'none' : 'blur(10px)'
+  }"
+  class="gameFrame"
+></app-gameFrame>
+<app-game-menu-box
+  [ngStyle]="{
+    opacity: url == '/game' || url == '/watch' ? 1 : 0
+  }"
+  class="gameInfo"
+  [loggedIn]="loggedIn"
+  [username]="username"
+  [adminLevel]="adminLevel"
+></app-game-menu-box>

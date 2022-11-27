@@ -1,0 +1,43 @@
+<div
+  class="box"
+  [ngStyle]="{
+    top: (gameObject.y / height) * 100 + '%',
+    left: (gameObject.x / width) * 100 + '%',
+    width: (gameObject.size / width) * 100 + '%',
+    '--gameObjectColor':
+      gameObject.color.red +
+      ',' +
+      gameObject.color.green +
+      ',' +
+      gameObject.color.blue
+  }"
+>
+  <!-- {{ gameObject.typeof.type }}: {{ gameObject.id }},{{ gameObject.strength }} -->
+  <div
+    (click)="objClick($event)"
+    (touchend)="objClick($event)"
+    [ngSwitch]="gameObject.typeof.type"
+    [ngClass]="{ gameObject: true, activated: click }"
+  >
+    <app-animation-army
+      *ngSwitchCase="'saveArmy'"
+      class="object"
+      [gameObject]="gameObject"
+    ></app-animation-army>
+    <app-animation-schiff
+      *ngSwitchCase="'saveSchiff'"
+      class="object"
+      [gameObject]="gameObject"
+    ></app-animation-schiff>
+    <app-animation-stadt
+      *ngSwitchCase="'saveStadt'"
+      class="object"
+      [gameObject]="gameObject"
+    ></app-animation-stadt>
+    <app-animation-default
+      *ngSwitchDefault
+      class="object"
+      [gameObject]="gameObject"
+    ></app-animation-default>
+  </div>
+</div>

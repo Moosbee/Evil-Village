@@ -1,0 +1,17 @@
+{
+  "mapSRC": "./Boria.png",
+  "smallMapSRC": "./Boria_small.png",
+  "description": "Boria",
+  "defaultMovementMultiplier": 1,
+  "colors": [
+    {
+      "color": {
+        "red": 255,
+        "green": 255,
+        "blue": 255
+      },
+      "isWater": true,
+      "movementMultiplier": 1
+    }
+  ]
+}

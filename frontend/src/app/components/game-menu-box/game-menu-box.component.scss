@@ -1,0 +1,48 @@
+@import '../../vars';
+.heading {
+  text-align: center;
+  width: max-content;
+  font-size: larger;
+  margin: 0.4rem;
+
+  .moveBox {
+    height: 1rem;
+    aspect-ratio: 1/1;
+    border: 1px solid $light;
+    fill: $light;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    .move {
+      height: 100%;
+      aspect-ratio: 1;
+      vertical-align: middle;
+      fill: currentColor;
+      overflow: hidden;
+    }
+  }
+}
+
+.infoPanel {
+  text-align: start;
+  top: 20px;
+  left: 30px;
+  position: fixed;
+  height: max-content;
+  width: max-content;
+  background-color: transparentize($color: $secondaryA, $amount: 0.1);
+  border-radius: 5px;
+  color: $primary;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .infoPanel {
+    top: 10px;
+    left: 5%;
+    right: 5%;
+    width: unset;
+  }
+}

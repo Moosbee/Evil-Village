@@ -1,0 +1,28 @@
+.box {
+  position: absolute;
+  display: block;
+  //   width: 50px;
+  aspect-ratio: 1/1;
+  transform: translate(-50%, -50%);
+  background-color: rgba(var(--gameObjectColor), 0.5);
+}
+
+.object {
+}
+.gameObject {
+  position: absolute;
+  display: block;
+  width: 100%;
+  min-width: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  aspect-ratio: 1/1;
+}
+:hover {
+  background-color: brown;
+}
+
+.activated {
+  background-color: rgba(var(--gameObjectColor), 1);
+}

@@ -1,0 +1,46 @@
+<div
+  id="frame"
+  #frame
+  (mousedown)="mouseClick($event, frame, map)"
+  (mousemove)="mouseDrag($event, frame, map)"
+  (touchstart)="touchStart($event, frame, map)"
+  (touchmove)="touchDrag($event, frame, map)"
+  (wheel)="mouseWheel($event, frame, map)"
+>
+  <!-- <img src="/assets/images/6-dots-scale.svg" alt="" class="loadingIcon" /> -->
+  <div
+    id="gameFrame"
+    [ngStyle]="{
+      'aspect-ratio': mapWidth / mapHeight,
+      transform:
+        'scale(' + zoom + ') translate(' + leftImg + '%,' + topImg + '%)'
+    }"
+  >
+    <img src="{{ link }}game/map" (load)="loadedImg($event)" alt="" #map />
+  </div>
+  <div
+    id="gameObjects"
+    [ngStyle]="{
+      'aspect-ratio': mapWidth / mapHeight,
+      transform: 'translate(' + left + '%,' + top + '%)',
+      '--zoome': zoom * 100 + '%'
+    }"
+    #zoomFrame
+    (touchend)="touchEnd($event, zoomFrame, map)"
+    (contextmenu)="disableContextMenu($event, zoomFrame, map)"
+  >
+    <!-- (mouseup)="mouseUp($event, zoomFrame, map)" -->
+    <div
+      *ngFor="let gameObject of gameObjects; trackBy: isSameGameObject"
+      class="gameObject"
+    >
+      <app-game-object
+        [gameObject]="gameObject"
+        [width]="mapWidth"
+        [height]="mapHeight"
+        [setClick]="unClick"
+        (unClick)="unClickAll($event)"
+      ></app-game-object>
+    </div>
+  </div>
+</div>

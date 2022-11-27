@@ -1,0 +1,53 @@
+<div class="InfoBox">
+  <div class="nav">
+    <div class="test">
+      <button class="btn" (click)="before()"><b>&lt;</b></button>
+      <div>{{ page + 1 }} / {{ menuEntries.length }}</div>
+      <button class="btn" (click)="next()"><b>&gt;</b></button>
+    </div>
+    <button class="btn" (click)="expanded = !expanded">
+      {{ expanded ? '&bigtriangleup;' : '&bigtriangledown;' }}
+    </button>
+  </div>
+  <div class="info" *ngIf="page == -1">
+    <div *ngIf="menuEntries.length == 0" class="headding">Map Statistics</div>
+    <div *ngIf="!(menuEntries.length == 0)" class="headding">
+      Selection Statistics
+    </div>
+    <div>All: {{ stats.all.all.count }}</div>
+    <div>Yours: {{ stats.your.all.count }}</div>
+    <div>notYours: {{ stats.notYour.all.count }}</div>
+    <div>avg Strength: {{ stats.all.all.avgStrength }}</div>
+    <div>Producing: {{ stats.all.stadt.producing }}</div>
+    <div *ngIf="!(menuEntries.length == 0) && !(stats.your.all.count == 0)">
+      <div>
+        <b>Settle all / Mobilization all</b> <br />
+        <button (click)="settleAll()" class="btn">Toggle</button>
+        <button (click)="settleAll(false)" class="btn">Settle</button>
+        <button (click)="settleAll(true)" class="btn">Mobilize</button>
+      </div>
+      <div *ngIf="!(stats.your.stadt.count == 0)">
+        <b>Army Produktion</b> <br />
+        <button (click)="ProduktionAll()" class="btn">Toggle</button>
+        <button (click)="ProduktionAll(true)" class="btn">Activate</button>
+        <button (click)="ProduktionAll(false)" class="btn">Deactivate</button>
+      </div>
+    </div>
+  </div>
+  <div class="info" *ngIf="!expanded && page >= 0">
+    <div>
+      <app-game-menu-object
+        [username]="username"
+        [menuEntry]="shownMenuEntry"
+      ></app-game-menu-object>
+    </div>
+  </div>
+  <div class="info" *ngIf="expanded && page >= 0">
+    <div *ngFor="let entry of menuEntries; trackBy: isSameGameObject">
+      <app-game-menu-object
+        [username]="username"
+        [menuEntry]="entry"
+      ></app-game-menu-object>
+    </div>
+  </div>
+</div>
