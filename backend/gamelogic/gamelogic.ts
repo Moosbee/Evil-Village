@@ -213,7 +213,6 @@ export class gamelogic {
   }
 
   update(change: changes, username?: string) {
-    console.log(this.map);
 
     let gameObject = this.gameObjects.filter((arm) => arm.name == change.name);
     if (gameObject.length != 1) return;
